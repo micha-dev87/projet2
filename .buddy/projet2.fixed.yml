@@ -36,3 +36,11 @@
     - apt-get install -y libzip-dev
     - docker-php-ext-install zip
     shell: BASH
+  - action: netlify deploy --dir=. --prodIfUnlocked
+    type: NETLIFY
+    version: 20
+    site_id: projet2php
+    integration: Netlify
+    execute_commands:
+    - netlify deploy --dir=. --prodIfUnlocked
+    shell: BASH
