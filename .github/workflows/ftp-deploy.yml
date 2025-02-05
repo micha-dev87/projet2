@@ -1,0 +1,32 @@
+name: Deploy to FTP Server
+
+on:
+  push:
+    branches:
+      - master # Trigger the workflow on pushes to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install FTP deployment tool
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Step 3: Deploy files to FTP server
+      - name: Upload files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || 21 }} # Use default port 21 if not specified
+          local-dir: ./ # Directory to upload from (root of the repository)
+          server-dir: /htdocs/ # Directory on the FTP server to upload to
