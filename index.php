@@ -15,7 +15,8 @@
    $sGras = "\"sGras\"";
    $sRouge = "\"sRouge\"";
    $sGrasRouge = "\"sGras sRouge\"";
-   
+
+
    /* Liste des fichiers d'inclusion */
    require_once("classe-fichier-2025-01-26.php");
    require_once("classe-mysql-2025-01-29.php");
