@@ -56,3 +56,11 @@
     setup_commands:
     - npm install hexo-cli -g
     shell: BASH
+  - action: netlify deploy --dir=. --prodIfUnlocked
+    type: NETLIFY
+    version: 20
+    site_id: projet2php
+    integration: Netlify
+    execute_commands:
+    - netlify deploy --dir=. --prodIfUnlocked
+    shell: BASH
