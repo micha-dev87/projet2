@@ -46,3 +46,13 @@
     setup_commands:
     - npm install -g gulp
     shell: BASH
+  - action: hexo generate
+    type: BUILD
+    docker_image_name: library/node
+    docker_image_tag: 22
+    execute_commands:
+    - npm install
+    - hexo generate
+    setup_commands:
+    - npm install hexo-cli -g
+    shell: BASH
