@@ -1,6 +1,6 @@
 <?php
    /* Réf.: http://fr.openclassrooms.com/informatique/cours/ajax-et-l-echange-de-donnees-en-javascript/l-access-control-1 */
-   header("Access-Control-Allow-Origin: *");
+   header("application: groupe2");
 
    /* Pour masquer les messages d'erreur pour cette page uniquement
       À IMPLANTER SEULEMENT EN PRODUCTION ! */
