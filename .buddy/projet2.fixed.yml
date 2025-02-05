@@ -35,6 +35,12 @@
     - apt-get install -y zlib1g-dev
     - apt-get install -y libzip-dev
     - docker-php-ext-install zip
+    services:
+    - type: MYSQL
+      connection:
+        host: mysql
+        user: root
+        password: root
     shell: BASH
   - action: netlify deploy --dir=. --prodIfUnlocked
     type: NETLIFY
