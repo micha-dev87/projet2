@@ -36,3 +36,13 @@
     - apt-get install -y libzip-dev
     - docker-php-ext-install zip
     shell: BASH
+  - action: gulp
+    type: BUILD
+    docker_image_name: library/node
+    docker_image_tag: 22
+    execute_commands:
+    - npm install
+    - gulp
+    setup_commands:
+    - npm install -g gulp
+    shell: BASH
