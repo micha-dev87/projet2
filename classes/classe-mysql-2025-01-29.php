@@ -229,10 +229,12 @@
             $valeurs = [];
             $nbArgs = func_num_args();
 
+
             // Vérifier qu'il y a au moins un argument en plus du nom de la table
             if ($nbArgs < 2) {
                 die("Au moins une valeur doit être fournie pour l'insertion.");
             }
+
 
             // Parcourir tous les arguments sauf le premier (qui est le nom de la table)
             for ($i = 1; $i < $nbArgs; $i++) {
@@ -247,22 +249,7 @@
                         $valeur = dateValide($valeur) ? $valeur : aujourdhui();
                     }
 
-                    // Vérifier si la valeur est une adresse courriel
-                    if (filter_var($valeur, FILTER_VALIDATE_EMAIL)) {
-                        // Vérifier si l'adresse courriel existe déjà dans la table
-                        $requeteVerification = "SELECT COUNT(*) AS count FROM $strNomTable WHERE email = '$valeur'";
-                        $resultatVerification = mysqli_query($this->cBD, $requeteVerification);
 
-                        if ($resultatVerification) {
-                            $row = mysqli_fetch_assoc($resultatVerification);
-                            if ($row['count'] > 0) {
-                                // Arrêter l'exécution et afficher une alerte JavaScript
-                                die("<script>alert('L\'adresse courriel existe déjà dans la base de données.');</script>");
-                            }
-                        } else {
-                            die("Erreur lors de la vérification de l'adresse courriel : " . mysqli_error($this->cBD));
-                        }
-                    }
 
                     // Échapper les chaînes pour éviter les injections SQL
                     $valeur = mysqli_real_escape_string($this->cBD, $valeur);
@@ -291,7 +278,6 @@
             // Retourner le succès de l'opération
             return $this->OK;
         }
-
 
         /*
         |----------------------------------------------------------------------------------|

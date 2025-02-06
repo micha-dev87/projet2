@@ -1,8 +1,29 @@
-BODY, INPUT { font-family:Verdana; font-size:16px; }
-.sTitreApplication { font-size:32px; line-height:26px; font-weight:bold; margin-top:0px; }
-.sTitreSection { font-size:24px; line-height:18px; }
-.sGras { font-weight:bold; }
-.sBleu { color:blue; }
-.sDroits { font-size:12px; } 
-.sNonGras { font-weight:normal; }
-.sRouge { color:red; }
+body {
+    background-color: #f8f9fa;
+}
+.form-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.form-container h2 {
+    font-weight: bold;
+    color: #333;
+}
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+.btn-primary {
+    background-color: #0d6efd;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #0b5ed7;
+}
+small.text-muted {
+    font-size: 0.875em;
+}

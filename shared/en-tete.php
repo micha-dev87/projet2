@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,19 +8,42 @@
     <link rel="stylesheet" type="text/css" href="<?php echo $strNomFichierCSS; ?>"/>
     <!--    bootstrap integration-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome pour les icônes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
 
 </head>
 <body>
 <div class="container mt-5">
 
-    <div class="card text-center">
-        <div id="divEntete" class="card-header">
-            <p class="sTitreApplication">
-                <?php echo "$strTitreApplication\n"; ?>
-                <span class="sTitreSection">
-               <br/>par <span class="sRouge"><?php echo $strNomAuteur; ?></span>
 
-            </p>
-        </div>
 
-        <div class="card-body">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4"><?= $strNomAuteur?></span>
+                </a>
+
+                <?php
+                    // Définir les routes disponibles
+                    $routes = [
+                        'register' => 'register',
+                        'login'    => 'login',
+                        'home'     => 'home',
+                    ];
+
+                    // Générer dynamiquement les liens du menu
+                    echo '<ul class="nav nav-pills">';
+                    foreach ($routes as $route => $label) {
+                        // Construire l'URL en fonction de l'environnement (localhost ou production)
+                        $url = SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/$route" : "/$route";
+
+                        // Déterminer si le lien est actif
+                        $isActive = $controller == $route;
+                        $activeClass = $isActive ? 'aria-current="page" class="nav-link active"' : 'class="nav-link"';
+
+                        // Afficher le lien
+                        echo "<li class=\"nav-item\"><a href=\"$url\" $activeClass>$label</a></li>";
+                    }
+                    echo '</ul>';
+                ?>
+            </header>

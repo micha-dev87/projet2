@@ -1,11 +1,6 @@
 <?php
 
-    //Entete de la page
-    $strTitreApplication = "Application  du groupeII";
-    $strNomFichierCSS = "index.css";
-    $strNomAuteur = "Michel Ange & Ramces & Franck & Samuel";
-    require_once("shared/en-tete.php");
-    //fin entête
+
 
     // Debut da la session
     session_start();
@@ -51,7 +46,16 @@
 
     // Inclure le contrôleur correspondant
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
-    echo $controllerFile;
+
+
+    //Entete de la page
+    $strTitreApplication = "Application  du groupeII";
+    $strNomFichierCSS = "index.css";
+    $strNomAuteur = "Michel Ange & Ramces & Franck & Samuel";
+    require_once("shared/en-tete.php");
+    //fin entête
+
+    //contenu page dynamique
     if (file_exists($controllerFile)) {
         include $controllerFile;
     } else {

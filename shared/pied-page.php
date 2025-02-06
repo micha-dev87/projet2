@@ -1,11 +1,11 @@
 
 
-     </div>
-      <div id="divPiedPage" class="card-footer">
+
+      <div id="divPiedPage" class="">
          <p class="sDroits">
             &copy; Département d'informatique-Projet fin session - Groupe II
          </p>
-      </div>
+
 
       </div>
    </div>
