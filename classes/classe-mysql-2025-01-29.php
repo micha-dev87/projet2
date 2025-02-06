@@ -135,10 +135,9 @@
         function creeTableGenerique($strNomTable, $strDefinitions, $strCles)
         {
 
-            // supprimer la table si elle existe
-            mysqli_query($this->cBD, "DROP TABLE IF EXISTS $strNomTable");
+
             // Initialiser la requête
-            $this->requete = "CREATE TABLE $strNomTable (";
+            $this->requete = "CREATE TABLE IF NOT EXISTS $strNomTable (";
 
             // Séparer les définitions (séparées par ;)
             $definitions = explode(";", $strDefinitions);
@@ -164,8 +163,10 @@
                         $sqlType = "DATE";
                         break;
                     case 'E':
+
                         $sqlType = "INT";
                         break;
+
                     case 'F':
                         $length = substr($type, 1);
                         $sqlType = "CHAR($length)";
@@ -174,12 +175,15 @@
                         $sqlType = "DECIMAL(10,2)";
                         break;
                     case 'N':
+
                         $sqlType = "INT NOT NULL";
                         break;
                     case 'V':
                         $length = substr($type, 1);
                         $sqlType = "VARCHAR($length)";
                         break;
+                    case 'A':
+                        $sqlType= "INT NOT NULL AUTO_INCREMENT";
                 }
 
                 // Ajouter la colonne à la requête

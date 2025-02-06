@@ -48,19 +48,15 @@
                 $motDePasseHache = password_hash($data[3], PASSWORD_DEFAULT);
 
 
-                // Construire la requête INSERT IGNORE (si nous avons juste 4 parametres)
-                if (func_num_args() < 5) {
-                    $requete = "INSERT IGNORE INTO $this->strTabUser (Nom, Prenom, Courriel, MotDePasse, Statut, NoEmpl, Creation)
-                 VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', 0, $this->NbUsers, '$date_creation');";
+                // Construire la requête INSERT IGNORE
 
-                } else {
 
                     $telMaison = $data[4];
                     $telTravail = $data[5];
                     $telCellulaire = $data[6];
                     $requete = "INSERT IGNORE INTO $this->strTabUser (Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, NoEmpl, Creation)
                  VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire', 0, $this->NbUsers,'$date_creation' );";
-                }
+                    afficheMessageConsole("Requete : $requete");
 
 
                 // Exécuter la requête
@@ -68,7 +64,8 @@
 
 
             } else {
-                die("<p class='text-danger'> Le nombre de parametre est incorrect </p>");
+                afficheMessageConsole("Le nombre de parametre est incorrect ", true);
+                die();
 
             }
             return $this->OK;

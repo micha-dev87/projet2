@@ -26,20 +26,20 @@
     /* --- Création de la structure de la table utilisateurs --- */
     $BDProjet2->creeTableGenerique(
         $strTabUser,
-        'E,NoUtilisateur;V50,Courriel;V15,MotDePasse;D,Creation;E,NbConnexions;E,Statut;
+        'A,NoUtilisateur;V50,Courriel;V15,MotDePasse;D,Creation;E,NbConnexions;E,Statut;
         E,NoEmpl;V25,Nom;V20,Prenom;V15,NoTelMaison;V21,NoTelTravail;V15,NoTelCellulaire;D,Modification;V50,AutresInfos',
         'NoUtilisateur'
     );
     /* --- Création de la structure de la table connexions --- */
     $BDProjet2->creeTableGenerique(
         $strTabCon,
-        'E,NoConnexion;E,NoUtilisateur;D,Connexion;D,Deconnexion',
+        'A,NoConnexion;E,NoUtilisateur;D,Connexion;D,Deconnexion',
         'NoConnexion'
     );
     /* --- Création de la structure de la table annonces --- */
     $BDProjet2->creeTableGenerique(
         $strTabAnn,
-        'E,NoAnnonce;E,NoUtilisateur;D,Parution;E,Categorie;V50,DescriptionAbregee;
+        'A,NoAnnonce;E,NoUtilisateur;D,Parution;E,Categorie;V50,DescriptionAbregee;
         V250,DescriptionComplete;M,Prix;V50,Photo;D,MiseAJour;E,Etat',
         'NoAnnonce'
     );
