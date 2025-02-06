@@ -23,7 +23,8 @@
 
 
     // Définir le chemin de base des contrôleurs
-    define('BASE_PATH', getParametre("SERVER_NAME", "SERVER"));
+    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
+    define('BASE_PATH', __DIR__);
 
     // Récupérer l'URL demandée
     $requestUri = getParametre("REQUEST_URI", "SERVER");
@@ -54,9 +55,9 @@
         include $controllerFile;
     } else {
         // Si le contrôleur n'existe pas, afficher une page d'erreur 404
-        header("HTTP/1.0 404 Not Found");
-        echo "Page not found.";
-        exit;
+        header("HTTP/1.0 404 Pas trouvé");
+        echo "<H4 >La page  <b class='text-danger'>$controller</b> n'existe pas</H4>\n";
+
     }
 
     //pied de page
