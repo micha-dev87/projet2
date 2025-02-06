@@ -22,6 +22,8 @@
     require_once("SQL/init.php");
 
 
+    //Définir le nom du serveur
+    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
     // Définir le chemin de base des contrôleurs
     define('BASE_PATH', __DIR__);
 
@@ -39,10 +41,12 @@
 
 
     // Le premier segment est considéré comme le contrôleur
-
+    if (SERVER_NAME=="localhost") {
+        //En local recuperer le lien après un pas
         $controller = !empty($uriSegments[1]) ? $uriSegments[1] : 'register';
-
-
+    }else{
+        $controller =  !empty($uriSegments[0]) ? $uriSegments[0] : 'register';
+    }
 
 
     // Inclure le contrôleur correspondant
