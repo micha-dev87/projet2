@@ -1,7 +1,6 @@
 <?php
 
 
-
     /*
     |----------------------------------------------------------------------------------------|
     | class mysql
@@ -26,11 +25,11 @@
         | __construct
         |----------------------------------------------------------------------------------|
         */
-        function __construct($strNomBD, $strNomFichierInfosSensibles, $strLocalHost)
+        function __construct($strNomBD, $strNomFichierInfosSensibles)
         {
             $this->nomBD = $strNomBD;
             $this->nomFichierInfosSensibles = $strNomFichierInfosSensibles;
-            $this->connexion($strLocalHost);
+            $this->connexion();
 
         }
 
@@ -39,14 +38,14 @@
         | connexion()
         |----------------------------------------------------------------------------------|
         */
-        function connexion($strLocalHost)
+        function connexion()
         {
             /* --- Connexion avec mySQL --- */
             require_once($this->nomFichierInfosSensibles);
-            $this->cBD = mysqli_connect($strLocalHost, $strNomAdmin, $strMotPasseAdmin, $this->nomBD);
+            $this->cBD = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $this->nomBD);
             if (mysqli_connect_errno()) {
                 echo "<br />";
-                echo "Problème de connexion... " . "Erreur no " . mysqli_connect_errno() . " (" . mysqli_connect_error() . ")";
+                echo "<p class='text-danger'>Problème de connexion... " . "Erreur no " . mysqli_connect_errno() . " (" . mysqli_connect_error() . ") </p>";
                 die();
             }
             return $this->cBD;
@@ -75,7 +74,6 @@
             }
 
 
-
             // Construire la requête de copie des données
             $this->requete = "INSERT INTO $strNomTableCible ($strListeChampsCible) ";
             $this->requete .= "SELECT $strListeChampsSource FROM $strNomTableSource";
@@ -89,12 +87,9 @@
             $this->OK = mysqli_query($this->cBD, $this->requete);
 
 
-
             // Retourner le succès de l'opération
             return $this->OK;
         }
-
-
 
 
         /*
@@ -116,7 +111,7 @@
                 if (is_string(func_get_arg($i)) && strpos(func_get_arg($i), 'PRIMARY KEY') !== false) {
                     $this->requete .= func_get_arg($i);
                 } else {
-                    $this->requete .= func_get_arg($i) . " " . func_get_arg($i + 1);
+                    $this->requete .= func_get_arg($i) . " classe-mysql-2025-01-29.php" . func_get_arg($i + 1);
                 }
 
                 // On ajoute une virgule après chaque couple, sauf pour le dernier
@@ -127,7 +122,6 @@
 
             $this->requete .= ") ENGINE=InnoDB";
             $this->OK = mysqli_query($this->cBD, $this->requete);
-
 
 
             return $this->OK;
@@ -141,74 +135,74 @@
         function creeTableGenerique($strNomTable, $strDefinitions, $strCles)
         {
 
-                // supprimer la table si elle existe
-               mysqli_query($this->cBD, "DROP TABLE IF EXISTS $strNomTable");
-                // Initialiser la requête
-                $this->requete = "CREATE TABLE $strNomTable (";
+            // supprimer la table si elle existe
+            mysqli_query($this->cBD, "DROP TABLE IF EXISTS $strNomTable");
+            // Initialiser la requête
+            $this->requete = "CREATE TABLE $strNomTable (";
 
-                // Séparer les définitions (séparées par ;)
-                $definitions = explode(";", $strDefinitions);
+            // Séparer les définitions (séparées par ;)
+            $definitions = explode(";", $strDefinitions);
 
-                // Pour chaque définition
-                for($i = 0; $i < count($definitions); $i++) {
-                    if(empty($definitions[$i])) continue;
+            // Pour chaque définition
+            for ($i = 0; $i < count($definitions); $i++) {
+                if (empty($definitions[$i])) continue;
 
-                    // Séparer le type et le nom (séparés par )
-                    list($type, $nom) = explode(",", trim($definitions[$i]));
+                // Séparer le type et le nom (séparés par )
+                list($type, $nom) = explode(",", trim($definitions[$i]));
 
-                    // Convertir le type en SQL selon les règles
-                    switch($type[0]) {
-                        case 'B':
-                            $sqlType = "BOOL";
-                            break;
-                        case 'C':
-                            $precision = substr($type, 1);
-                            $precision = str_replace(".", ",", $precision);
-                            $sqlType = "DECIMAL($precision)";
-                            break;
-                        case 'D':
-                            $sqlType = "DATE";
-                            break;
-                        case 'E':
-                            $sqlType = "INT";
-                            break;
-                        case 'F':
-                            $length = substr($type, 1);
-                            $sqlType = "CHAR($length)";
-                            break;
-                        case 'M':
-                            $sqlType = "DECIMAL(10,2)";
-                            break;
-                        case 'N':
-                            $sqlType = "INT NOT NULL";
-                            break;
-                        case 'V':
-                            $length = substr($type, 1);
-                            $sqlType = "VARCHAR($length)";
-                            break;
-                    }
-
-                    // Ajouter la colonne à la requête
-                    $this->requete .= "$nom $sqlType";
-
-                    // Ajouter une virgule si ce n'est pas la dernière définition
-                    if($i < count($definitions) - 1) {
-                        $this->requete .= ", ";
-                    }
+                // Convertir le type en SQL selon les règles
+                switch ($type[0]) {
+                    case 'B':
+                        $sqlType = "BOOL";
+                        break;
+                    case 'C':
+                        $precision = substr($type, 1);
+                        $precision = str_replace(".", ",", $precision);
+                        $sqlType = "DECIMAL($precision)";
+                        break;
+                    case 'D':
+                        $sqlType = "DATE";
+                        break;
+                    case 'E':
+                        $sqlType = "INT";
+                        break;
+                    case 'F':
+                        $length = substr($type, 1);
+                        $sqlType = "CHAR($length)";
+                        break;
+                    case 'M':
+                        $sqlType = "DECIMAL(10,2)";
+                        break;
+                    case 'N':
+                        $sqlType = "INT NOT NULL";
+                        break;
+                    case 'V':
+                        $length = substr($type, 1);
+                        $sqlType = "VARCHAR($length)";
+                        break;
                 }
 
-                // Ajouter la clé primaire
-                if(!empty($strCles)) {
-                    $this->requete .= ", PRIMARY KEY($strCles)";
+                // Ajouter la colonne à la requête
+                $this->requete .= "$nom $sqlType";
+
+                // Ajouter une virgule si ce n'est pas la dernière définition
+                if ($i < count($definitions) - 1) {
+                    $this->requete .= ", ";
                 }
+            }
 
-                // Finaliser la requête
-                $this->requete .= ") ENGINE=InnoDB";
+            // Ajouter la clé primaire
+            if (!empty($strCles)) {
+                $this->requete .= ", PRIMARY KEY($strCles)";
+            }
 
-                // Exécuter la requête et mettre à jour OK
-                $this->OK = mysqli_query($this->cBD, $this->requete);
+            // Finaliser la requête
+            $this->requete .= ") ENGINE=InnoDB";
 
-                return $this->OK;
+            // Exécuter la requête et mettre à jour OK
+            $this->OK = mysqli_query($this->cBD, $this->requete);
+
+            return $this->OK;
 
 
         }
@@ -233,7 +227,6 @@
         {
             // Initialiser la requête
             $valeurs = [];
-
             $nbArgs = func_num_args();
 
             // Vérifier qu'il y a au moins un argument en plus du nom de la table
@@ -253,9 +246,27 @@
                     if (preg_match("/[0-9]{4}-[0-9]{2}-[0-9]{2}/", $valeur)) {
                         $valeur = dateValide($valeur) ? $valeur : aujourdhui();
                     }
+
+                    // Vérifier si la valeur est une adresse courriel
+                    if (filter_var($valeur, FILTER_VALIDATE_EMAIL)) {
+                        // Vérifier si l'adresse courriel existe déjà dans la table
+                        $requeteVerification = "SELECT COUNT(*) AS count FROM $strNomTable WHERE email = '$valeur'";
+                        $resultatVerification = mysqli_query($this->cBD, $requeteVerification);
+
+                        if ($resultatVerification) {
+                            $row = mysqli_fetch_assoc($resultatVerification);
+                            if ($row['count'] > 0) {
+                                // Arrêter l'exécution et afficher une alerte JavaScript
+                                die("<script>alert('L\'adresse courriel existe déjà dans la base de données.');</script>");
+                            }
+                        } else {
+                            die("Erreur lors de la vérification de l'adresse courriel : " . mysqli_error($this->cBD));
+                        }
+                    }
+
                     // Échapper les chaînes pour éviter les injections SQL
                     $valeur = mysqli_real_escape_string($this->cBD, $valeur);
-                    //ajouter la valeur dans le tableau
+                    // Ajouter la valeur dans le tableau
                     $valeurs[] = "'$valeur'";
                 } elseif (is_bool($valeur)) {
                     // Convertir les booléens en 1 ou 0
@@ -264,12 +275,10 @@
                     // Ajouter les nombres tels quels
                     $valeurs[] = $valeur;
                 }
-
             }
 
             // Construire la requête INSERT IGNORE
             $this->requete = "INSERT IGNORE INTO `$strNomTable` VALUES (" . implode(", ", $valeurs) . ")";
-
 
             // Exécuter la requête
             $this->OK = mysqli_query($this->cBD, $this->requete);
@@ -282,6 +291,7 @@
             // Retourner le succès de l'opération
             return $this->OK;
         }
+
 
         /*
         |----------------------------------------------------------------------------------|
@@ -316,7 +326,7 @@
         function supprimeEnregistrements($strNomTable, $strListeConditions = "")
         {
             $this->requete = "DELETE FROM $strNomTable";
-            $this->requete .= empty($strlisteconditions)? "" : " WHERE $strlisteconditions";
+            $this->requete .= empty($strlisteconditions) ? "" : " WHERE $strlisteconditions";
             $this->OK = mysqli_query($this->cBD, $this->requete);
             return $this->OK;
 
@@ -370,20 +380,19 @@
             $sDetails = "style=\"$strDetails\"";
 
             /* --- Entreposage des noms de table --- */
-            $ListeTablesBD = array_column(mysqli_fetch_all(mysqli_query($this->cBD, 'SHOW TABLES')),0);
+            $ListeTablesBD = array_column(mysqli_fetch_all(mysqli_query($this->cBD, 'SHOW TABLES')), 0);
             $intNbTables = count($ListeTablesBD);
 
             /* --- Parcours de chacune des tables --- */
             echo "<span $sCommande>Informations sur " . (!empty($strNomTableRecherchee) ?
                     "la table '$strNomTableRecherchee' de " : "") . "la base de données ' $this->nomBD' </span><br />";
             $binTablePresente = false;
-            for ($i=0; $i<$intNbTables; $i++)
-            {
+            for ($i = 0; $i < $intNbTables; $i++) {
                 /* Récupération du nom de la table courante */
                 $strNomTable = $ListeTablesBD[$i];
                 if (empty($strNomTableRecherchee) || strtolower($strNomTable) == strtolower($strNomTableRecherchee)) {
                     $binTablePresente = true;
-                    echo "<p $sMessage>Table no ".strval($i+1)." : ".$strNomTable."</p>";
+                    echo "<p $sMessage>Table no " . strval($i + 1) . " : " . $strNomTable . "</p>";
 
                     /* Récupération des enregistrements de la table courante */
                     $ListeEnregistrements = mysqli_query($this->cBD, "SELECT * FROM $strNomTable");
@@ -396,44 +405,61 @@
 
                     /* Affichage de la structure de table courante */
                     echo "<p $sContenu>";
-                    $j=0;
+                    $j = 0;
                     $tabNomChamp = array();
                     while ($champCourant = $ListeEnregistrements->fetch_field()) {
                         $intDivAjustement = 1;
                         $tabNomChamp[$j] = $champCourant->name;
                         $strType = $champCourant->type;
                         switch ($strType) {
-                            case 1   : $strType = "BOOL"; break;
-                            case 3   : $strType = "INTEGER"; break;
-                            case 10  : $strType = "DATE"; break;
-                            case 12  : $strType = "DATETIME"; break;
-                            case 246 : $strType = "DECIMAL"; break;
-                            case 253 : $strType = "VARCHAR";
-                                /* Ajustement temporaire */
-                                if ($_SERVER["SERVER_NAME"] == "lmbrousseau.ca") { $intDivAjustement = 3; }
+                            case 1   :
+                                $strType = "BOOL";
                                 break;
-                            case 254 : $strType = "CHAR"; break;
-                            default  : $strType = "<span $sTypeADefinir>$strType à définir</span>"; break;
+                            case 3   :
+                                $strType = "INTEGER";
+                                break;
+                            case 10  :
+                                $strType = "DATE";
+                                break;
+                            case 12  :
+                                $strType = "DATETIME";
+                                break;
+                            case 246 :
+                                $strType = "DECIMAL";
+                                break;
+                            case 253 :
+                                $strType = "VARCHAR";
+                                /* Ajustement temporaire */
+                                if ($_SERVER["SERVER_NAME"] == "lmbrousseau.ca") {
+                                    $intDivAjustement = 3;
+                                }
+                                break;
+                            case 254 :
+                                $strType = "CHAR";
+                                break;
+                            default  :
+                                $strType = "<span $sTypeADefinir>$strType à définir</span>";
+                                break;
                         }
                         $strLongueur = intval($champCourant->length) / $intDivAjustement;
                         $intDetails = $champCourant->flags;
                         $strDetails = "";
-                        if ($intDetails & 1     ) $strDetails .= "[NOT_NULL] ";
-                        if ($intDetails & 2     ) $strDetails .= "<span style=\"font-weight:bold;\">[PRI_KEY]</span> ";
-                        if ($intDetails & 4     ) $strDetails .= "[UNIQUE_KEY] ";
-                        if ($intDetails & 16    ) $strDetails .= "[BLOB] ";
-                        if ($intDetails & 32    ) $strDetails .= "[UNSIGNED] ";
-                        if ($intDetails & 64    ) $strDetails .= "[ZEROFILL] ";
-                        if ($intDetails & 128   ) $strDetails .= "[BINARY] ";
-                        if ($intDetails & 256   ) $strDetails .= "[ENUM] ";
-                        if ($intDetails & 512   ) $strDetails .= "[AUTO_INCREMENT] ";
-                        if ($intDetails & 1024  ) $strDetails .= "[TIMESTAMP] ";
-                        if ($intDetails & 2048  ) $strDetails .= "[SET] ";
-                        if ($intDetails & 32768 ) $strDetails .= "[NUM] ";
-                        if ($intDetails & 16384 ) $strDetails .= "[PART_KEY] ";
-                        if ($intDetails & 32768 ) $strDetails .= "[GROUP] ";
-                        if ($intDetails & 65536 ) $strDetails .= "[UNIQUE] ";
-                        echo ($j+1).". $tabNomChamp[$j], $strType($strLongueur) <span $sDetails>$strDetails</span><br />";
+                        if ($intDetails & 1) $strDetails .= "[NOT_NULL] ";
+                        if ($intDetails & 2) $strDetails .= "<span style=\"font-weight:bold;\">[PRI_KEY]</span> ";
+                        if ($intDetails & 4) $strDetails .= "[UNIQUE_KEY] ";
+                        if ($intDetails & 16) $strDetails .= "[BLOB] ";
+                        if ($intDetails & 32) $strDetails .= "[UNSIGNED] ";
+                        if ($intDetails & 64) $strDetails .= "[ZEROFILL] ";
+                        if ($intDetails & 128) $strDetails .= "[BINARY] ";
+                        if ($intDetails & 256) $strDetails .= "[ENUM] ";
+                        if ($intDetails & 512) $strDetails .= "[AUTO_INCREMENT] ";
+                        if ($intDetails & 1024) $strDetails .= "[TIMESTAMP] ";
+                        if ($intDetails & 2048) $strDetails .= "[SET] ";
+                        if ($intDetails & 32768) $strDetails .= "[NUM] ";
+                        if ($intDetails & 16384) $strDetails .= "[PART_KEY] ";
+                        if ($intDetails & 32768) $strDetails .= "[GROUP] ";
+                        if ($intDetails & 65536) $strDetails .= "[UNIQUE] ";
+                        echo ($j + 1) . ". $tabNomChamp[$j], $strType($strLongueur) <span $sDetails>$strDetails</span><br />";
                         $j++;
                     }
                     echo "</p>";
@@ -441,7 +467,7 @@
                     /* Affichage des enregistrements composant la table courante */
                     echo "<table $sTable>";
                     echo "<tr>";
-                    for ($k=0; $k<$NbChamps; $k++)
+                    for ($k = 0; $k < $NbChamps; $k++)
                         echo "<td $sMessageAvecBordures>" . $tabNomChamp[$k] . "</td>";
                     echo "</tr>";
                     if (empty($NbEnregistrements)) {
@@ -454,7 +480,7 @@
                     while ($listeChampsEnregistrement = $ListeEnregistrements->fetch_row()) {
 
                         echo "<tr>";
-                        for ($j=0; $j<count($listeChampsEnregistrement); $j++)
+                        for ($j = 0; $j < count($listeChampsEnregistrement); $j++)
                             echo "      <td $sContenuAvecBordures>" . $listeChampsEnregistrement[$j] . "</td>";
                         echo "   </tr>";
                     }

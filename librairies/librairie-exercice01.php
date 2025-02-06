@@ -102,7 +102,7 @@
          }
       }
       extraitJSJJMMAAAAv2($intJourSemaine, $intJour, $intMois, $intAnnee, $strDate);
-      $strDateEnLitteral = ($binJourSemaineDemande ? jourSemaineEnLitteral($intJourSemaine, true) . " " : "") . er($intJour) . " " . moisEnLitteral($intMois) . " " . $intAnnee;
+      $strDateEnLitteral = ($binJourSemaineDemande ? jourSemaineEnLitteral($intJourSemaine, true) . " librairie-exercice01.php" : "") . er($intJour) . " " . moisEnLitteral($intMois) . " " . $intAnnee;
       
       return $strDateEnLitteral;
    }

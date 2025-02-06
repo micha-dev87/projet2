@@ -148,3 +148,56 @@
         $strNomServeur = $_SERVER["SERVER_NAME"];
         $strInfosSensibles = str_replace(".", "-", $strNomServeur) . ".php";
     }
+/*
+|
+|
+| getParametre()
+| Récupère la valeur d'une variable $_POST, $_GET, $_SERVER, ou $_SESSION.
+|
+|
+*/
+    function getParametre($strNom, $strType = 'POST') {
+        // Convertir le type en majuscules pour éviter les erreurs de casse
+        $strType = strtoupper($strType);
+
+        // Récupérer la valeur en fonction du type spécifié
+        switch ($strType) {
+            case 'POST':
+                return isset($_POST[$strNom]) ? $_POST[$strNom] : null;
+            case 'GET':
+                return isset($_GET[$strNom]) ? $_GET[$strNom] : null;
+            case 'SERVER':
+                return isset($_SERVER[$strNom]) ? $_SERVER[$strNom] : null;
+            case 'SESSION':
+                return isset($_SESSION[$strNom]) ? $_SESSION[$strNom] : null;
+            default:
+                // Si le type n'est pas spécifié ou invalide, chercher dans $_POST puis $_GET
+                if (isset($_POST[$strNom])) {
+                    return $_POST[$strNom];
+                } elseif (isset($_GET[$strNom])) {
+                    return $_GET[$strNom];
+                } else {
+                    return null; // Retourner null si la variable n'existe pas
+                }
+        }
+    }
+
+
+/*
+|
+|
+| afficheMessageConsole()
+| Affiche un message dans la console du navigateur.
+| Si c'est une erreur, le texte est rouge ; sinon, il est vert.
+|
+|
+*/
+    function afficheMessageConsole($message, $estErreur = false) {
+        // Définir la couleur en fonction du type de message
+        $couleur = $estErreur ? 'red' : 'green';
+
+        // Générer le script JavaScript pour afficher le message dans la console
+        echo "<script>
+            console.log('%c$message', 'color: $couleur;');
+          </script>";
+    }
