@@ -23,7 +23,6 @@
 
 
     // Définir le chemin de base des contrôleurs
-    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
     define('BASE_PATH', __DIR__);
 
     // Récupérer l'URL demandée
@@ -38,13 +37,11 @@
     // Diviser l'URL en segments
     $uriSegments = explode('/', $requestUri);
 
+
     // Le premier segment est considéré comme le contrôleur
 
-    if(count($uriSegments) > 2) {
-        $controller = !empty($uriSegments[0]) ? $uriSegments[0] : 'register';
-    }else{
-        $controller = 'register';
-    }
+        $controller = !empty($uriSegments[1]) ? $uriSegments[1] : 'register';
+
 
 
 

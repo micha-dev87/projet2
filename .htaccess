@@ -1,0 +1,9 @@
+# Activer le module RewriteEngine
+RewriteEngine On
+
+# Si le fichier demandé existe physiquement, ne pas rediriger
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rediriger toutes les autres requêtes vers index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
