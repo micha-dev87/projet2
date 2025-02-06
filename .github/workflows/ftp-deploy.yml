@@ -1,4 +1,4 @@
-name: Deploy to FTP Server
+name: FTP Deploy
 
 on:
   push:
@@ -16,11 +16,34 @@ jobs:
 
       # Step 2: Deploy files to FTP server
       - name: Upload files via FTP
-        uses: appleboy/ftp-action@master
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ${{ secrets.FTP_HOST }}
+          # FTP server
+          server: ${{ secrets.FTP_HOST }}
+          # FTP username
           username: ${{ secrets.FTP_USER }}
+          # FTP password
           password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT || 21 }} # Default port is 21
-          local_dir: ./ # Directory to upload from (root of the repository)
-          remote_dir: /htdocs/ # Directory on the FTP server to upload to
+          # Server port to connect to (read your web host's docs)
+          port: ${{ secrets.FTP_PORT || 21 }}
+          # Protocol to deploy with - ftp, ftps, or ftps-legacy
+          protocol: ftp # optional, defaults to 'ftp'
+          # Folder to upload from, must end with trailing slash /
+          local-dir: ./ # optional, defaults to './'
+          # Path to upload to on the server. Must end with trailing slash /
+          server-dir: /projet2.ct.ws/htdocs/ # optional, defaults to '/'
+          # Path and name of the state file - this file is used to track which files have been deployed
+          state-name: .ftp-deploy-state.json # optional, defaults to '.ftp-deploy-state.json'
+          # Prints which modifications will be made with current config options, but doesn't actually make any changes
+          dry-run: false # optional, defaults to 'false'
+          # Deletes ALL contents of server-dir, even items excluded with exclude argument
+          dangerous-clean-slate: false # optional, defaults to 'false'
+          # An array of glob patterns, these files will not be included in the publish/delete process
+          exclude: | # optional
+            **/.git*
+            **/.DS_Store
+            **/node_modules/**
+          # How verbose should the information be - minimal, standard, or verbose
+          log-level: standard # optional, defaults to 'standard'
+          # strict or loose
+          security: strict
