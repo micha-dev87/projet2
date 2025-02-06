@@ -16,6 +16,8 @@
     // Initialiser la base de données :
     require_once("SQL/init.php");
 
+    // Variable style
+    $shadowBox = "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border-radius: 17px;";
 
     //Définir le nom du serveur
     define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
@@ -55,7 +57,7 @@
     require_once("shared/en-tete.php");
     //fin entête
 
-    //contenu page dynamique
+    //Main contenu - Routage -  page dynamique
     if (file_exists($controllerFile)) {
         include $controllerFile;
     } else {

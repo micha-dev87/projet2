@@ -6,7 +6,7 @@
     <?php if (!empty($succes)): ?>
         <div class="alert alert-success"><?= htmlspecialchars($succes) ?></div>
     <?php endif; ?>
-    <form id="registerForm" method="POST">
+    <form id="registerForm" class="p-4 " style="<?=$shadowBox?>" method="POST">
         <!-- Champ Nom -->
         <div class="mb-3">
             <label for="nom" class="form-label"><i class="fas fa-user me-2"></i>Nom</label>
