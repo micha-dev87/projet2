@@ -1,4 +1,5 @@
 <?php
+
 // models/utilisateurDAO.php
 
 
@@ -8,13 +9,16 @@
         public $OK;
         private $strTabUser = "utilisateurs";
         private $db;
-        private $NbUsers = 0;
 
         public function __construct($db)
         {
 
 
-            /* --- Création de l'instance, connexion avec mySQL et sélection de la base de données (RÉUSSITE) --- */
+            /*
+            |----------------------------------------------------------------------------------|
+            | connection à la base de données
+            |----------------------------------------------------------------------------------|
+            */
             $this->db = $db;
 
 
@@ -22,9 +26,11 @@
 
 
         /*
-         * Insérer un nouvel utilisateur
-         */
-        public function insererUtilisateur()
+        |----------------------------------------------------------------------------------|
+        | Ajouter un utilisateur
+        |----------------------------------------------------------------------------------|
+        */
+        public function ajouterUtilisateur()
         {
             $data = [];
             if (func_num_args() >= 4) {
@@ -46,16 +52,15 @@
 
                 // Hacher le mot de passe pour plus de sécurité
                 $motDePasseHache = password_hash($data[3], PASSWORD_DEFAULT);
-
-
+                //Optionnel
+                $telMaison = $data[4]??"";
+                $telTravail = $data[5]??"";
+                $telCellulaire = $data[6]??"";
+                $isAdmin = $data[7]??false;
                 // Construire la requête INSERT IGNORE
-
-
-                    $telMaison = $data[4];
-                    $telTravail = $data[5];
-                    $telCellulaire = $data[6];
-                    $requete = "INSERT IGNORE INTO $this->strTabUser (Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, NoEmpl, Creation)
-                 VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire', 0, $this->NbUsers,'$date_creation' );";
+                    $requete = "INSERT IGNORE INTO
+                    $this->strTabUser (Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, NoEmpl, Creation)
+                    VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire',($isAdmin?1:0), $this->NbUsers,'$date_creation' );";
                     afficheMessageConsole("Requete : $requete");
 
 
@@ -64,6 +69,7 @@
 
 
             } else {
+                $this->OK = false;
                 afficheMessageConsole("Le nombre de parametre est incorrect ", true);
                 die();
 
@@ -75,8 +81,10 @@
 
 
         /*
-         * Supprimer un utilisateur par ID
-         */
+        |----------------------------------------------------------------------------------|
+        | Verifier que l'adresse mail existe
+        |----------------------------------------------------------------------------------|
+        */
 
         function emailExiste($strEmail)
         {
@@ -86,8 +94,8 @@
 
             if ($resultatVerification) {
                 $row = mysqli_fetch_assoc($resultatVerification);
-                $this->NbUsers = $row['count'];
-                if ($this->NbUsers > 0) {
+
+                if ($row['count'] > 0) {
                     return true;
                 }
             } else {
@@ -97,8 +105,27 @@
         }
 
         /*
-         * Mettre à jour un utilisateur par ID
-         */
+        |----------------------------------------------------------------------------------|
+        | Confirmer un utilistaeur
+        |----------------------------------------------------------------------------------|
+        */
+
+        function confimerUtilisateur($strEmail, $intStatut)
+        {
+            // Vérifier si l'adresse courriel existe déjà dans la table
+            $requete = "UPDATE $this->strTabUser SET Statut = $intStatut WHERE Courriel = '$strEmail'";
+            $resultat= mysqli_query($this->db, $requete);
+
+            return $resultat;
+
+        }
+
+        /*
+        |----------------------------------------------------------------------------------|
+        | Supprimer un Utilisateur
+        |----------------------------------------------------------------------------------|
+        */
+
 
         public
         function supprimerUtilisateur($id)
@@ -112,7 +139,7 @@
 
         /*
         |----------------------------------------------------------------------------------|
-        | Verifier que l'adresse mail existe
+        | Mettre à jour l'utilisateur
         |----------------------------------------------------------------------------------|
         */
 
@@ -168,6 +195,62 @@
         }
 
 
+        /*
+        |----------------------------------------------------------------------------------|
+        | Authentification de l'utilisateur
+        | @return $utilisateur - table avec les valeurs ou string avec message d'erreur
+        |----------------------------------------------------------------------------------|
+        */
+        public function authentifierUtilisateur($courriel, $mot_de_passe) {
+            $requete = "SELECT * FROM utilisateurs WHERE Courriel = '$courriel'";
+            $resultat = mysqli_query($this->db, $requete);
 
+            if ($resultat && mysqli_num_rows($resultat) > 0) {
+                $utilisateur = mysqli_fetch_assoc($resultat);
+
+                // Vérifier le mot de passe
+                if (password_verify($mot_de_passe, $utilisateur['MotDePasse'])) {
+                    // Vérifier si l'utilisateur est confirmé
+                    if ($utilisateur['Statut'] == 0) {
+                        return "Votre compte n'a pas encore été confirmé. Veuillez vérifier votre courriel.";
+                    }
+
+                    // Incrémenter le nombre de connexions
+                    $this->incrementerNbConnexions($utilisateur['NoUtilisateur']);
+
+                    // Ajouter une nouvelle connexion dans la table connexions
+                    $connexionDAO = new ConnexionDAO();
+                    $connexionDAO->ajouterConnexion($utilisateur['NoUtilisateur']);
+
+                    return $utilisateur; // Retourner les informations de l'utilisateur
+                }
+            }
+
+            return "Les informations de connexion sont incorrectes.";
+        }
+
+        /*
+        |----------------------------------------------------------------------------------|
+        | Incrémenter le nombre de connexions d'un utilisateur
+        |----------------------------------------------------------------------------------|
+        */
+        private function incrementerNbConnexions($noUtilisateur) {
+            $requete = "UPDATE utilisateurs SET NbConnexions = NbConnexions + 1 WHERE NoUtilisateur = $noUtilisateur";
+            mysqli_query($this->db, $requete);
+        }
+
+        /*
+        |----------------------------------------------------------------------------------|
+        | Déconnecter l'utilisateur
+        |----------------------------------------------------------------------------------|
+        */
+        public function deconnecterUtilisateur($noUtilisateur) {
+            // Mettre à jour la date de déconnexion dans la table connexions
+            $connexionDAO = new ConnexionDAO();
+            $connexionDAO->fermerConnexion($noUtilisateur);
+
+            // Détruire la session
+            session_destroy();
+        }
 
     }

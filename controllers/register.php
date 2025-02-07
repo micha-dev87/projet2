@@ -8,7 +8,11 @@
 
 // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Récupérer les données du formulaire
+        /*
+        |----------------------------------------------------------------------------------|
+        | Recupération des valeurs du formulaire
+        |----------------------------------------------------------------------------------|
+        */
         $nom = trim($_POST['nom']);
         $prenom = trim($_POST['prenom']);
         $courriel = trim($_POST['courriel']);
@@ -19,7 +23,11 @@
         $no_tel_travail = trim($_POST['no_tel_travail']);
         $no_tel_cellulaire = trim($_POST['no_tel_cellulaire']);
 
-        // Validation côté serveur
+        /*
+        |----------------------------------------------------------------------------------|
+        | Verification des information du formulaire
+        |----------------------------------------------------------------------------------|
+        */
         if ($courriel !== $courriel_confirmation) {
             $erreur = "Les deux adresses de courriel ne correspondent pas.";
         } elseif ($mot_de_passe !== $mot_de_passe_confirmation) {
@@ -33,15 +41,28 @@
     } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-'.'’]*[a-zA-ZÀ-ÿ]$/', $prenom)) {
             $erreur = "Le prénom est invalide.";
         } else {
-            // Vérifier si l'adresse de courriel existe déjà dans la base de données
+            /*
+            |----------------------------------------------------------------------------------|
+            | Action sur la base de données "Utilisateur"
+            |----------------------------------------------------------------------------------|
+            */
             $utilisateurModel = new UtilisateurDAO($BDProjet2->cBD);
             if ($utilisateurModel->emailExiste($courriel)) {
+                /*
+                |----------------------------------------------------------------------------------|
+                | Definir le message d'erreur -
+                |----------------------------------------------------------------------------------|
+                */
                 $erreur = "Cette adresse de courriel est déjà utilisée. Veuillez en choisir une autre.";
             } else {
-                // Insérer l'utilisateur dans la base de données
+                /*
+                |----------------------------------------------------------------------------------|
+                | Hashé le mot de passe
+                |----------------------------------------------------------------------------------|
+                */
                 $mot_de_passe_hache = password_hash($mot_de_passe, PASSWORD_BCRYPT); // Hacher le mot de passe
 
-                $resultat_insertion = $utilisateurModel->insererUtilisateur(
+                $resultat_insertion = $utilisateurModel->ajouterUtilisateur(
                     $nom,
                     $prenom,
                     $courriel,
@@ -52,7 +73,11 @@
                 );
 
                 if ($resultat_insertion) {
-
+                    /*
+                    |----------------------------------------------------------------------------------|
+                    | Message de confirmation d'ajout
+                    |----------------------------------------------------------------------------------|
+                    */
                     $succes = "Votre inscription a été enregistrée avec succès. Un courriel de confirmation vous a été envoyé.";
                     // TODO : Envoyer un courriel de confirmation avec un jeton unique
                     afficheMessageConsole($succes);
