@@ -30,7 +30,10 @@
         </form>
 
         <div class="text-center mt-3">
-            <a href="index.php?action=register">Pas encore inscrit ? Inscrivez-vous ici.</a>
+            <p class="mt-4 mb-3 ">
+                Pas encore inscrit <i class="fas fa-face-smile"></i>  ?
+                <a href="<?=SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/register": "/register"?>" class="link">Inscrivez-vous ici</a>
+            </p>
         </div>
     </div>
 

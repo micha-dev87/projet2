@@ -8,10 +8,12 @@
     //inclusion générale
     require_once ("librairies/librairie-exercice01.php");
     require_once ("librairies/librairie-generale-2025-01-26.php");
+
     //Chargement les classes et models
     inclureFichiersDossier("classes", "require");
     inclureFichiersDossier("models", "require");
-    inclureFichiersDossier("SQL", "require");
+    //charger la base de données
+    require_once ("SQL/init.php");
 
 
 
@@ -23,6 +25,13 @@
     // Définir le chemin de base des contrôleurs
     define('BASE_PATH', __DIR__);
 
+
+
+
+
+    /*
+     * ------------------
+     */
     // Récupérer l'URL demandée
     $requestUri = getParametre("REQUEST_URI", "SERVER");
 

@@ -49,10 +49,11 @@
         'E,NoCategorie;V20,Description',
         'NoCategorie'
     );
-
-
-    /* --- Ajouter l'administrateur ---- */
-    // Coordonnées de l'administrateur;
+    /*
+    |----------------------------------------------------------------------------------|
+    | Ajouter les données de l'administrateur si celui-ci n'existe pas déja
+    |----------------------------------------------------------------------------------|
+    */
     require_once ("secrets/admin_user.php");
     $adminUser = new UtilisateurDAO($BDProjet2->cBD);
     if(!$adminUser->emailExiste(ADMIN_EMAIL)){
@@ -63,5 +64,7 @@
     }else{
         afficheMessageConsole("Administrateur à déjà été ajouté !");
     }
+
+
 
 

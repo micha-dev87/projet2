@@ -224,7 +224,7 @@
                 // Inclure ou requérir le fichier en fonction du type spécifié
                 try {
                     if ($typeInclusion === 'require') {
-                        require $fichier;
+                        require_once $fichier;
                         $resultats[] = "Fichier '$fichier' inclus avec require.";
                     } else {
                         include $fichier;
