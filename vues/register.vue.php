@@ -1,4 +1,4 @@
-<div class="form-container">
+<div class="container">
     <h2 class="text-center mb-4">Inscription</h2>
     <?php if (!empty($erreur)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($erreur) ?></div>
@@ -55,7 +55,7 @@
         </div>
         <!-- Bouton Soumettre -->
         <button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
-        <p class="mt-4 mb-3 "> Déjà membre <i class="fas fa-face-smile"></i>  ? <a href="<?=SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/login": "/login"?>" class="stretched-link">Connectez-vous</a> </p>
+        <p class="mt-4 mb-3 "> Déjà membre <i class="fas fa-face-smile"></i>  ? <a href="<?=SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/login": "/login"?>" class="link">Connectez-vous</a> </p>
     </form>
 </div>
 

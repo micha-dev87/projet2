@@ -46,7 +46,7 @@
         ?>
     </header>
 </div>
-<div class="container mt-5  mx-auto" style="max-width: 900px;">
+<div class="container mt-5  mx-auto" style="max-width: 1000px;">
 
 
 
