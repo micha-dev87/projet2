@@ -53,19 +53,39 @@
                 // Hacher le mot de passe pour plus de sécurité
                 $motDePasseHache = password_hash($data[3], PASSWORD_DEFAULT);
                 //Optionnel
-                $telMaison = $data[4]??"";
-                $telTravail = $data[5]??"";
-                $telCellulaire = $data[6]??"";
-                $isAdmin = $data[7]??false;
+                $telMaison = $data[4] ?? "";
+                $telTravail = $data[5] ?? "";
+                $telCellulaire = $data[6] ?? "";
+                $isAdmin = $data[7] ?? false;
                 // Construire la requête INSERT IGNORE
-                    $requete = "INSERT IGNORE INTO
-                    $this->strTabUser (Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, NoEmpl, Creation)
-                    VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire',($isAdmin?1:0), 0,'$date_creation' );";
-                    afficheMessageConsole("Requete : $requete");
+                $requete = "INSERT IGNORE INTO
+                    $this->strTabUser (
+                    Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, Creation
+                    )
+                    VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire'," . ($isAdmin ? 1 : 0) . ",'$date_creation' );";
+                afficheMessageConsole("Requete : $requete");
 
 
                 // Exécuter la requête
                 $this->OK = mysqli_query($this->db, $requete);
+
+                if ($this->OK) {
+                    // Récupérer l'ID généré automatiquement (clé primaire)
+                    $noEmpl = mysqli_insert_id($this->db);
+
+                    // Mettre à jour le champ NoEmpl avec la valeur de la clé primaire
+                    $requeteUpdate = "UPDATE $this->strTabUser SET NoEmpl = $noEmpl WHERE Noutilisateur = $noEmpl;";
+                    afficheMessageConsole("Requete Update : $requeteUpdate");
+
+                    // Exécuter la mise à jour
+                    $this->OK = mysqli_query($this->db, $requeteUpdate);
+
+                    if (!$this->OK) {
+                        afficheMessageConsole("Erreur lors de la mise à jour du NoEmpl", true);
+                    }
+                } else {
+                    afficheMessageConsole("Erreur lors de l'insertion de l'utilisateur", true);
+                }
 
 
             } else {
@@ -114,7 +134,7 @@
         {
             // Vérifier si l'adresse courriel existe déjà dans la table
             $requete = "UPDATE $this->strTabUser SET Statut = $intStatut WHERE Courriel = '$strEmail'";
-            $resultat= mysqli_query($this->db, $requete);
+            $resultat = mysqli_query($this->db, $requete);
 
             return $resultat;
 
@@ -127,8 +147,7 @@
         */
 
 
-        public
-        function supprimerUtilisateur($id)
+        public function supprimerUtilisateur($id)
         {
             // Construire la condition de suppression
             $condition = "NoUtilisateur = $id";
@@ -143,8 +162,7 @@
         |----------------------------------------------------------------------------------|
         */
 
-        public
-        function mettreAJourUtilisateur()
+        public function mettreAJourUtilisateur()
         {
             // Initialiser un tableau pour stocker les données
             $data = [];
@@ -165,8 +183,9 @@
                 $prenom = $data[2];
                 $email = $data[3];
                 $telMaison = $data[4];
-                $telTravail = $data[5] ?? null; // Optionnel
-                $telCellulaire = $data[6] ?? null; // Optionnel
+                $telTravail = $data[5] ?? ""; // Optionnel
+                $telCellulaire = $data[6] ?? ""; // Optionnel
+                $dateModification = aujourdhui();
 
 
                 // Construire la requête UPDATE
@@ -175,8 +194,10 @@
                     Prenom = '$prenom', 
                     Courriel = '$email', 
                     NoTelMaison = '$telMaison', 
-                    NoTelTravail = " . ($telTravail ? "'$telTravail'" : "NULL") . ", 
-                    NoTelCellulaire = " . ($telCellulaire ? "'$telCellulaire'" : "NULL") . " 
+                    NoTelTravail =  '$telTravail' , 
+                    NoTelCellulaire = '$telCellulaire',
+                    Modification = '$dateModification'
+                     
                     WHERE NoUtilisateur = $noUtilisateur";
 
                 // Exécuter la requête
@@ -197,11 +218,13 @@
 
         /*
         |----------------------------------------------------------------------------------|
-        | Authentification de l'utilisateur
-        | @return $utilisateur - table avec les valeurs ou string avec message d'erreur
+        | @function : Authentification de l'utilisateur
+        | @param : l'adresse courriel et mot de passe
+        | @return : []$utilisateur ou String - message d'erreur
         |----------------------------------------------------------------------------------|
         */
-        public function authentifierUtilisateur($courriel, $mot_de_passe) {
+        public function authentifierUtilisateur($courriel, $mot_de_passe)
+        {
             $requete = "SELECT * FROM utilisateurs WHERE Courriel = '$courriel'";
             $resultat = mysqli_query($this->db, $requete);
 
@@ -220,8 +243,9 @@
 
                     // Ajouter une nouvelle connexion dans la table connexions
                     $connexionDAO = new ConnexionDAO();
-                    $connexionDAO->ajouterConnexion($utilisateur['NoUtilisateur']);
-
+                    $noConnexion = $connexionDAO->ajouterConnexion($utilisateur['NoUtilisateur']);
+                    // Stocker l'ID de connexion dans la session
+                    $_SESSION['no_connexion'] = $noConnexion;
                     return $utilisateur; // Retourner les informations de l'utilisateur
                 }
             }
@@ -231,10 +255,13 @@
 
         /*
         |----------------------------------------------------------------------------------|
-        | Incrémenter le nombre de connexions d'un utilisateur
+        | @function : Incrementer le nombre de connexion dans la table user
+        | @param : l'id de l'utilisateur
+        | @return : void
         |----------------------------------------------------------------------------------|
         */
-        private function incrementerNbConnexions($noUtilisateur) {
+        private function incrementerNbConnexions($noUtilisateur)
+        {
             $requete = "UPDATE utilisateurs SET NbConnexions = NbConnexions + 1 WHERE NoUtilisateur = $noUtilisateur";
             mysqli_query($this->db, $requete);
         }
@@ -244,13 +271,20 @@
         | Déconnecter l'utilisateur
         |----------------------------------------------------------------------------------|
         */
-        public function deconnecterUtilisateur($noUtilisateur) {
-            // Mettre à jour la date de déconnexion dans la table connexions
-            $connexionDAO = new ConnexionDAO();
-            $connexionDAO->fermerConnexion($noUtilisateur);
+        public function deconnecterUtilisateur()
+        {
+            // Vérifier si l'utilisateur est connecté
+            if (isset($_SESSION['no_connexion'])) {
+                $noConnexion = $_SESSION['no_connexion'];
 
-            // Détruire la session
-            session_destroy();
+                // Fermer la connexion
+                $connexionDAO = new ConnexionDAO();
+                $connexionDAO->fermerConnexion($noConnexion);
+
+                // Détruire la session
+                session_destroy();
+            }
+
         }
 
     }

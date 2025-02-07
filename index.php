@@ -5,15 +5,13 @@
     // Debut da la session
     session_start();
 
+    //inclusion générale
     require_once ("librairies/librairie-exercice01.php");
     require_once ("librairies/librairie-generale-2025-01-26.php");
     //Chargement les classes et models
     inclureFichiersDossier("classes", "require");
     inclureFichiersDossier("models", "require");
     inclureFichiersDossier("SQL", "require");
-
-
-
 
 
 
@@ -51,14 +49,21 @@
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
 
 
-    //Entete de la page
+    /*
+    |----------------------------------------------------------------------------------|
+    | Entête de la page
+    |----------------------------------------------------------------------------------|
+    */
     $strTitreApplication = "Application  du groupeII";
     $strNomFichierCSS = "index.css";
     $strNomAuteur = "Michel Ange & Ramces & Franck & Samuel";
     require_once("shared/en-tete.php");
-    //fin entête
 
-    //Main contenu - Routage -  page dynamique
+    /*
+    |----------------------------------------------------------------------------------|
+    | Contenu de la page - selon les vues
+    |----------------------------------------------------------------------------------|
+    */
     if (file_exists($controllerFile)) {
         include $controllerFile;
     } else {
@@ -67,6 +72,9 @@
         echo "<H4 >La page  <b class='text-danger'>$controller</b> n'existe pas</H4>\n";
 
     }
-
-    //pied de page
+    /*
+    |----------------------------------------------------------------------------------|
+    | Pied de la page
+    |----------------------------------------------------------------------------------|
+    */
     require_once("shared/pied-page.php");

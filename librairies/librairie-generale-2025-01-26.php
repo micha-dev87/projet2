@@ -198,7 +198,7 @@
 
         // Générer le script JavaScript pour afficher le message dans la console
         echo "<script>
-            console.log('%c$message', 'color: $couleur;');
+            console.log(` %c$message` , ` color: $couleur;` );
           </script>";
     }
 
@@ -228,7 +228,7 @@
                         $resultats[] = "Fichier '$fichier' inclus avec require.";
                     } else {
                         include $fichier;
-                        $resultats[] = "Fichier '$fichier' inclus avec include.";
+                        $resultats[] = " Fichier '$fichier' inclus avec include.";
                     }
                 } catch (Exception $e) {
                     $resultats[] = "Erreur lors de l'inclusion du fichier '$fichier' : " . $e->getMessage();
