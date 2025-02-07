@@ -60,7 +60,7 @@
                 // Construire la requête INSERT IGNORE
                     $requete = "INSERT IGNORE INTO
                     $this->strTabUser (Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, NoEmpl, Creation)
-                    VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire',($isAdmin?1:0), $this->NbUsers,'$date_creation' );";
+                    VALUES ('$nom', '$prenom', '$email', '$motDePasseHache', '$telMaison', '$telTravail', '$telCellulaire',($isAdmin?1:0), 0,'$date_creation' );";
                     afficheMessageConsole("Requete : $requete");
 
 
