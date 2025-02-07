@@ -80,8 +80,8 @@
                     // TODO : Envoyer un courriel de confirmation avec un jeton unique
                     afficheMessageConsole($succes);
                     // Attendre 3 seconde et renvoyer vers le dashboard
-                    sleep(3);
-                    header("Location: ".SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/home": "/home");
+
+
                 } else {
                     $erreur = "Erreur lors de l'enregistrement.";
                     afficheMessageConsole($erreur, true);
