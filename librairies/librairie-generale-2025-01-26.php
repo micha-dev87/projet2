@@ -201,3 +201,49 @@
             console.log('%c$message', 'color: $couleur;');
           </script>";
     }
+
+/*
+ *  fonction pour inclure tous les fichiers d'un dossiers
+ */
+    function inclureFichiersDossier($dossier, $typeInclusion = 'include')
+    {
+        // Vérifier si le dossier existe
+        if (!is_dir($dossier)) {
+            return "Erreur : Le dossier '$dossier' n'existe pas.";
+        }
+
+        // Récupérer tous les fichiers .php dans le dossier
+        $fichiers_php = glob($dossier . '/*.php');
+
+        // Initialiser un tableau pour stocker les résultats
+        $resultats = [];
+
+        // Parcourir chaque fichier trouvé
+        foreach ($fichiers_php as $fichier) {
+            if (file_exists($fichier)) {
+                // Inclure ou requérir le fichier en fonction du type spécifié
+                try {
+                    if ($typeInclusion === 'require') {
+                        require $fichier;
+                        $resultats[] = "Fichier '$fichier' inclus avec require.";
+                    } else {
+                        include $fichier;
+                        $resultats[] = "Fichier '$fichier' inclus avec include.";
+                    }
+                } catch (Exception $e) {
+                    $resultats[] = "Erreur lors de l'inclusion du fichier '$fichier' : " . $e->getMessage();
+                }
+            } else {
+                $resultats[] = "Erreur : Le fichier '$fichier' n'existe pas.";
+            }
+        }
+
+        // Retourner les messages dans la console
+        if(count($resultats) > 0) {
+            afficheMessageConsole("message inclusion fichiers :::\n");
+            foreach ($resultats as $resultat) {
+                afficheMessageConsole($resultat);
+            }
+        }
+
+    }

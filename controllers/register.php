@@ -1,8 +1,6 @@
 <?php
 // controllers/register.controller.php
 
-    require_once 'models/utilisateurDAO.php'; // Inclure le modèle utilisateur
-
     $erreur = ""; // Stocke les messages d'erreur
     $succes = ""; // Stocke les messages de succès
 

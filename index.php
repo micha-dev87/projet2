@@ -6,15 +6,14 @@
     session_start();
 
     //Chargement les classes et librairies
-    require_once("classes/classe-mysql-2025-01-29.php");
-    require_once("classes/classe-fichier-2018-03-13.php");
-    require_once("librairies/librairie-exercice01.php");
-    require_once("librairies/librairie-generale-2025-01-26.php");
-    //fin
+    inclureFichiersDossier("classes", "require");
+    inclureFichiersDossier("models", "require");
+    inclureFichiersDossier("SQL", "require");
 
 
-    // Initialiser la base de données :
-    require_once("SQL/init.php");
+
+
+
 
     // Variable style
     $shadowBox = "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border-radius: 17px;";
