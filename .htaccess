@@ -7,3 +7,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Rediriger toutes les autres requêtes vers index.php
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+
+SetEnv DB_HOST="localhost"
+SetEnv DB_USERNAME="root"
+SetEnv DB_PASSWORD="Marias1987@"

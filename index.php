@@ -9,6 +9,7 @@
     //inclusion générale
     require_once ("librairies/librairie-exercice01.php");
     require_once ("librairies/librairie-generale-2025-01-26.php");
+    require_once __DIR__.'vendor/autoload.php';
 
 
     //Chargement les classes et models
