@@ -54,12 +54,13 @@
     $uriSegments = explode('/', $requestUri);
 
 
+    $defaultRoute = estConnecte() ? "dashboard" : "login";
     // Le premier segment est considéré comme le contrôleur
     if (SERVER_NAME=="localhost") {
         //En local recuperer le lien après un pas
-        $controller = !empty($uriSegments[1]) ? $uriSegments[1] : 'register';
+        $controller = !empty($uriSegments[1]) ?  "$uriSegments[1]/$defaultRoute": "$defaultRoute";
     }else{
-        $controller =  !empty($uriSegments[0]) ? $uriSegments[0] : 'register';
+        $controller =  !empty($uriSegments[0]) ?  "$uriSegments[0]/$defaultRoute": "$defaultRoute";
     }
 
 
