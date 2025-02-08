@@ -63,7 +63,6 @@
         $controller =  !empty($uriSegments[0]) ?  "$uriSegments[0]/$defaultRoute": "$defaultRoute";
     }
 
-
     // Inclure le contrôleur correspondant
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
 
