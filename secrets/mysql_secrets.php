@@ -9,6 +9,7 @@
     if (getParametre("SERVER_NAME", "SERVER") == "localhost") {
 
 
+
         $HOSTNAME = $_ENV['DB_HOST'] ;
         $USERNAME = $_ENV['DB_USERNAME'];
         $PASSWORD = $_ENV['DB_PASSWORD'];
