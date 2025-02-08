@@ -13,7 +13,7 @@
 
     if(isset($noConnexion)){
 
-
+        echo "<H4>Bienvenu <i class='fa-spin fa-regular fa-face-smile'> </i></h4>";
         echo "<h2> Bonjour ".$Prenom." tu as le role  :  ".strStatut($Statut)."</h2>";
 
     }
