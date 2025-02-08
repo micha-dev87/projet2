@@ -57,7 +57,7 @@
     $defaultRoute = estConnecte() ? "dashboard" : "login";
     // Le premier segment est considéré comme le contrôleur
     $controller = count($uriSegments)>2 ? end($uriSegments) : $defaultRoute;
-    echo $controller;
+
     // Inclure le contrôleur correspondant
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
 
