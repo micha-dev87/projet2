@@ -79,8 +79,9 @@
             $controller = $defaultRoute;
         endif;
     }
-
-    echo $id??"";
+    //recupérer l'id passé dans la console
+    afficheMessageConsole("Id passé :");
+    afficheMessageConsole($id??"Id inexistant !") ;
     // Inclure le contrôleur correspondant
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
 
