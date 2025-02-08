@@ -160,7 +160,7 @@
                         $sqlType = "DECIMAL($precision)";
                         break;
                     case 'D':
-                        $sqlType = "DATE";
+                        $sqlType = "DATETIME";
                         break;
                     case 'E':
 
