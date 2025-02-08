@@ -56,13 +56,8 @@
 
     $defaultRoute = estConnecte() ? "dashboard" : "login";
     // Le premier segment est considéré comme le contrôleur
-    if (SERVER_NAME=="localhost") {
-        //En local recuperer le lien après un pas
-        $controller = !empty($uriSegments[1]) ?  "$uriSegments[1]/$defaultRoute": "$defaultRoute";
-    }else{
-        $controller =  !empty($uriSegments[0]) ?  "$uriSegments[0]/$defaultRoute": "$defaultRoute";
-    }
-
+    $controller = count($uriSegments)>2 ? end($uriSegments) : $defaultRoute;
+    echo $controller;
     // Inclure le contrôleur correspondant
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
 
