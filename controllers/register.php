@@ -53,7 +53,6 @@
             // nouveau utilisateur
             $utilisateur = new Utilisateur($nom, $prenom, $courriel, $mot_de_passe, $no_tel_cellulaire, $no_tel_travail, $no_tel_maison);
 
-            afficheMessageConsole(".var_dump($utilisateur).");
 
             $utilisateurModel = new UtilisateurDAO($BDProjet2->cBD);
             if ($utilisateurModel->emailExiste($courriel)) {

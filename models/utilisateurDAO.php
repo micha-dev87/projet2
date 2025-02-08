@@ -33,7 +33,7 @@
         */
         public function ajouterUtilisateur($utilisateur)
         {
-            $date_creation = aujourdhui();
+            $date_creation = date('Y-m-d H:i:s');
             $mot_de_passe_hash = password_hash($utilisateur->mot_de_passe, PASSWORD_BCRYPT);
             // Construire la requête INSERT IGNORE
             $requete = "INSERT IGNORE INTO
@@ -137,7 +137,7 @@
         {
 
 
-            $dateModification = aujourdhui();
+            $dateModification = date('Y-m-d H:i:s');
 
 
             // Construire la requête UPDATE
@@ -190,6 +190,9 @@
                     // Stocker l'ID de connexion dans la session
                     $_SESSION['no_connexion'] = $noConnexion;
                     return $utilisateur; // Retourner les informations de l'utilisateur
+                }else{
+                    afficheMessageConsole("Mot de passe incorrect, dans la base: ".$utilisateur['MotDePasse']."  # Mot de passe : ".$MotDePasse);
+                    return "Le mot de passe est incorrect.";
                 }
             }
 
@@ -221,7 +224,7 @@
                 $noConnexion = $_SESSION['no_connexion'];
 
                 // Fermer la connexion
-                $connexionDAO = new ConnexionDAO();
+                $connexionDAO = new ConnexionDAO($this->db);
                 $connexionDAO->fermerConnexion($noConnexion);
 
                 // Détruire la session

@@ -23,7 +23,7 @@
         */
         public function ajouterConnexion($noUtilisateur)
         {
-            $date_connexion = aujourdhui(); // Date et heure actuelles
+            $date_connexion = date('Y-m-d H:i:s'); // Date et heure actuelles
             $requete = "INSERT INTO connexions (NoUtilisateur, Connexion) VALUES ($noUtilisateur, '$date_connexion')";
             mysqli_query($this->db, $requete);
 
@@ -40,7 +40,7 @@
         */
         public function fermerConnexion($noConnexion)
         {
-            $date_deconnexion = aujourdhui(); // Date et heure actuelles
+            $date_deconnexion = date('Y-m-d H:i:s'); // Date et heure actuelles
             $requete = "UPDATE connexions 
                     SET Deconnexion = '$date_deconnexion' 
                     WHERE NoConnexion = $noConnexion";

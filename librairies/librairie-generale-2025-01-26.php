@@ -273,3 +273,31 @@
     function estConnecte() {
         return isset($_SESSION['no_connexion']);
     }
+
+    /*
+    |----------------------------------------------------------------------------------|
+    | @function : Status utilisateur
+    | @return : string
+    |----------------------------------------------------------------------------------|
+    */
+
+    function strStatut($statut) {
+        switch ($statut) {
+            case 0:
+                return "En attente"; // Statut lors de l'enregistrement
+            case 9:
+                return "Confirmé"; // Statut après confirmation
+            case 1:
+                return "Administrateur"; // Rôle administrateur
+            case 2:
+                return "Cadre"; // Rôle cadre
+            case 3:
+                return "Employé de soutien"; // Rôle employé de soutien
+            case 4:
+                return "Enseignant"; // Rôle enseignant
+            case 5:
+                return "Professionnel"; // Rôle professionnel
+            default:
+                return "Statut inconnu"; // Cas par défaut si le statut n'est pas reconnu
+        }
+    }

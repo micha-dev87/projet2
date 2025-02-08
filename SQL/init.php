@@ -26,7 +26,7 @@
     /* --- Création de la structure de la table utilisateurs --- */
     $BDProjet2->creeTableGenerique(
         $strTabUser,
-        'A,NoUtilisateur;V50,Courriel;V15,MotDePasse;D,Creation;E,NbConnexions;E,Statut;
+        'A,NoUtilisateur;V50,Courriel;V60,MotDePasse;D,Creation;E,NbConnexions;E,Statut;
         E,NoEmpl;V25,Nom;V20,Prenom;V15,NoTelMaison;V21,NoTelTravail;V15,NoTelCellulaire;D,Modification;V50,AutresInfos',
         'NoUtilisateur'
     );
