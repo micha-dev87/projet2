@@ -34,9 +34,9 @@
             $erreur = "L'adresse de courriel saisie n'est pas valide.";
         } elseif (strlen($mot_de_passe) < 5 || strlen($mot_de_passe) > 15 || !preg_match('/[a-zA-Z]/', $mot_de_passe) || !preg_match('/[0-9]/', $mot_de_passe)) {
             $erreur = "Le mot de passe doit contenir entre 5 et 15 caractères, avec des lettres et chiffres combinés.";
-        } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-'.'’]*[a-zA-ZÀ-ÿ]$/', $nom)) {
-        $erreur = "Le nom est invalide.";
-    } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-'.'’]*[a-zA-ZÀ-ÿ]$/', $prenom)) {
+        } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-' . '’]*[a-zA-ZÀ-ÿ]$/', $nom)) {
+            $erreur = "Le nom est invalide.";
+        } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-' . '’]*[a-zA-ZÀ-ÿ]$/', $prenom)) {
             $erreur = "Le prénom est invalide.";
         } else {
             /*
@@ -80,15 +80,38 @@
                     // TODO : Envoyer un courriel de confirmation avec un jeton unique
                     afficheMessageConsole($succes);
                     // Attendre 3 seconde et renvoyer vers le dashboard
+                    ?>
+                        <script type="text/javascript">
+                        setTimeout((function(){
+                        <?php
+                        if(SERVER_NAME == 'localhost'):
+                        ?>
 
 
+
+
+
+                        window.location.href = "/<?=$uriSegments[0]?>/home"';
+
+                        <?php
+                        else:
+                        ?>
+                        window.location.href = "/home";
+
+
+                        <?php
+                        endif;
+                        ?>
+                                  }, 3000);
+                    </script>
+                    <?php
                 } else {
                     $erreur = "Erreur lors de l'enregistrement.";
                     afficheMessageConsole($erreur, true);
                 }
             }
         }
-}
+    }
 
 // Inclure la vue
-    require_once ("vues/register.vue.php");
+    require_once("vues/register.vue.php");
