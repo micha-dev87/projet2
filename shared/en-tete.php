@@ -38,7 +38,7 @@
             echo '<ul class="nav nav-pills">';
             foreach ($routes as $route => $label) {
                 // Construire l'URL en fonction de l'environnement (localhost ou production)
-                $url = SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/$route" : "/$route";
+                $url = "../$route";
 
                 // Déterminer si le lien est actif
                 $isActive = $controller == $route;
