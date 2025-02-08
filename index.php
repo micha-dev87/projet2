@@ -57,14 +57,30 @@
     $defaultRoute = estConnecte() ? "dashboard" : "login";
     /*
     |----------------------------------------------------------------------------------|
-    | Si nous avons
+    |returner un lien selon le server
     |----------------------------------------------------------------------------------|
     */
-    if (SERVER_NAME == "localhost"):
-        $controller = count($uriSegments)>2 ? end($uriSegments) : $defaultRoute;
-    else:
-        $controller = count($uriSegments)>1 ? end($uriSegments) : $defaultRoute;
-    endif;
+    $intNbUriSegment = count($uriSegments);
+
+    $controller = count($uriSegments)>1 ? end($uriSegments) : $defaultRoute;
+
+    /*
+    |----------------------------------------------------------------------------------|
+    |Recuperer les paramétres passés dans les lien
+    |----------------------------------------------------------------------------------|
+    */
+
+    if(is_numeric($controller)){
+        //vérifier que le format du lien est correcte sinon retourner le controller par default
+        if($intNbUriSegment >2):
+            $controller = $uriSegments[$intNbUriSegment-2];
+            $id= intval(end($uriSegments));
+        else:
+            $controller = $defaultRoute;
+        endif;
+    }
+
+    echo $id??"";
     // Inclure le contrôleur correspondant
     $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
 
