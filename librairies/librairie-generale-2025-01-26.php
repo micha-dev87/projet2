@@ -246,4 +246,30 @@
             }
         }
 
+
+
+
+    }
+
+    /*
+    |----------------------------------------------------------------------------------|
+    | @function : obtenir le chemin correct d'un controller
+    | @param : route et nom du dossier local du site
+    | @return : string - chemin correcte
+    |----------------------------------------------------------------------------------|
+    */
+
+    function chemin($route, $strFolderSite){
+        return SERVER_NAME == 'localhost' ? "/$strFolderSite/$route" : "/$route";
+    }
+
+    /*
+    |----------------------------------------------------------------------------------|
+    | @function : Verifie si l'utilisateur est connecté
+    | @return : bool
+    |----------------------------------------------------------------------------------|
+    */
+
+    function estConnecte() {
+        return isset($_SESSION['no_connexion']);
     }

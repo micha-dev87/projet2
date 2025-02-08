@@ -1,6 +1,11 @@
 <?php
-// controllers/register.controller.php
+    /*
+    |----------------------------------------------------------------------------------|
+    | Controller register - pour enregistrer l'utilisateur
+    |----------------------------------------------------------------------------------|
+    */
 
+    global $uriSegments, $BDProjet2;
     $erreur = ""; // Stocke les messages d'erreur
     $succes = ""; // Stocke les messages de succès
 
@@ -44,6 +49,12 @@
             | Action sur la base de données "Utilisateur"
             |----------------------------------------------------------------------------------|
             */
+
+            // nouveau utilisateur
+            $utilisateur = new Utilisateur($nom, $prenom, $courriel, $mot_de_passe, $no_tel_cellulaire, $no_tel_travail, $no_tel_maison);
+
+            afficheMessageConsole(".var_dump($utilisateur).");
+
             $utilisateurModel = new UtilisateurDAO($BDProjet2->cBD);
             if ($utilisateurModel->emailExiste($courriel)) {
                 /*
@@ -60,15 +71,7 @@
                 */
                 $mot_de_passe_hache = password_hash($mot_de_passe, PASSWORD_BCRYPT); // Hacher le mot de passe
 
-                $resultat_insertion = $utilisateurModel->ajouterUtilisateur(
-                    $nom,
-                    $prenom,
-                    $courriel,
-                    $mot_de_passe_hache,
-                    $no_tel_maison,
-                    $no_tel_travail,
-                    $no_tel_cellulaire
-                );
+                $resultat_insertion = $utilisateurModel->ajouterUtilisateur($utilisateur);
 
                 if ($resultat_insertion) {
                     /*
@@ -79,29 +82,15 @@
                     $succes = "Votre inscription a été enregistrée avec succès. Un courriel de confirmation vous a été envoyé.";
                     // TODO : Envoyer un courriel de confirmation avec un jeton unique
                     afficheMessageConsole($succes);
-                    // Attendre 3 seconde et renvoyer vers le dashboard
+                    /*
+                    |----------------------------------------------------------------------------------|
+                    | Attendre 3 seconde et rediriger vers la page dashboard
+                    |----------------------------------------------------------------------------------|
+                    */
                     ?>
                         <script type="text/javascript">
-                        setTimeout((function(){
-                        <?php
-                        if(SERVER_NAME == 'localhost'):
-                        ?>
-
-
-
-
-
-                        window.location.href = "/<?=$uriSegments[0]?>/home"';
-
-                        <?php
-                        else:
-                        ?>
-                        window.location.href = "/home";
-
-
-                        <?php
-                        endif;
-                        ?>
+                        setTimeout(function(){
+                        window.location.href = "<?=chemin("login", $uriSegments[0])?>";
                                   }, 3000);
                     </script>
                     <?php

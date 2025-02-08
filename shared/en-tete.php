@@ -22,12 +22,17 @@
 
         <?php
             // Définir les routes disponibles
-            $routes = [
-                'register' => 'register',
-                'login'    => 'login',
-                'home'     => 'home',
-                'logout'   => 'Se déconnecter',
-            ];
+            if(estConnecte()){
+                $routes = [
+                    'dashboard'     => 'Dashboard',
+                    'logout'   => 'Se déconnecter'
+                ];
+            }else{
+                $routes = [
+                    'register' => 'register',
+                    'login'    => 'login'
+                ];
+            }
 
             // Générer dynamiquement les liens du menu
             echo '<ul class="nav nav-pills">';

@@ -1,14 +1,16 @@
 <?php
     /*
     |----------------------------------------------------------------------------------|
-    | Controller login
+    | Model DAO Connexion
     |----------------------------------------------------------------------------------|
     */
 
-    class ConnexionDAO {
+    class ConnexionDAO
+    {
         private $db;
 
-        public function __construct($db) {
+        public function __construct($db)
+        {
             $this->db = $db;
         }
 
@@ -19,7 +21,8 @@
         | @return l'id de la connexion
         |----------------------------------------------------------------------------------|
         */
-        public function ajouterConnexion($noUtilisateur) {
+        public function ajouterConnexion($noUtilisateur)
+        {
             $date_connexion = aujourdhui(); // Date et heure actuelles
             $requete = "INSERT INTO connexions (NoUtilisateur, Connexion) VALUES ($noUtilisateur, '$date_connexion')";
             mysqli_query($this->db, $requete);
@@ -35,7 +38,8 @@
         | @return : bool
         |----------------------------------------------------------------------------------|
         */
-        public function fermerConnexion($noConnexion) {
+        public function fermerConnexion($noConnexion)
+        {
             $date_deconnexion = aujourdhui(); // Date et heure actuelles
             $requete = "UPDATE connexions 
                     SET Deconnexion = '$date_deconnexion' 
@@ -50,7 +54,8 @@
         | @return l'id de la connexion active
         |----------------------------------------------------------------------------------|
         */
-        public function recupererDerniereConnexionActive($noUtilisateur) {
+        public function recupererDerniereConnexionActive($noUtilisateur)
+        {
             $requete = "SELECT NoConnexion FROM connexions 
                     WHERE NoUtilisateur = $noUtilisateur AND Deconnexion IS NULL 
                     ORDER BY NoConnexion DESC LIMIT 1";
@@ -63,4 +68,6 @@
 
             return null; // Aucune connexion active trouvée
         }
+
+
     }

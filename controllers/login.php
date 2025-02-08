@@ -29,7 +29,7 @@
                 ];
 
                 // Rediriger vers la page d'accueil ou le tableau de bord
-                header("Location: index.php?action=dashboard");
+                header("Location: ".chemin("dashboard", $uriSegments[0]));
                 exit();
             } else {
                 $erreur = $utilisateur; // Message d'erreur retourné par authentifierUtilisateur
