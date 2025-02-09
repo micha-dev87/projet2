@@ -56,7 +56,7 @@
 
 
     }
-    afficheMessageConsole("Controlleur utilisé : ".$controller);
+    afficheMessageConsole("Controlleur utilisé : ".$controller. " Nombre de urisegments : ".count($uriSegments));
 
     // Afficher l'ID dans la console pour débogage
     afficheMessageConsole("Id passé : " . ($id ?? "Aucun ID détecté"));
