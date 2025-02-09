@@ -1,93 +1,60 @@
 <?php
-
-
-    // Debut da la session
+    // Début de la session
     session_start();
 
-    //inclusion générale
-    require_once ("librairies/librairie-exercice01.php");
-    require_once ("librairies/librairie-generale-2025-01-26.php");
+    // Inclusion des librairies nécessaires
+    require_once __DIR__ . "/librairies/librairie-exercice01.php";
+    require_once __DIR__ . "/librairies/librairie-generale-2025-01-26.php";
 
-    //Définir le nom du serveur
+    // Définir le nom du serveur
     define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
-    if(SERVER_NAME == "localhost"):
-    require_once __DIR__.'/vendor/autoload.php';
-    // Charger les variables d'environnement depuis le fichier .env
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-    endif;
+    // Définir des constantes globales
+    define('DEFAULT_CONTROLLER', estConnecte() ? "dashboard" : "login"); // Contrôleur par défaut
 
-    //Chargement les classes et models
-    inclureFichiersDossier("classes", "require");
-    inclureFichiersDossier("models", "require");
-    //charger la base de données
-    require_once ("SQL/init.php");
-
-
-
-
-
-
-    // Variable style
-    $shadowBox = "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border-radius: 17px;";
-
-    // Définir le chemin de base des contrôleurs
-    define('BASE_PATH', __DIR__);
-
-
-
-
-
-    /*
-     * ------------------
-     */
-    // Récupérer l'URL demandée
-    $requestUri = getParametre("REQUEST_URI", "SERVER");
-
-    // Supprimer la query string (tout ce qui suit "?")
-    $requestUri = strtok($requestUri, '?');
-
-    // Nettoyer l'URL (enlever les slashes inutiles)
-    $requestUri = trim($requestUri, '/');
-
-    // Diviser l'URL en segments
-    $uriSegments = explode('/', $requestUri);
-
-
-    $defaultRoute = estConnecte() ? "dashboard" : "login";
-    /*
-    |----------------------------------------------------------------------------------|
-    |returner un lien selon le server
-    |----------------------------------------------------------------------------------|
-    */
-    $intNbUriSegment = count($uriSegments);
-    if(SERVER_NAME == "localhost"):
-        $controller = count($uriSegments)>1 ? end($uriSegments) : $defaultRoute;
-    else:
-        $controller = count($uriSegments)>0 ? end($uriSegments) : $defaultRoute;
-    endif;
-    //si le controller est vide mettre la valeur de default
-    $controller = $controller == ""? $defaultRoute : $controller;
-    /*
-    |----------------------------------------------------------------------------------|
-    |Recuperer les paramétres passés dans les lien
-    |----------------------------------------------------------------------------------|
-    */
-
-    if(is_numeric($controller)){
-        //vérifier que le format du lien est correcte sinon retourner le controller par default
-        if($intNbUriSegment >2):
-            $controller = $uriSegments[$intNbUriSegment-2];
-            $id= intval(end($uriSegments));
-        endif;
+    // Charger les variables d'environnement si on est en local
+    if (SERVER_NAME === "localhost") {
+        require_once __DIR__ . '/vendor/autoload.php';
+        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+        $dotenv->load();
     }
 
-    //recupérer l'id passé dans la console
-    afficheMessageConsole("Id passé :");
-    afficheMessageConsole($id??"Id inexistant !") ;
-    // Inclure le contrôleur correspondant
-    $controllerFile = BASE_PATH . '/controllers/' . $controller . '.php';
+    // Chargement automatique des classes et modèles
+    inclureFichiersDossier("classes", "require");
+    inclureFichiersDossier("models", "require");
 
+    // Initialisation de la base de données
+    require_once __DIR__ . "/SQL/init.php";
+
+
+
+    // Style CSS global
+    $shadowBox = "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border-radius: 17px;";
+
+    // Récupérer l'URL demandée
+    $requestUri = getParametre("REQUEST_URI", "SERVER");
+    $requestUri = strtok($requestUri, '?'); // Supprimer la query string
+    $requestUri = trim($requestUri, '/'); // Nettoyer l'URL
+    $uriSegments = explode('/', $requestUri); // Diviser l'URL en segments
+
+    // Déterminer le contrôleur à charger
+    $controller = DEFAULT_CONTROLLER;
+    $id = null;
+
+    if (!empty($uriSegments)) {
+        // Si le dernier segment est numérique, il s'agit probablement d'un ID
+        if (is_numeric(end($uriSegments))) {
+            $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
+        }
+
+        // Le dernier segment restant est le contrôleur
+        $controller = !empty($uriSegments) ? end($uriSegments) : DEFAULT_CONTROLLER;
+    }
+
+    // Afficher l'ID dans la console pour débogage
+    afficheMessageConsole("Id passé : " . ($id ?? "Aucun ID détecté"));
+
+    // Construire le chemin du fichier du contrôleur
+    $controllerFile = __DIR__ . '/controllers/' . $controller . '.php';
 
     /*
     |----------------------------------------------------------------------------------|
@@ -99,18 +66,14 @@
     $strNomAuteur = "Michel Ange & Ramces & Franck & Samuel";
     require_once("shared/en-tete.php");
 
-    /*
-    |----------------------------------------------------------------------------------|
-    | Contenu de la page - selon les vues
-    |----------------------------------------------------------------------------------|
-    */
-    if (file_exists($controllerFile)) {
-        include $controllerFile;
-    } else {
-        // Si le contrôleur n'existe pas, afficher une page d'erreur 404
-        header("HTTP/1.0 404 Pas trouvé");
-        echo "<H4 >La page  <b class='text-danger'>$controller</b> n'existe pas</H4>\n";
 
+    // Vérifier si le fichier du contrôleur existe
+    if (file_exists($controllerFile)) {
+        include $controllerFile; // Inclure le contrôleur correspondant
+    } else {
+        // Gérer l'erreur 404 - Page non trouvée
+        http_response_code(404);
+        echo "<h4>La page <b class='text-danger'>$controller</b> n'existe pas.</h4>";
     }
     /*
     |----------------------------------------------------------------------------------|
