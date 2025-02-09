@@ -41,7 +41,7 @@
     $id = null;
 
     if (!empty($uriSegments)) {
-        $controller = !empty(end($uriSegments))??DEFAULT_CONTROLLER;
+        $controller = (end($uriSegments))??DEFAULT_CONTROLLER;
         // Si le dernier segment est numérique, il s'agit probablement d'un ID
         if (is_numeric($controller)) {
             $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
