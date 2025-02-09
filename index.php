@@ -9,11 +9,12 @@
     //inclusion générale
     require_once ("librairies/librairie-exercice01.php");
     require_once ("librairies/librairie-generale-2025-01-26.php");
+    if(getParametre("SERVER_NAME", "SERVER") == "localhost"):
     require_once __DIR__.'/vendor/autoload.php';
     // Charger les variables d'environnement depuis le fichier .env
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
-
+    endif;
 
     //Chargement les classes et models
     inclureFichiersDossier("classes", "require");
