@@ -41,7 +41,13 @@
     $id = null;
 
     if (!empty($uriSegments)) {
-        $controller = (end($uriSegments))??DEFAULT_CONTROLLER;
+        //Sachant que le site dans le local host se trouve dans un dossier
+        if(SERVER_NAME === "localhost"):
+            $controller = (!empty(end($uriSegments)) && count($uriSegments) >2 )?
+                end($uriSegments): DEFAULT_CONTROLLER;
+        else:
+            $controller = !empty(end($uriSegments))?end($uriSegments):DEFAULT_CONTROLLER;
+        endif;
         // Si le dernier segment est numérique, il s'agit probablement d'un ID
         if (is_numeric($controller)) {
             $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
