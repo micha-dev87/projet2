@@ -43,7 +43,7 @@
     if (!empty($uriSegments)) {
         //Sachant que le site dans le local host se trouve dans un dossier
         if(SERVER_NAME === "localhost"):
-            $controller = (!empty(end($uriSegments)) && count($uriSegments) >2 )?
+            $controller = (!empty(end($uriSegments)) && count($uriSegments) >1 )?
                 end($uriSegments): DEFAULT_CONTROLLER;
         else:
             $controller = !empty(end($uriSegments))?end($uriSegments):DEFAULT_CONTROLLER;
