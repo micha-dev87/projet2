@@ -44,7 +44,7 @@
      */
     // Récupérer l'URL demandée
     $requestUri = getParametre("REQUEST_URI", "SERVER");
-
+    echo $requestUri;
     // Supprimer la query string (tout ce qui suit "?")
     $requestUri = strtok($requestUri, '?');
 
@@ -63,7 +63,7 @@
     */
     $intNbUriSegment = count($uriSegments);
 
-    $controller = count($uriSegments)>1 ? end($uriSegments) : $defaultRoute;
+    $controller = count($uriSegments)>0 ? end($uriSegments) : $defaultRoute;
 
     /*
     |----------------------------------------------------------------------------------|
@@ -78,6 +78,7 @@
             $id= intval(end($uriSegments));
         endif;
     }
+
     //recupérer l'id passé dans la console
     afficheMessageConsole("Id passé :");
     afficheMessageConsole($id??"Id inexistant !") ;
