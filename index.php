@@ -76,8 +76,6 @@
         if($intNbUriSegment >2):
             $controller = $uriSegments[$intNbUriSegment-2];
             $id= intval(end($uriSegments));
-        else:
-            $controller = $defaultRoute;
         endif;
     }
     //recupérer l'id passé dans la console
