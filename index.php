@@ -45,14 +45,21 @@
         if(SERVER_NAME === "localhost"):
             $controller = (!empty(end($uriSegments)) && count($uriSegments) >1 )?
                 end($uriSegments): DEFAULT_CONTROLLER;
+
+            // Si le dernier segment est numérique, il s'agit probablement d'un ID
+            if (is_numeric($controller) && count($uriSegments)>2  ) {
+                $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
+                $controller = end($uriSegments);
+            };
         else:
             $controller = !empty(end($uriSegments))?end($uriSegments):DEFAULT_CONTROLLER;
+            // Si le dernier segment est numérique, il s'agit probablement d'un ID
+            if (is_numeric($controller) && count($uriSegments)>1  ) {
+                $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
+                $controller = end($uriSegments);
+            };
         endif;
-        // Si le dernier segment est numérique, il s'agit probablement d'un ID
-        if (is_numeric($controller)) {
-            $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
-            $controller = end($uriSegments);
-        }
+
 
 
     }
