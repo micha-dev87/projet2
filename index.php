@@ -67,7 +67,8 @@
     else:
         $controller = count($uriSegments)>0 ? end($uriSegments) : $defaultRoute;
     endif;
-
+    //si le controller est vide mettre la valeur de default
+    $controller = $controller == ""? $defaultRoute : $controller;
     /*
     |----------------------------------------------------------------------------------|
     |Recuperer les paramétres passés dans les lien
