@@ -50,6 +50,7 @@
 
 
     }
+    afficheMessageConsole("Controlleur utilisé : ".$controller);
 
     // Afficher l'ID dans la console pour débogage
     afficheMessageConsole("Id passé : " . ($id ?? "Aucun ID détecté"));
