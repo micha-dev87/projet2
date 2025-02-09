@@ -41,13 +41,14 @@
     $id = null;
 
     if (!empty($uriSegments)) {
+        $controller = !empty(end($uriSegments))??DEFAULT_CONTROLLER;
         // Si le dernier segment est numérique, il s'agit probablement d'un ID
-        if (is_numeric(end($uriSegments))) {
+        if (is_numeric($controller)) {
             $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
+            $controller = end($uriSegments);
         }
 
-        // Le dernier segment restant est le contrôleur
-        $controller = !empty($uriSegments) ? end($uriSegments) : DEFAULT_CONTROLLER;
+
     }
 
     // Afficher l'ID dans la console pour débogage

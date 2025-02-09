@@ -1,5 +1,5 @@
 <?php
-
+//model Utilisateur.php
     class Utilisateur
     {
         public $NoUtilisateur;
@@ -41,3 +41,4 @@
 
 
     }
+
