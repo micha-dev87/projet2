@@ -44,7 +44,7 @@
      */
     // Récupérer l'URL demandée
     $requestUri = getParametre("REQUEST_URI", "SERVER");
-    echo $requestUri;
+
     // Supprimer la query string (tout ce qui suit "?")
     $requestUri = strtok($requestUri, '?');
 
@@ -62,8 +62,11 @@
     |----------------------------------------------------------------------------------|
     */
     $intNbUriSegment = count($uriSegments);
-
-    $controller = count($uriSegments)>0 ? end($uriSegments) : $defaultRoute;
+    if(getParametre("SERVER_NAME", "SERVER") == "localhost"):
+        $controller = count($uriSegments)>1 ? end($uriSegments) : $defaultRoute;
+    else:
+        $controller = count($uriSegments)>0 ? end($uriSegments) : $defaultRoute;
+    endif;
 
     /*
     |----------------------------------------------------------------------------------|
