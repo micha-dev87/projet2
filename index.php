@@ -62,7 +62,7 @@
     |----------------------------------------------------------------------------------|
     */
     $intNbUriSegment = count($uriSegments);
-    if(getParametre("SERVER_NAME", "SERVER") == "localhost"):
+    if(SERVER_NAME == "localhost"):
         $controller = count($uriSegments)>1 ? end($uriSegments) : $defaultRoute;
     else:
         $controller = count($uriSegments)>0 ? end($uriSegments) : $defaultRoute;
