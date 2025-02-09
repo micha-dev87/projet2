@@ -1,15 +1,16 @@
 <?php
 
 
-
-
     // Debut da la session
     session_start();
 
     //inclusion générale
     require_once ("librairies/librairie-exercice01.php");
     require_once ("librairies/librairie-generale-2025-01-26.php");
-    if(getParametre("SERVER_NAME", "SERVER") == "localhost"):
+
+    //Définir le nom du serveur
+    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
+    if(SERVER_NAME == "localhost"):
     require_once __DIR__.'/vendor/autoload.php';
     // Charger les variables d'environnement depuis le fichier .env
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -30,8 +31,6 @@
     // Variable style
     $shadowBox = "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border-radius: 17px;";
 
-    //Définir le nom du serveur
-    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
     // Définir le chemin de base des contrôleurs
     define('BASE_PATH', __DIR__);
 
