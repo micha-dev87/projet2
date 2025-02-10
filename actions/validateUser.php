@@ -7,6 +7,7 @@
         $resultat = $GLOBALS["utilisateurDAO"]->confimerUtilisateur($noUtilisateur, $nouveauStatut);
         if ($resultat) {
             echo afficherModal("L'utilisateur : $noUtilisateur ", "est désormais actif");
+            sleep(5);
             header("Location: dashboard");
             exit();
         } else {
