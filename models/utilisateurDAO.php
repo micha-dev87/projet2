@@ -100,10 +100,10 @@
         |----------------------------------------------------------------------------------|
         */
 
-        function confimerUtilisateur($utilisateur)
+        function confimerUtilisateur($id, $statut)
         {
             // Vérifier si l'adresse courriel existe déjà dans la table
-            $requete = "UPDATE $this->strTabUser SET Statut = $utilisateur->statut WHERE Courriel = '$utilisateur->courriel'";
+            $requete = "UPDATE $this->strTabUser SET Statut = $statut WHERE NoUtilisateur = '$id'";
             $resultat = mysqli_query($this->db, $requete);
 
             return $resultat;
@@ -140,14 +140,15 @@
         |----------------------------------------------------------------------------------|
         */
 
-
-        public function supprimerUtilisateur($id)
+        /**
+         * @param $id
+         * @return mysqli_result|bool
+         */
+        public function supprimerUtilisateur($id): mysqli_result|bool
         {
-            // Construire la condition de suppression
-            $condition = "NoUtilisateur = $id";
-
-            // Appeler la fonction de suppression
-            return $this->db->supprimeEnregistrements($this->strTabUser, $condition);
+            $requet = "DELETE FROM $this->strTabUser WHERE NoUtilisateur = '$id'";
+            $resultat = mysqli_query($this->db, $requet);
+            return $resultat;
         }
 
         /*

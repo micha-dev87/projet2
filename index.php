@@ -8,6 +8,7 @@
     require_once __DIR__ . "/librairies/librairie-exercice01.php";
     require_once __DIR__ . "/librairies/librairie-generale-2025-01-26.php";
 
+
 // Déterminer le sous-dossier dynamiquement
     $scriptName = $_SERVER['SCRIPT_NAME'];
     $subFolder = trim(dirname($scriptName), "/");
@@ -19,6 +20,7 @@
     define('DEFAULT_CONTROLLER', estConnecte() ? "dashboard" : "login");
     define('BASE_PATH', $subFolder);
     define('CONTROLLERS_PATH', 'controllers/');
+    define('ACTIONS_PATH', 'actions/');
 
 // Charger les variables d'environnement si on est en local
     if (SERVER_NAME === "localhost") {
@@ -30,7 +32,7 @@
 // Chargement automatique des classes, styles et modèles
     inclureFichiersDossier("classes", "require");
     inclureFichiersDossier("models", "require");
-    inclureFichiersDossier("variablesStyles", "require");
+    inclureFichiersDossier("variables", "require");
 
 
 // Initialisation de la base de données
@@ -43,7 +45,10 @@
 
 // Supprimer le sous-dossier du chemin
     if (!empty($subFolder)) {
-        $requestUri = str_replace($subFolder, '', $requestUri);
+
+        $requestUri = str_replace(strtolower($subFolder), "", $requestUri);
+
+
     }
 
 // Diviser l'URL en segments
@@ -51,30 +56,63 @@
 
 // Déterminer le contrôleur et l'action
     $controller = DEFAULT_CONTROLLER;
-    $action = "";
-    $id = null;
+    $action = null;
+    $paramId = null;
     $intNbSegments= sizeof($uriSegments);
+    $controllers = glob(CONTROLLERS_PATH . "*.php");
+    $actions = glob(ACTIONS_PATH . "*.php");
 
-    if (!empty($requestUri)) {
-        $controller = end($uriSegments);
-        $index = null;
 
+    if ($intNbSegments > 1) {
+        foreach ($uriSegments as $uriSegment) {
+
+            if(empty($uriSegment)) continue;
+            //verifier les chemins
+
+            //si controleur
+            if( in_array(CONTROLLERS_PATH.$uriSegment.".php", $controllers)) {
+                afficheMessageConsole("le controleur ".$uriSegment." existe !");
+                $controller = $uriSegment;
+            }
+            //si action
+            else if( in_array(ACTIONS_PATH.$uriSegment.".php", $actions)) {
+                afficheMessageConsole("l'action ".$uriSegment." existe !");
+                $action = $uriSegment;
+
+            }
+
+
+            //si id
+            else if(is_numeric($uriSegment) && $action) {
+                afficheMessageConsole("Un id a été fourni : ".$uriSegment);
+                $paramId = (int)$uriSegment;
+            }else{
+                afficheMessageConsole("Erreur le chemin ".$uriSegment." n'existe pas !");
+            }
+
+
+
+        }
+    }else{
+        // Afficher message dans la console navigateur
+        afficheMessageConsole("Infos folder, controller et ID :");
+        afficheMessageConsole("Default Controller: " . DEFAULT_CONTROLLER);
+        afficheMessageConsole("Controller : ".$controller);
+        afficheMessageConsole("Action : ".$action);
+        afficheMessageConsole("ID : ".$id);
+        afficheMessageConsole("subFolder  : ".$subFolder);
+        afficheMessageConsole("Nombre segment : ".$intNbSegments);
+        afficheMessageConsole("requestUri : ".$requestUri);
     }
 
-    // Afficher message dans la console navigateur
-    afficheMessageConsole("Infos folder, controller et ID :");
-    afficheMessageConsole("Default Controller: " . DEFAULT_CONTROLLER);
-    afficheMessageConsole("Controller : ".$controller);
-    afficheMessageConsole("ID : ".$id);
-    afficheMessageConsole("subFolder  : ".$subFolder);
-    afficheMessageConsole("Nombre segment : ".$intNbSegments);
-    afficheMessageConsole("requestUri : ".$requestUri);
-    afficheMessageConsole("Controller path: ".CONTROLLERS_PATH);
+
+
+
 
 
     //Rediriger tous utilisateur vers le dashboard
     if(estConnecte() && ($controller=="login" || $controller=="register")) {
-        header('Location: dashboard');
+        $controller = header("Location dashboard");
     }
 
 // Construire le chemin du fichier du contrôleur

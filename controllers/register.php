@@ -86,13 +86,7 @@
                     | Attendre 3 seconde et rediriger vers la page dashboard
                     |----------------------------------------------------------------------------------|
                     */
-                    ?>
-                        <script type="text/javascript">
-                        setTimeout(function(){
-                        window.location.href = "/login";
-                                  }, 3000);
-                    </script>
-                    <?php
+                    header("Location:login");
                 } else {
                     $erreur = "Erreur lors de l'enregistrement.";
                     afficheMessageConsole($erreur, true);

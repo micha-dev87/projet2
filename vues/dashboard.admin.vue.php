@@ -47,7 +47,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formChangerStatut" method="POST" action="/utilisateur/modifier-statut">
+                        <form id="formChangerStatut" method="POST" action="utilisateur/validateUser">
                             <input type="hidden" name="no_utilisateur" value="<?= $utilisateur->NoUtilisateur ?>">
                             <div class="mb-3">
                                 <label for="statut" class="form-label">Nouveau statut</label>
@@ -72,7 +72,7 @@
     // Fonction pour supprimer un utilisateur
     function supprimerUtilisateur(noUtilisateur) {
         if (confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
-            window.location.href = "/utilisateur/supprimer/" + noUtilisateur;
+            window.location.href = "utilisateur/deleteUser/" + noUtilisateur;
         }
     }
 </script>
