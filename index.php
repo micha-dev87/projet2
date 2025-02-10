@@ -51,14 +51,14 @@
 
 // Déterminer le contrôleur et l'action
     $controller = DEFAULT_CONTROLLER;
+    $action = "";
     $id = null;
+    $intNbSegments= sizeof($uriSegments);
 
     if (!empty($requestUri)) {
         $controller = end($uriSegments);
-        if (is_numeric($controller) && count($uriSegments) > 1) {
-            $id = intval(array_pop($uriSegments));
-            $controller = end($uriSegments);
-        }
+        $index = null;
+
     }
 
     // Afficher message dans la console navigateur
@@ -67,6 +67,7 @@
     afficheMessageConsole("Controller : ".$controller);
     afficheMessageConsole("ID : ".$id);
     afficheMessageConsole("subFolder  : ".$subFolder);
+    afficheMessageConsole("Nombre segment : ".$intNbSegments);
     afficheMessageConsole("requestUri : ".$requestUri);
     afficheMessageConsole("Controller path: ".CONTROLLERS_PATH);
 

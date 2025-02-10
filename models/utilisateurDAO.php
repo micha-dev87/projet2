@@ -111,6 +111,29 @@
         }
 
 
+
+        /**
+         * Liste des utilisateurs
+         * @return array<int, Utilisateur>
+         */
+        function listerUtilisateurs(): array
+        {
+            //Select all users
+            $requete = "SELECT * FROM $this->strTabUser";
+
+            $resultat = mysqli_query($this->db, $requete);
+            $listeUtilisateurs = array();
+            while ($row = mysqli_fetch_assoc($resultat)) {
+                $utilisateur = new Utilisateur($row["Nom"], $row["Prenom"], $row["Courriel"],
+                    $row["MotDePasse"], $row["NoTelCellulaire"], $row["NoTelTravail"],
+                    $row["NoTelMaison"], $row["Statut"], $row["NoUtilisateur"]);
+
+                array_push($listeUtilisateurs, $utilisateur);
+
+            }
+            return $listeUtilisateurs;
+        }
+
         /*
         |----------------------------------------------------------------------------------|
         | Supprimer un Utilisateur
