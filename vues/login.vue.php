@@ -4,6 +4,8 @@
   | Vue page login
   |----------------------------------------------------------------------------------|
   */
+
+
 ?>
   <div class="container">
         <h2 class="text-center mb-4">Connexion</h2>
@@ -12,7 +14,7 @@
             <div class="alert alert-danger"><?= htmlspecialchars($erreur) ?></div>
         <?php endif; ?>
 
-        <form id="loginForm" method="POST" action="">
+        <form id="loginForm" method="POST" class="p-4" style="<?= $shadowBox." ".$borderRadius. " ".$form_width ?>" action="">
             <!-- Champ Courriel -->
             <div class="mb-3">
                 <label for="courriel" class="form-label">Adresse de courriel</label>

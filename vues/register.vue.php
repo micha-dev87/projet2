@@ -1,3 +1,6 @@
+<?php
+
+?>
 <div class="container">
     <h2 class="text-center mb-4">Inscription</h2>
     <?php if (!empty($erreur)): ?>
@@ -6,7 +9,7 @@
     <?php if (!empty($succes)): ?>
         <div class="alert alert-success"><?= htmlspecialchars($succes) ?></div>
     <?php endif; ?>
-    <form id="registerForm" class="p-4 " style="<?=$shadowBox?>" method="POST">
+    <form id="registerForm" class="p-4 " style="<?=$shadowBox." ".$borderRadius?>" method="POST">
         <!-- Champ Nom -->
         <div class="mb-3">
             <label for="nom" class="form-label"><i class="fas fa-user me-2"></i>Nom</label>

@@ -1,98 +1,98 @@
 <?php
-    // Début de la session
+
+
+// Début de la session
     session_start();
 
-    // Inclusion des librairies nécessaires
+// Inclusion des librairies nécessaires
     require_once __DIR__ . "/librairies/librairie-exercice01.php";
     require_once __DIR__ . "/librairies/librairie-generale-2025-01-26.php";
 
-    // Définir le nom du serveur
-    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
-    // Définir des constantes globales
-    define('DEFAULT_CONTROLLER', estConnecte() ? "dashboard" : "login"); // Contrôleur par défaut
+// Déterminer le sous-dossier dynamiquement
+    $scriptName = $_SERVER['SCRIPT_NAME'];
+    $subFolder = trim(dirname($scriptName), "/");
+    // format lien
+    $subFolder = str_replace(" ", "%20", $subFolder);
 
-    // Charger les variables d'environnement si on est en local
+// Définir des constantes globales
+    define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
+    define('DEFAULT_CONTROLLER', estConnecte() ? "dashboard" : "login");
+    define('BASE_PATH', $subFolder);
+    define('CONTROLLERS_PATH', 'controllers/');
+
+// Charger les variables d'environnement si on est en local
     if (SERVER_NAME === "localhost") {
         require_once __DIR__ . '/vendor/autoload.php';
         $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
         $dotenv->load();
     }
 
-    // Chargement automatique des classes et modèles
+// Chargement automatique des classes, styles et modèles
     inclureFichiersDossier("classes", "require");
     inclureFichiersDossier("models", "require");
+    inclureFichiersDossier("variablesStyles", "require");
 
-    // Initialisation de la base de données
+
+// Initialisation de la base de données
     require_once __DIR__ . "/SQL/init.php";
 
-
-
-    // Style CSS global
-    $shadowBox = "box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; border-radius: 17px;";
-
-    // Récupérer l'URL demandée
-    $requestUri = getParametre("REQUEST_URI", "SERVER");
+// Récupérer l'URL demandée
+    $requestUri = $_SERVER['REQUEST_URI'];
     $requestUri = strtok($requestUri, '?'); // Supprimer la query string
-    $requestUri = trim($requestUri, '/'); // Nettoyer l'URL
-    $uriSegments = explode('/', $requestUri); // Diviser l'URL en segments
+    $requestUri = trim($requestUri, '/');  // Nettoyer les slashes
 
-    // Déterminer le contrôleur à charger
+// Supprimer le sous-dossier du chemin
+    if (!empty($subFolder)) {
+        $requestUri = str_replace($subFolder, '', $requestUri);
+    }
+
+// Diviser l'URL en segments
+    $uriSegments = explode('/', $requestUri);
+
+// Déterminer le contrôleur et l'action
     $controller = DEFAULT_CONTROLLER;
     $id = null;
 
-    if (!empty($uriSegments)) {
-        //Sachant que le site dans le local host se trouve dans un dossier
-        if(SERVER_NAME === "localhost"):
-            $controller = (!empty(end($uriSegments)) && count($uriSegments) >1 )?
-                end($uriSegments): DEFAULT_CONTROLLER;
-
-            // Si le dernier segment est numérique, il s'agit probablement d'un ID
-            if (is_numeric($controller) && count($uriSegments)>2  ) {
-                $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
-                $controller = end($uriSegments);
-            };
-        else:
-            $controller = !empty(end($uriSegments))?end($uriSegments):DEFAULT_CONTROLLER;
-            // Si le dernier segment est numérique, il s'agit probablement d'un ID
-            if (is_numeric($controller) && count($uriSegments)>1  ) {
-                $id = intval(array_pop($uriSegments)); // Récupérer l'ID et retirer le dernier segment
-                $controller = end($uriSegments);
-            };
-        endif;
-
-
-
+    if (!empty($requestUri)) {
+        $controller = end($uriSegments);
+        if (is_numeric($controller) && count($uriSegments) > 1) {
+            $id = intval(array_pop($uriSegments));
+            $controller = end($uriSegments);
+        }
     }
-    afficheMessageConsole("Controlleur utilisé : ".$controller. " Nombre de urisegments : ".count($uriSegments));
 
-    // Afficher l'ID dans la console pour débogage
-    afficheMessageConsole("Id passé : " . ($id ?? "Aucun ID détecté"));
+    // Afficher message dans la console navigateur
+    afficheMessageConsole("Infos folder, controller et ID :");
+    afficheMessageConsole("Default Controller: " . DEFAULT_CONTROLLER);
+    afficheMessageConsole("Controller : ".$controller);
+    afficheMessageConsole("ID : ".$id);
+    afficheMessageConsole("subFolder  : ".$subFolder);
+    afficheMessageConsole("requestUri : ".$requestUri);
+    afficheMessageConsole("Controller path: ".CONTROLLERS_PATH);
 
-    // Construire le chemin du fichier du contrôleur
-    $controllerFile = __DIR__ . '/controllers/' . $controller . '.php';
 
-    /*
-    |----------------------------------------------------------------------------------|
-    | Entête de la page
-    |----------------------------------------------------------------------------------|
-    */
-    $strTitreApplication = "Application  du groupeII";
+    //Rediriger tous utilisateur vers le dashboard
+    if(estConnecte() && ($controller=="login" || $controller=="register")) {
+        header('Location: dashboard');
+    }
+
+// Construire le chemin du fichier du contrôleur
+    $controllerFile = CONTROLLERS_PATH . $controller . '.php';
+
+// Inclure les fichiers communs
+    $strTitreApplication = "Application du groupe II";
     $strNomFichierCSS = "index.css";
     $strNomAuteur = "Michel Ange & Ramces & Franck & Samuel";
     require_once("shared/en-tete.php");
 
-
-    // Vérifier si le fichier du contrôleur existe
+// Vérifier si le fichier du contrôleur existe
     if (file_exists($controllerFile)) {
-        include $controllerFile; // Inclure le contrôleur correspondant
+
+        include $controllerFile;
     } else {
-        // Gérer l'erreur 404 - Page non trouvée
         http_response_code(404);
         echo "<h4>La page <b class='text-danger'>$controller</b> n'existe pas.</h4>";
     }
-    /*
-    |----------------------------------------------------------------------------------|
-    | Pied de la page
-    |----------------------------------------------------------------------------------|
-    */
+
+// Inclure le pied de page
     require_once("shared/pied-page.php");

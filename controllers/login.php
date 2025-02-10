@@ -29,7 +29,7 @@
                 ];
 
                 // Rediriger vers la page d'accueil ou le tableau de bord
-                header("Location: ".chemin("dashboard", $uriSegments[0]));
+                header("Location: dashboard");
                 exit();
             } else {
                 $erreur = $utilisateur; // Message d'erreur retourné par authentifierUtilisateur

@@ -89,7 +89,7 @@
                     ?>
                         <script type="text/javascript">
                         setTimeout(function(){
-                        window.location.href = "<?=chemin("login", $uriSegments[0])?>";
+                        window.location.href = "/login";
                                   }, 3000);
                     </script>
                     <?php
