@@ -5,6 +5,9 @@
 |----------------------------------------------------------------------------------|
 */
 
+    // Base de donnée - USER
+    $utilisateurDAO = new UtilisateurDAO($GLOBALS["BDProjet2"]->cBD);
+
 
 // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['utilisateur'])) {
@@ -25,8 +28,7 @@
 
 // Passer les données à la vue selon l'utilisateur
     if ($Statut == 1) :
-        // Récupérer la liste des utilisateurs
-        $utilisateurDAO = new UtilisateurDAO($BDProjet2->cBD);
+        //liste des utilisateur :::: administrateur
         $listeUtilisateurs = $utilisateurDAO->listerUtilisateurs();
         require_once 'vues/dashboard.admin.vue.php';
     else:

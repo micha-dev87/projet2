@@ -6,7 +6,7 @@
         // Mettre à jour le statut de l'utilisateur
         $resultat = $GLOBALS["utilisateurDAO"]->confimerUtilisateur($noUtilisateur, $nouveauStatut);
         if ($resultat) {
-            afficherModal("L'utilisateur : $noUtilisateur ", "est désormais actif");
+            echo afficherModal("L'utilisateur : $noUtilisateur ", "est désormais actif");
             header("Location: dashboard");
             exit();
         } else {

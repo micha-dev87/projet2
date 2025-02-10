@@ -99,7 +99,7 @@
         afficheMessageConsole("Default Controller: " . DEFAULT_CONTROLLER);
         afficheMessageConsole("Controller : ".$controller);
         afficheMessageConsole("Action : ".$action);
-        afficheMessageConsole("ID : ".$id);
+        afficheMessageConsole("ID : ".$paramId);
         afficheMessageConsole("subFolder  : ".$subFolder);
         afficheMessageConsole("Nombre segment : ".$intNbSegments);
         afficheMessageConsole("requestUri : ".$requestUri);
