@@ -46,7 +46,7 @@
     /* --- Création de la structure de la table categories --- */
     $BDProjet2->creeTableGenerique(
         $strTabCat,
-        'E,NoCategorie;V20,Description',
+        'A,NoCategorie;V20,Description',
         'NoCategorie'
     );
     /*
@@ -63,6 +63,25 @@
     }else{
         afficheMessageConsole("Administrateur à déjà été ajouté !");
     }
+
+    /*
+    |----------------------------------------------------------------------------------|
+    | Ajouter les categories
+    |----------------------------------------------------------------------------------|
+    */
+    $categorieDAO = new CategorieDAO($BDProjet2->cBD);
+
+    $categories = $categorieDAO->getAllCategorie();
+    if(!empty($categories)){
+        afficheMessageConsole("les catégories ont déjà été ajouté !");
+    }else{
+        foreach (["Location", "Recherche", "A vendre", "Service offert", "Autre"] as $Description){
+            $categorieDAO->addCategorie($Description);
+        }
+        afficheMessageConsole("Categories ajouté !");
+    }
+
+
 
 
 
