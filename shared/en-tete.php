@@ -25,7 +25,8 @@
             if(estConnecte()){
                 $routes = [
                     'dashboard'     => 'Dashboard',
-                    'logout'   => 'Se déconnecter'
+                    'logout'   => 'Se déconnecter',
+                    'annonce/ajouter' => 'Ajouter Annonce',
                 ];
             }else{
                 $routes = [
@@ -38,7 +39,11 @@
             echo '<ul class="nav nav-pills">';
             foreach ($routes as $route => $label) {
                 // Déterminer si le lien est actif
-                $isActive = $GLOBALS["controller"] == $route;
+                $isActive = $GLOBALS["controller"] == $route || $isActive = $GLOBALS["controller"]."/".$GLOBALS["action"] === $route;
+
+
+
+
                 $activeClass = $isActive ? 'aria-current="page" class="nav-link active"' : 'class="nav-link"';
                 $lien = lien($route);
                 // Afficher le lien

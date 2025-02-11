@@ -80,7 +80,7 @@
                     */
                     $succes = "Votre inscription a été enregistrée avec succès. Un courriel de confirmation vous a été envoyé.";
                     // TODO : Envoyer un courriel de confirmation avec un jeton unique
-                    afficheMessageConsole($succes);
+                    //afficheMessageConsole($succes);
                     /*
                     |----------------------------------------------------------------------------------|
                     | Attendre rediriger vers la page login

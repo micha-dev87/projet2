@@ -71,13 +71,20 @@
         /*
          * Ajouter une nouvelle annonce
          */
-        public function ajouterAnnonce($annonce, $NoUtilisateur) {
 
-            $requete = "INSERT INTO annonces ( NoUtilisateur, DescriptionAbregee,DescriptionComplete, Prix, Parution, Etat, photo, Categorie) 
-                    VALUES ('$NoUtilisateur', '$annonce->DescriptionA', $annonce->Description, $annonce->Prix, '$annonce->Parution', '$annonce->Etat', '$annonce->photo', $annonce->Categorie
-                    )";
-            return mysqli_query($this->db, $requete);
-        }
+public function ajouterAnnonce($annonce) {
+    $requete = "INSERT INTO annonces (NoUtilisateur, DescriptionAbregee, DescriptionComplete, 
+            Prix, Parution, Etat, Photo, Categorie) 
+                VALUES ('$annonce->NoUtilisateur', '$annonce->DescriptionA', '$annonce->Description',
+                        $annonce->Prix, '$annonce->Parution', $annonce->Etat, '$annonce->Photo', $annonce->Categorie)";
+    $resultat = mysqli_query($this->db, $requete);
+
+    if(mysqli_error($this->db)){
+        afficheMessageConsole("Erreur SQL : ". mysqli_error($this->db));
+        return false;
+    }
+    return $resultat;
+}
 
         /*
          * Supprimer une annonce

@@ -86,6 +86,7 @@
         afficheMessageConsole("Action : ". $action);
         afficheMessageConsole("ID param : ". $paramId);
         afficheMessageConsole("nombre de segment uri : ". $intNbSegments);
+        afficheMessageConsole("METHODE : ". $_SERVER['REQUEST_METHOD']);
 
     }
 

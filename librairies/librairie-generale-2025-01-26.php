@@ -303,5 +303,26 @@
     }
 
 
+    /*
+    |----------------------------------------------------------------------------------|
+    | @function : Annonce etat
+    | @return : string
+    |----------------------------------------------------------------------------------|
+    */
+
+    function strEtat($etat) {
+        switch ($etat) {
+            case 1:
+                return "Actif"; // Statut lors de l'enregistrement
+            case 2:
+                return "Inactif"; // Statut après confirmation
+            case 3:
+                return "Retiré"; // Rôle administrateur
+            default:
+                return "Etat inconnu"; // Cas par défaut si le statut n'est pas reconnu
+        }
+    }
+
+
 
 
