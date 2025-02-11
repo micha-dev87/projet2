@@ -103,7 +103,8 @@
     //Rediriger tous utilisateur vers le dashboard
     if (estConnecte() && ($controller == "login" || $controller == "register")) {
 
-        header("Location: dashboard");
+        header("Location: ".lien("dashboard"));
+        exit();
 
     }
 
