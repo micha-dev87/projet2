@@ -70,9 +70,9 @@
     |----------------------------------------------------------------------------------|
     */
     $categorieDAO = new CategorieDAO($BDProjet2->cBD);
-
+    $categories = [];
     $categories = $categorieDAO->getAllCategorie();
-    if(!empty($categories)){
+    if(sizeof($categories) >0){
         afficheMessageConsole("les catégories ont déjà été ajouté !");
     }else{
         foreach (["Location", "Recherche", "A vendre", "Service offert", "Autre"] as $Description){

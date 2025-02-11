@@ -7,6 +7,11 @@
 
     // Base de donnée - USER
     $utilisateurDAO = new UtilisateurDAO($GLOBALS["BDProjet2"]->cBD);
+    // Annonce
+    $annonceDAO = new AnnonceDAO($GLOBALS["BDProjet2"]->cBD);
+    //liste annonces
+    $annonces = $annonceDAO->listerAnnonces();
+
 
 
 // Vérifier si l'utilisateur est connecté

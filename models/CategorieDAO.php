@@ -10,36 +10,37 @@ Class CategorieDAO {
 
 
     // Get categories par id
-    function getCategorie($NoCategorie) {
+    function getCategorie($NoCategorie){
+
         $resultat = mysqli_query($this->db, "SELECT * FROM categories where NoCategorie = '$NoCategorie'");
         if($resultat && mysqli_num_rows($resultat) > 0) {
-            $categories = [];
+
             while ($row = mysqli_fetch_assoc($resultat)) {
                 $categories = $row["Description"];
             }
 
-            return $categories;
         }
+            return $categories;
     }
 
     // Get all categories
-    function getAllCategorie()  {
+    function getAllCategorie():array  {
         $categories = [];
         $resultat = mysqli_query($this->db, "SELECT * FROM categories");
         if($resultat && mysqli_num_rows($resultat) > 0) {
 
             while ($row = mysqli_fetch_assoc($resultat)) {
-                $categories = $row["Description"];
+                $categories[] = $row["Description"];
             }
 
         }
-            return $categories;
+        return $categories;
 
 
     }
 
     //Add Categorie
-    function addCategorie($Description) {
+    function addCategorie($Description):bool {
         $resultat = mysqli_query($this->db, "INSERT INTO categories (Description) VALUES ('$Description')");
         if($resultat && mysqli_affected_rows($this->db)> 0) {
            return true;

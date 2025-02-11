@@ -16,9 +16,9 @@
                     FROM annonces a 
                     JOIN categories c ON a.Categorie = c.NoCategorie";
             $resultat = mysqli_query($this->db, $requete);
-
+            $annonces = [];
             if(mysqli_num_rows($resultat) > 0 && $resultat) {
-                $annonces = [];
+
                 while ($row = mysqli_fetch_assoc($resultat)) {
                     $annonces[] = new Annonce(
                         $row['NoUtilisateur'],
@@ -32,10 +32,8 @@
                         $row['Categorie']
                     );
                 }
-                return $annonces;
-            }else{
-                return null;
             }
+                return $annonces;
         }
 
         /*
