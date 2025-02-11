@@ -259,9 +259,9 @@
     |----------------------------------------------------------------------------------|
     */
 
-    function chemin($route, $strFolderSite){
-        return SERVER_NAME == 'localhost' ? "/$strFolderSite/$route" : "/$route";
-    }
+   function lien($valeur){
+       return    "/" . BASE_PATH . "/" . $valeur;
+   }
 
     /*
     |----------------------------------------------------------------------------------|
@@ -302,44 +302,6 @@
         }
     }
 
-    /*
-     *
-     * Message boite
-     */
 
 
-    function afficherModal($titre, $message,  $bouton = "OK")
-    {
-        // Générer l'ID unique pour la modal
-        $modalId = "myModal_" . uniqid();
 
-        // Retourner le code HTML de la modal
-        return <<<HTML
-    <!-- Modal -->
-    <div class="modal fade" id="$modalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">$titre</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            $message
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn  btn-outline-primary" data-bs-dismiss="modal">$bouton</button>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Script pour afficher automatiquement la modal -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        var myModal = new bootstrap.Modal(document.getElementById('$modalId'));
-        myModal.show();
-      });
-    </script>
-HTML;
-    }

@@ -38,11 +38,11 @@
             echo '<ul class="nav nav-pills">';
             foreach ($routes as $route => $label) {
                 // Déterminer si le lien est actif
-                $isActive = $controller == $route;
+                $isActive = $GLOBALS["controller"] == $route;
                 $activeClass = $isActive ? 'aria-current="page" class="nav-link active"' : 'class="nav-link"';
-
+                $lien = lien($route);
                 // Afficher le lien
-                echo "<li class=\"nav-item\"><a href=\"$route\" $activeClass>$label</a></li>";
+                echo "<li class=\"nav-item\"><a href=\"$lien\" $activeClass>$label</a></li>";
             }
             echo '</ul>';
         ?>

@@ -55,65 +55,59 @@
     $uriSegments = explode('/', $requestUri);
 
 // Déterminer le contrôleur et l'action
-    $controller = DEFAULT_CONTROLLER;
+    $controller = null;
     $action = null;
     $paramId = null;
-    $intNbSegments= sizeof($uriSegments);
+    $intNbSegments = sizeof($uriSegments);
     $controllers = glob(CONTROLLERS_PATH . "*.php");
     $actions = glob(ACTIONS_PATH . "*.php");
 
+    if($intNbSegments >1){
+        //si controleur
+        if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers) ) {
+            afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
+            $controller =  $uriSegments[1];
 
-    if ($intNbSegments > 1) {
-        foreach ($uriSegments as $uriSegment) {
+            //action ?
+            if($intNbSegments > 2){
+                //si action
+                if (in_array(ACTIONS_PATH . $uriSegments[2] . ".php", $actions) && $intNbSegments >2) {
+                    afficheMessageConsole("l'action " .  $uriSegments[2] . " existe !");
+                    $action =  $uriSegments[2];
 
-            if(empty($uriSegment)) continue;
-            //verifier les chemins
+                    if($intNbSegments ==4){
+                        $paramId = $uriSegments[3];
+                    }
 
-            //si controleur
-            if( in_array(CONTROLLERS_PATH.$uriSegment.".php", $controllers)) {
-                afficheMessageConsole("le controleur ".$uriSegment." existe !");
-                $controller = $uriSegment;
+                }
             }
-            //si action
-            else if( in_array(ACTIONS_PATH.$uriSegment.".php", $actions)) {
-                afficheMessageConsole("l'action ".$uriSegment." existe !");
-                $action = $uriSegment;
-
-            }
-
-
-            //si id
-            else if(is_numeric($uriSegment) && $action) {
-                afficheMessageConsole("Un id a été fourni : ".$uriSegment);
-                $paramId = (int)$uriSegment;
-            }else{
-                afficheMessageConsole("Erreur le chemin ".$uriSegment." n'existe pas !");
-            }
-
-
-
         }
-    }else{
-        // Afficher message dans la console navigateur
-        afficheMessageConsole("Infos folder, controller et ID :");
-        afficheMessageConsole("Default Controller: " . DEFAULT_CONTROLLER);
-        afficheMessageConsole("Controller : ".$controller);
-        afficheMessageConsole("Action : ".$action);
-        afficheMessageConsole("ID : ".$paramId);
-        afficheMessageConsole("subFolder  : ".$subFolder);
-        afficheMessageConsole("Nombre segment : ".$intNbSegments);
-        afficheMessageConsole("requestUri : ".$requestUri);
+        afficheMessageConsole("Controller : ". $controller);
+        afficheMessageConsole("Action : ". $action);
+        afficheMessageConsole("ID param : ". $paramId);
+        afficheMessageConsole("nombre de segment uri : ". $intNbSegments);
+
     }
 
 
 
 
+
+    //Si le controlleur est inexistant et lien trop long ridiger vers les routes de default
+    if(is_null($controller) || $intNbSegments > 4){
+        header("Location: ".lien(DEFAULT_CONTROLLER));
+        exit();
+    }
 
 
     //Rediriger tous utilisateur vers le dashboard
-    if(estConnecte() && ($controller=="login" || $controller=="register")) {
-        $controller = header("Location dashboard");
+    if (estConnecte() && ($controller == "login" || $controller == "register")) {
+
+        header("Location: dashboard");
+
     }
+
+
 
 // Construire le chemin du fichier du contrôleur
     $controllerFile = CONTROLLERS_PATH . $controller . '.php';
@@ -126,7 +120,6 @@
 
 // Vérifier si le fichier du contrôleur existe
     if (file_exists($controllerFile)) {
-
         include $controllerFile;
     } else {
         http_response_code(404);

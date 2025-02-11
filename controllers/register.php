@@ -83,10 +83,10 @@
                     afficheMessageConsole($succes);
                     /*
                     |----------------------------------------------------------------------------------|
-                    | Attendre 3 seconde et rediriger vers la page dashboard
+                    | Attendre rediriger vers la page login
                     |----------------------------------------------------------------------------------|
                     */
-                    header("Location:login");
+                    header("Location:".lien("login"));
                 } else {
                     $erreur = "Erreur lors de l'enregistrement.";
                     afficheMessageConsole($erreur, true);

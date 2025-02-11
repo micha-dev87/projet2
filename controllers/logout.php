@@ -11,5 +11,5 @@
     $utilisateurDAO->deconnecterUtilisateur();
 
 // Rediriger vers la page de connexion
-    header("Location: login");
+    header("Location: ".lien("login"));
     exit();

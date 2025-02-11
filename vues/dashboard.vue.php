@@ -16,7 +16,7 @@
         <!-- Filtre par catégorie -->
         <select class="form-select" id="categorieFiltre">
             <option value="">Toutes les catégories</option>
-            <?php foreach ($categories??null as $categorie): ?>
+            <?php foreach ($categories??[] as $categorie): ?>
                 <option value="<?= htmlspecialchars($categorie['id']) ?>"><?= htmlspecialchars($categorie['nom']) ?></option>
             <?php endforeach; ?>
         </select>

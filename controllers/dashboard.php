@@ -11,7 +11,7 @@
 
 // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['utilisateur'])) {
-        header("Location: login");
+        header("Location: ".lien("login"));
         exit();
     }
 
