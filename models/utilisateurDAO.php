@@ -5,13 +5,12 @@
 
     class UtilisateurDAO
     {
-
-        private $strTabUser = "utilisateurs";
+        
         private $db;
 
         private $OK;
 
-        public function __construct($db)
+        public function __construct()
         {
 
 
@@ -20,7 +19,8 @@
             | connection à la base de données
             |----------------------------------------------------------------------------------|
             */
-            $this->db = $db;
+            $DB = new mysql();
+            $this->db = $DB->connexion();
 
 
         }
@@ -37,11 +37,9 @@
             $mot_de_passe_hash = password_hash($utilisateur->mot_de_passe, PASSWORD_BCRYPT);
             // Construire la requête INSERT IGNORE
             $requete = "INSERT IGNORE INTO
-                    $this->strTabUser ( Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, Creation )
+                   ".TABLE_USERS." ( Nom, Prenom, Courriel, MotDePasse,NoTelMaison, NoTelTravail, NoTelCellulaire, Statut, Creation )
                     VALUES ('$utilisateur->nom', '$utilisateur->prenom', '$utilisateur->courriel', '$mot_de_passe_hash', '$utilisateur->no_tel_maison', '$utilisateur->no_tel_travail',
                     '$utilisateur->no_tel_cellulaire', '$utilisateur->statut', '$date_creation');";
-
-            afficheMessageConsole("Requete : $requete");
 
 
             // Exécuter la requête
@@ -52,7 +50,7 @@
                 $noEmpl = mysqli_insert_id($this->db);
 
                 // Mettre à jour le champ NoEmpl avec la valeur de la clé primaire
-                $requeteUpdate = "UPDATE $this->strTabUser SET NoEmpl = $noEmpl WHERE Noutilisateur = $noEmpl;";
+                $requeteUpdate = "UPDATE ".TABLE_USERS." SET NoEmpl = $noEmpl WHERE Noutilisateur = $noEmpl;";
                 afficheMessageConsole("Requete Update : $requeteUpdate");
 
                 // Exécuter la mise à jour
@@ -79,7 +77,7 @@
         function emailExiste($strEmail)
         {
             // Vérifier si l'adresse courriel existe déjà dans la table
-            $requeteVerification = "SELECT COUNT(*) AS count FROM $this->strTabUser WHERE Courriel = '$strEmail'";
+            $requeteVerification = "SELECT COUNT(*) AS count FROM ".TABLE_USERS." WHERE Courriel = '$strEmail'";
             $resultatVerification = mysqli_query($this->db, $requeteVerification);
 
             if ($resultatVerification) {
@@ -103,7 +101,7 @@
         function confimerUtilisateur($id, $statut)
         {
             // Vérifier si l'adresse courriel existe déjà dans la table
-            $requete = "UPDATE $this->strTabUser SET Statut = $statut WHERE NoUtilisateur = '$id'";
+            $requete = "UPDATE ".TABLE_USERS." SET Statut = $statut WHERE NoUtilisateur = '$id'";
             $resultat = mysqli_query($this->db, $requete);
 
             return $resultat;
@@ -119,7 +117,7 @@
         function listerUtilisateurs(): array
         {
             //Select all users
-            $requete = "SELECT * FROM $this->strTabUser";
+            $requete = "SELECT * FROM ". TABLE_USERS;
 
             $resultat = mysqli_query($this->db, $requete);
             $listeUtilisateurs = array();
@@ -146,7 +144,7 @@
          */
         public function supprimerUtilisateur($id): mysqli_result|bool
         {
-            $requet = "DELETE FROM $this->strTabUser WHERE NoUtilisateur = '$id'";
+            $requet = "DELETE FROM ".TABLE_USERS." WHERE NoUtilisateur = '$id'";
             $resultat = mysqli_query($this->db, $requet);
             return $resultat;
         }
@@ -165,7 +163,7 @@
 
 
             // Construire la requête UPDATE
-            $requete = "UPDATE $this->strTabUser SET 
+            $requete = "UPDATE ".TABLE_USERS." SET 
                     Nom = '$utilisateur->nom', 
                     Prenom = '$utilisateur->prenom', 
                     Courriel = '$utilisateur->courriel', 
@@ -192,7 +190,7 @@
         */
         public function authentifierUtilisateur($Courriel, $MotDePasse)
         {
-            $requete = "SELECT * FROM utilisateurs WHERE Courriel = '$Courriel'";
+            $requete = "SELECT * FROM ".TABLE_USERS." WHERE Courriel = '$Courriel'";
             $resultat = mysqli_query($this->db, $requete);
 
             if ($resultat && mysqli_num_rows($resultat) > 0) {
@@ -209,7 +207,7 @@
                     $this->incrementerNbConnexions($utilisateur['NoUtilisateur']);
 
                     // Ajouter une nouvelle connexion dans la table connexions
-                    $connexionDAO = new ConnexionDAO($this->db);
+                    $connexionDAO = new ConnexionDAO();
                     $noConnexion = $connexionDAO->ajouterConnexion($utilisateur['NoUtilisateur']);
                     // Stocker l'ID de connexion dans la session
                     $_SESSION['no_connexion'] = $noConnexion;
@@ -232,7 +230,7 @@
         */
         private function incrementerNbConnexions($noUtilisateur)
         {
-            $requete = "UPDATE utilisateurs SET NbConnexions = NbConnexions + 1 WHERE NoUtilisateur = $noUtilisateur";
+            $requete = "UPDATE ".TABLE_USERS." SET NbConnexions = NbConnexions + 1 WHERE NoUtilisateur = $noUtilisateur";
             mysqli_query($this->db, $requete);
         }
 
@@ -247,12 +245,15 @@
             if (isset($_SESSION['no_connexion'])) {
                 $noConnexion = $_SESSION['no_connexion'];
 
-                // Fermer la connexion
-                $connexionDAO = new ConnexionDAO($this->db);
-                $connexionDAO->fermerConnexion($noConnexion);
 
+                // Fermer la connexion
+                $connexionDAO = new ConnexionDAO();
+
+                 if($connexionDAO->fermerConnexion($noConnexion))
                 // Détruire la session
                 session_destroy();
+                 else
+                        afficheMessageConsole("Erreur lors de la fermeture de la connexion", true);
             }
 
         }
@@ -266,7 +267,7 @@
 
         public function utilisateurDetail($noUtilisateur){
 
-            $requete = "SELECT * FROM $this->strTabUser WHERE NoUtilisateur = $noUtilisateur";
+            $requete = "SELECT * FROM ".TABLE_USERS." WHERE NoUtilisateur = $noUtilisateur";
             $this->OK = mysqli_query($this->db, $requete);
             if ($this->OK && mysqli_num_rows($this->OK) > 0) {
                 $row = mysqli_fetch_assoc($this->OK);

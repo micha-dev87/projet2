@@ -5,7 +5,6 @@
     |----------------------------------------------------------------------------------|
     */
 
-    global $uriSegments, $BDProjet2;
     $erreur = ""; // Stocke les messages d'erreur
     $succes = ""; // Stocke les messages de succès
 
@@ -54,7 +53,7 @@
             $utilisateur = new Utilisateur($nom, $prenom, $courriel, $mot_de_passe, $no_tel_cellulaire, $no_tel_travail, $no_tel_maison);
 
 
-            $utilisateurModel = new UtilisateurDAO($BDProjet2->cBD);
+            $utilisateurModel = new UtilisateurDAO();
             if ($utilisateurModel->emailExiste($courriel)) {
                 /*
                 |----------------------------------------------------------------------------------|
@@ -80,13 +79,16 @@
                     */
                     $succes = "Votre inscription a été enregistrée avec succès. Un courriel de confirmation vous a été envoyé.";
                     // TODO : Envoyer un courriel de confirmation avec un jeton unique
-                    //afficheMessageConsole($succes);
+                    afficheMessageConsole($succes);
                     /*
                     |----------------------------------------------------------------------------------|
                     | Attendre rediriger vers la page login
                     |----------------------------------------------------------------------------------|
                     */
-                    header("Location:".lien("login"));
+                    echo '<script type="text/javascript">
+                    window.location.href = "' . lien("login") . '";
+                             </script>';
+                    exit();
                 } else {
                     $erreur = "Erreur lors de l'enregistrement.";
                     afficheMessageConsole($erreur, true);

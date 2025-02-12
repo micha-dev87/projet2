@@ -1,19 +1,22 @@
 <?php
 // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['utilisateur'])) {
-        header("Location: " . lien("login"));
-        exit();
+
+      echo '<script type="text/javascript">
+              window.location.href = "' . lien("login") . '";
+            </script>';
+      exit();
     }
 
-    $error = ""; // Message d'erreur
-    $success = ""; // Message de succès
+    $erreur = ""; // Message d'erreur
+    $succes = ""; // Message de succès
 
 // Récupérer les informations de l'utilisateur connecté
     $NoUtilisateur = $_SESSION['utilisateur']['NoUtilisateur'];
-
+afficheMessageConsole("NoUtilisateur : ". $NoUtilisateur);
 // Si le formulaire est soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        afficheMessageConsole("Action ajoutée lancée");
+
         try {
 
             // Récupérer les données du formulaire
@@ -66,21 +69,19 @@
                 $Categorie
             );
 
-
-            // Vérifier si l'objet $annonce est bien créé
-            afficheMessageConsole("Annonce créée : " . print_r($annonce, true));
-
+            afficheMessageConsole("Object  annonce : " . print_r($annonce, true));
 
             // Ajouter l'annonce dans la base de données
-            $resultat = $GLOBALS["annonceDAO"]->ajouterAnnonce($annonce);
-            afficheMessageConsole("Annonce ajoutée : ". $resultat);
-            if ($resultat) {
-                $success = "L'annonce a bien été ajoutée !";
+            $resultats = $GLOBALS["annonceDAO"]->ajouterAnnonce($annonce);
+
+            if ($resultats) {
+                $succes = "L'annonce a bien été ajoutée !";
             } else {
                 throw new Exception("Erreur lors de l'ajout de l'annonce.");
             }
         } catch (Exception $e) {
-            $error = $e->getMessage();
+            afficheMessageConsole("Erreur : " . $e->getMessage());
+            $erreur = $e->getMessage();
         }
     }
 

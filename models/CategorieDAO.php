@@ -4,8 +4,9 @@ Class CategorieDAO {
 
     private $db;
 
-    public function __construct($db) {
-        $this->db = $db;
+    public function __construct() {
+        $DB = new mysql();
+        $this->db = $DB->connexion();
     }
 
 

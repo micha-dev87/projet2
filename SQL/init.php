@@ -6,18 +6,17 @@
 */
 
 /* --- Initialisation des variables de travail --- */
-define('DB_NAME', 'if0_38253009_projet2');
+
 define('TABLE_USERS', 'utilisateurs');
 define('TABLE_CONNECTIONS', 'connexions');
 define('TABLE_ANNOUNCEMENTS', 'annonces');
 define('TABLE_CATEGORIES', 'categories');
-define('SENSITIVE_INFO', 'secrets/mysql_secrets.php');
 
 /* --- Création de l'instance, connexion avec mySQL et sélection de la base de données (RÉUSSITE) --- */
-$BDProjet2 = new mysql(DB_NAME, SENSITIVE_INFO);
+$BDProjet2 = new mysql();
 
-/* --- Sélectionner la base de données ---*/
-$BDProjet2->selectionneBD();
+/* --- Se connecter à la base de données---*/
+$BDProjet2->connexion();
 if($BDProjet2->OK){
     afficheMessageConsole("Connexion à la base de données avec success !");
 }else{
@@ -49,13 +48,18 @@ $BDProjet2->creeTableGenerique(
     'A,NoCategorie;V20,Description',
     'NoCategorie'
 );
+
+/*
+ * Fermer la connexion
+ */
+$BDProjet2->deconnexion();
 /*
 |----------------------------------------------------------------------------------|
 | Ajouter les données de l'administrateur si celui-ci n'existe pas déja
 |----------------------------------------------------------------------------------|
 */
-require_once ("secrets/admin_user.php");
-$adminUserDAO = new UtilisateurDAO($BDProjet2->cBD);
+
+$adminUserDAO = new UtilisateurDAO();
 $adminUser = new Utilisateur(ADMIN_NAME, ADMIN_SURNAME, ADMIN_EMAIL, ADMIN_MOTDEPASSE, ADMIN_PHONE,ADMIN_PHONE, ADMIN_PHONE, 1);
 if(!$adminUserDAO->emailExiste(ADMIN_EMAIL)){
     $adminUserDAO->ajouterUtilisateur($adminUser );
@@ -69,7 +73,7 @@ if(!$adminUserDAO->emailExiste(ADMIN_EMAIL)){
 | Ajouter les categories
 |----------------------------------------------------------------------------------|
 */
-$categorieDAO = new CategorieDAO($BDProjet2->cBD);
+$categorieDAO = new CategorieDAO();
 $categories = [];
 $categories = $categorieDAO->getAllCategorie();
 if(sizeof($categories) >0){

@@ -16,8 +16,6 @@
         */
         public $cBD = null;                       /* Identifiant de connexion */
         public $listeEnregistrements = null;      /* Liste des enregistrements retournés */
-        public $nomFichierInfosSensibles = "";    /* Nom du fichier 'InfosSensibles' */
-        public $nomBD = "";                       /* Nom de la base de données */
         public $OK = false;                       /* Opération réussie ou non */
         public $requete = "";                     /* Requête exécutée */
         /*
@@ -25,11 +23,9 @@
         | __construct
         |----------------------------------------------------------------------------------|
         */
-        function __construct($strNomBD, $strNomFichierInfosSensibles)
+        function __construct( )
         {
-            $this->nomBD = $strNomBD;
-            $this->nomFichierInfosSensibles = $strNomFichierInfosSensibles;
-            $this->connexion();
+
 
         }
 
@@ -41,13 +37,13 @@
         function connexion()
         {
             /* --- Connexion avec mySQL --- */
-            require_once($this->nomFichierInfosSensibles);
-            $this->cBD = mysqli_connect($HOSTNAME, $USERNAME, $PASSWORD, $this->nomBD);
+            $this->cBD = mysqli_connect(HOSTNAME, USERNAME, PASSWORD, DB_NAME);
             if (mysqli_connect_errno()) {
                 echo "<br />";
                 echo "<p class='text-danger'>Problème de connexion... " . "Erreur no " . mysqli_connect_errno() . " (" . mysqli_connect_error() . ") </p>";
                 die();
             }
+            $this->selectionneBD();
             return $this->cBD;
         }
 
@@ -303,7 +299,7 @@
         function selectionneBD()
         {
 
-            $this->requete = "USE " . $this->nomBD;
+            $this->requete = "USE " . DB_NAME;
             $this->OK = mysqli_query($this->cBD, $this->requete);
             return $this->OK;
         }

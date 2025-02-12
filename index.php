@@ -1,6 +1,5 @@
 <?php
 
-
 // Début de la session
     session_start();
 
@@ -33,6 +32,7 @@
     inclureFichiersDossier("classes", "require");
     inclureFichiersDossier("models", "require");
     inclureFichiersDossier("variables", "require");
+    inclureFichiersDossier("secrets", "require");
 
 
 // Initialisation de la base de données
@@ -104,7 +104,9 @@
     //Rediriger tous utilisateur vers le dashboard
     if (estConnecte() && ($controller == "login" || $controller == "register")) {
 
-        header("Location: ".lien("dashboard"));
+        echo '<script type="text/javascript">
+        window.location.href = "' . lien("dashboard") . '";
+      </script>';
         exit();
 
     }
@@ -130,3 +132,4 @@
 
 // Inclure le pied de page
     require_once("shared/pied-page.php");
+

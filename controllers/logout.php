@@ -1,15 +1,18 @@
 <?php
-    /*
-    |----------------------------------------------------------------------------------|
-    | Controller logout - deconnection
-    |----------------------------------------------------------------------------------|
-    */
+/*
+|----------------------------------------------------------------------------------|
+| Controller logout - deconnection
+|----------------------------------------------------------------------------------|
+*/
 
-// Déconnecter l'utilisateur
-    global $BDProjet2, $uriSegments;
-    $utilisateurDAO = new UtilisateurDAO($BDProjet2->cBD);
-    $utilisateurDAO->deconnecterUtilisateur();
+// Your logout logic here
+$utilisateurDAO = new UtilisateurDAO();
+$utilisateurDAO->deconnecterUtilisateur();
 
-// Rediriger vers la page de connexion
-    header("Location: ".lien("login"));
-    exit();
+// Output JavaScript for redirection
+echo '<script type="text/javascript">
+        window.location.href = "' . lien("login") . '";
+      </script>';
+exit();
+
+?>

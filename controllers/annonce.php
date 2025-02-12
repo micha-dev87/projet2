@@ -6,19 +6,23 @@
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['utilisateur'])) {
-    header("Location: " . lien("login"));
+    echo '<script type="text/javascript">
+            window.location.href = "' . lien("login") . '";
+          </script>';
     exit();
 }
 
 
-$annonceDAO = new AnnonceDAO($GLOBALS["BDProjet2"]->cBD);
-$categorieDAO = new CategorieDAO($GLOBALS["BDProjet2"]->cBD);
+$annonceDAO = new AnnonceDAO();
+$categorieDAO = new CategorieDAO();
 $id_annonce = intval($GLOBALS["paramId"]);
 
 // Gérer les actions
 if ($GLOBALS["action"]) {
     require_once(ACTIONS_PATH . $GLOBALS["action"] . ".php");
 } else {
-    header("Location: " . lien("dashboard"));
+    echo '<script type="text/javascript">
+        window.location.href = "' . lien("dashboard") . '";
+      </script>';
     exit();
 }

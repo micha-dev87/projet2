@@ -6,9 +6,9 @@
 */
 
     // Base de donnée - USER
-    $utilisateurDAO = new UtilisateurDAO($GLOBALS["BDProjet2"]->cBD);
+    $utilisateurDAO = new UtilisateurDAO();
     // Annonce
-    $annonceDAO = new AnnonceDAO($GLOBALS["BDProjet2"]->cBD);
+    $annonceDAO = new AnnonceDAO();
     //liste annonces
     $annonces = $annonceDAO->listerAnnonces();
 
@@ -16,7 +16,10 @@
 
 // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['utilisateur'])) {
-        header("Location: ".lien("login"));
+        echo '<script type="text/javascript">
+        window.location.href = "' . lien("login") . '";
+      </script>';
+
         exit();
     }
 

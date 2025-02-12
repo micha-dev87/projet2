@@ -13,8 +13,11 @@
         $resultat = $GLOBALS["utilisateurDAO"]->confimerUtilisateur($noUtilisateur, $nouveauStatut);
         if ($resultat) {
 
-            header("Location: dashboard");
+            echo '<script type="text/javascript">
+        window.location.href = "' . lien("dashboard") . '";
+      </script>';
             exit();
+
         } else {
             die("Erreur lors de la mise à jour du statut.");
         }

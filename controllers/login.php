@@ -15,7 +15,7 @@
             $erreur = "Le mot de passe doit contenir entre 5 et 15 caractères.";
         } else {
             // Authentifier l'utilisateur
-            $utilisateurDAO = new UtilisateurDAO($BDProjet2->cBD);
+            $utilisateurDAO = new UtilisateurDAO();
             $utilisateur = $utilisateurDAO->authentifierUtilisateur($courriel, $mot_de_passe);
 
             if (is_array($utilisateur)) {
@@ -29,8 +29,11 @@
                 ];
 
                 // Rediriger vers la page d'accueil ou le tableau de bord
-                header("Location: ".lien("dashboard"));
+                echo '<script type="text/javascript">
+                         window.location.href = "' . lien("dashboard") . '";
+                    </script>';
                 exit();
+
             } else {
                 $erreur = $utilisateur; // Message d'erreur retourné par authentifierUtilisateur
             }
