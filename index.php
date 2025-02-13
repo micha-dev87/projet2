@@ -130,13 +130,14 @@
     }
 
 
-    //Si le controlleur est inexistant et lien trop long ridiger vers les routes de default
+    //Rediriger tous utilisateur vers le dashboard
+    if (estConnecte() && ($controller == "login" || $controller == "register")) {
 
-    if($intNbSegments > 4){
         echo '<script type="text/javascript">
-        window.location.href = "' . lien(DEFAULT_CONTROLLER) . '";
+        window.location.href = "' . lien("dashboard") . '";
       </script>';
         exit();
+
     }
 
 
