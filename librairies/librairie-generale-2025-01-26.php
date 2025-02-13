@@ -260,7 +260,7 @@
     */
 
    function lien($valeur){
-       return    "/" . BASE_PATH . "/" . $valeur;
+       return    empty(BASE_PATH) ? "/" . $valeur: "/" . BASE_PATH . "/" . $valeur;
    }
 
     /*
