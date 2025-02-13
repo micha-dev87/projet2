@@ -62,29 +62,55 @@
     $controllers = glob(CONTROLLERS_PATH . "*.php");
     $actions = glob(ACTIONS_PATH . "*.php");
 
-    if($intNbSegments >1){
-        //si controleur
-        if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers) ) {
-            afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
-            $controller =  $uriSegments[1];
+    if(SERVER_NAME==="localhost"){
+        if($intNbSegments >1){
+            //si controleur
+            if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers) ) {
+                afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
+                $controller =  $uriSegments[1];
 
-            //action ?
-            if($intNbSegments > 2){
-                //si action
-                if (in_array(ACTIONS_PATH . $uriSegments[2] . ".php", $actions) && $intNbSegments >2) {
-                    afficheMessageConsole("l'action " .  $uriSegments[2] . " existe !");
-                    $action =  $uriSegments[2];
+                //action ?
+                if($intNbSegments > 2){
+                    //si action
+                    if (in_array(ACTIONS_PATH . $uriSegments[2] . ".php", $actions) && $intNbSegments >2) {
+                        afficheMessageConsole("l'action " .  $uriSegments[2] . " existe !");
+                        $action =  $uriSegments[2];
 
-                    if($intNbSegments ==4){
-                        $paramId = $uriSegments[3];
+                        if($intNbSegments ==4){
+                            $paramId = $uriSegments[3];
+                        }
+
                     }
-
                 }
             }
+
         }
+    }else{
+        if($intNbSegments >0){
+            //si controleur
+            if (in_array(CONTROLLERS_PATH . $uriSegments[0] . ".php", $controllers) ) {
+                afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
+                $controller =  $uriSegments[0];
 
+                //action ?
+                if($intNbSegments > 1){
+                    //si action
+                    if (in_array(ACTIONS_PATH . $uriSegments[1] . ".php", $actions) && $intNbSegments >2) {
+                        afficheMessageConsole("l'action " .  $uriSegments[2] . " existe !");
+                        $action =  $uriSegments[1];
 
+                        if($intNbSegments ==3){
+                            $paramId = $uriSegments[2];
+                        }
+
+                    }
+                }
+            }
+
+        }
     }
+
+
 
     afficheMessageConsole("Controller : ". $controller);
     afficheMessageConsole("Action : ". $action);
