@@ -96,7 +96,7 @@
 
 
     //Si le controlleur est inexistant et lien trop long ridiger vers les routes de default
-    if(is_null($controller) || $intNbSegments > 4){
+    if(is_null($controller) ){
         echo '<script type="text/javascript">
         window.location.href = "' . lien(DEFAULT_CONTROLLER) . '";
       </script>';
