@@ -61,7 +61,7 @@
     $intNbSegments = sizeof($uriSegments);
     $controllers = glob(CONTROLLERS_PATH . "*.php");
     $actions = glob(ACTIONS_PATH . "*.php");
-
+  // Vérification du serveur local et des segments d'URL
     if(SERVER_NAME==="localhost"){
         if($intNbSegments >1){
             //si controleur
@@ -72,7 +72,7 @@
                 //action ?
                 if($intNbSegments > 2){
                     //si action
-                    if (in_array(ACTIONS_PATH . $uriSegments[2] . ".php", $actions) && $intNbSegments >2) {
+                    if (in_array(ACTIONS_PATH . $uriSegments[2] . ".php", $actions)) {
                         afficheMessageConsole("l'action " .  $uriSegments[2] . " existe !");
                         $action =  $uriSegments[2];
 
@@ -89,14 +89,14 @@
         if($intNbSegments >0){
             //si controleur
             if (in_array(CONTROLLERS_PATH . $uriSegments[0] . ".php", $controllers) ) {
-                afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
+                afficheMessageConsole("le controleur " .  $uriSegments[0] . " existe !");
                 $controller =  $uriSegments[0];
 
                 //action ?
-                if($intNbSegments > 1){
+                if($intNbSegments == 2){
                     //si action
-                    if (in_array(ACTIONS_PATH . $uriSegments[1] . ".php", $actions) && $intNbSegments >2) {
-                        afficheMessageConsole("l'action " .  $uriSegments[2] . " existe !");
+                    if (in_array(ACTIONS_PATH . $uriSegments[1] . ".php", $actions)) {
+                        afficheMessageConsole("l'action " .  $uriSegments[1] . " existe !");
                         $action =  $uriSegments[1];
 
                         if($intNbSegments ==3){
