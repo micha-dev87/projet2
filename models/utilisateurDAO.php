@@ -5,7 +5,7 @@
 
     class UtilisateurDAO
     {
-        
+
         private $db;
 
         private $OK;
@@ -249,11 +249,11 @@
                 // Fermer la connexion
                 $connexionDAO = new ConnexionDAO();
 
-                 if($connexionDAO->fermerConnexion($noConnexion))
-                // Détruire la session
-                session_destroy();
-                 else
-                        afficheMessageConsole("Erreur lors de la fermeture de la connexion", true);
+                if($connexionDAO->fermerConnexion($noConnexion))
+                    // Détruire la session
+                    session_destroy();
+                else
+                    afficheMessageConsole("Erreur lors de la fermeture de la connexion", true);
             }
 
         }

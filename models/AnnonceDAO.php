@@ -52,9 +52,9 @@
             $resultat = mysqli_query($this->db, $requete);
 
             if (mysqli_num_rows($resultat) > 0 && $resultat) {
-                $annonces = [];
+
                 while ($row = mysqli_fetch_assoc($resultat)) {
-                    $annonces[] = new Annonce(
+                    $annonce = new Annonce(
                         $row['NoUtilisateur'],
                         $row['NoAnnonce'],
                         $row['DescriptionAbregee'],
@@ -66,7 +66,7 @@
                         $row['Categorie']
                     );
                 }
-                return $annonces;
+                return $annonce;
             } else {
                 return null;
             }
@@ -81,7 +81,7 @@
         {
 
 
-            $requete = "INSERT INTO annonces (NoUtilisateu, DescriptionAbregee, DescriptionComplete, 
+            $requete = "INSERT INTO annonces (NoUtilisateur, DescriptionAbregee, DescriptionComplete, 
             Prix, Parution, Etat, Photo, Categorie) 
                 VALUES ('$annonce->NoUtilisateur', '$annonce->DescriptionA', '$annonce->Description',
                         $annonce->Prix, '$annonce->Parution', $annonce->Etat, '$annonce->Photo', $annonce->Categorie)";

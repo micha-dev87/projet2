@@ -41,8 +41,10 @@ afficheMessageConsole("NoUtilisateur : ". $NoUtilisateur);
             if (!validateDate($Parution)) {
                 throw new Exception("La date de parution n'est pas valide.");
             }
-            if ($Photo['error'] !== UPLOAD_ERR_OK || !getimagesize($Photo['tmp_name'])) {
+            if ($Photo['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($Photo['tmp_name']) || !exif_imagetype($Photo['tmp_name'])) {
                 throw new Exception("Veuillez télécharger une image valide.");
+            }else{
+                afficheMessageConsole("Photo : ". print_r($Photo, true));
             }
 
             // Gestion de l'upload de la photo

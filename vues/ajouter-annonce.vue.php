@@ -14,17 +14,20 @@
         <!-- Champ Description Abrégée -->
         <div class="col-md-6">
             <label for="descriptionA" class="form-label">Description Abrégée</label>
-            <input type="text" class="form-control" id="descriptionA" name="DescriptionA" required>
+            <input type="text" class="form-control" id="descriptionA" name="DescriptionA"
+                   value="<?= $DescriptionA ?? ""; ?>"  required>
         </div>
         <!-- Champ Description Complète -->
         <div class="col-md-12">
             <label for="description" class="form-label">Description Complète</label>
-            <textarea class="form-control" id="description" name="Description" rows="3" required></textarea>
+            <textarea class="form-control" id="description" name="Description" rows="3"
+                      required><?= $Description ?? ""; ?></textarea>
         </div>
         <!-- Champ Prix -->
         <div class="col-md-4">
             <label for="prix" class="form-label">Prix</label>
-            <input type="number" step="0.01" class="form-control" id="prix" name="Prix" required>
+            <input type="number" step="0.01" class="form-control" id="prix" value="<?= $Prix ?? ""; ?>" name="Prix"
+                   required>
         </div>
         <!-- Champ Date de Parution -->
         <div class="col-md-4">
@@ -35,9 +38,9 @@
         <div class="col-md-4">
             <label for="etat" class="form-label">État</label>
             <select class="form-select" id="etat" name="Etat" required>
-                <option selected>Selection</option>
+                <option value="" <?= !isset($Etat) ? 'selected' : ''; ?>>Selection</option>
                 <?php foreach (range(1, 3) as $id): ?>
-                <option value="<?= $id; ?>"><?= strEtat($id); ?></option>
+                    <option value="<?= $id; ?>" <?= isset($Etat) && $Etat == $id ? 'selected' : ''; ?>><?= strEtat($id); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -45,15 +48,20 @@
         <div class="col-md-6">
             <label for="photo" class="form-label">Photo (fichier image)</label>
             <input type="file" class="form-control" id="photo" name="Photo" accept="image/*" required>
+                  <?php if (isset($Photo)): ?>
+                      <img src="<?= htmlspecialchars('/uploads/' . $Photo['name']) ?>" alt="Image actuelle" style="max-width: 100px; margin-top: 10px;">
+                  <?php endif; ?>
         </div>
         <!-- Champ Catégorie -->
         <div class="col-md-6">
             <label for="categorie" class="form-label">Catégorie</label>
-            <select class="form-select" id="categorie" name="Categorie" required>
-                <?php foreach ($GLOBALS["categories"] as $i => $categorie): ?>
-                    <option value="<?= intval($i) +1 ?>"><?= htmlspecialchars($categorie) ?></option>
-                <?php endforeach; ?>
-            </select>
+<select class="form-select" id="categorie" name="Categorie" required>
+    <?php foreach ($GLOBALS["categories"] as $i => $categorie): ?>
+        <option value="<?= intval($i) + 1 ?>" <?= isset($Categorie) && $Categorie == intval($i) + 1 ? 'selected' : ''; ?>>
+            <?= htmlspecialchars($categorie) ?>
+        </option>
+    <?php endforeach; ?>
+</select>
         </div>
     </div>
     <!-- Bouton Soumettre -->
@@ -65,7 +73,7 @@
 
 <script>
     // Validation côté client avant soumission
-    document.getElementById('formAjouterAnnonce').addEventListener('submit', function(event) {
+    document.getElementById('formAjouterAnnonce').addEventListener('submit', function (event) {
         const descriptionA = document.getElementById('descriptionA').value.trim();
         const description = document.getElementById('description').value.trim();
         const prix = parseFloat(document.getElementById('prix').value);

@@ -39,7 +39,7 @@
         <div class="col">
             <div class="card h-100">
                 <!-- Image de l'annonce -->
-                <img src="<?= htmlspecialchars($annonce->Photo) ?>" class="card-img-top" alt="<?= htmlspecialchars($annonce->Descrit) ?>">
+                <img src="<?= lien(htmlspecialchars($annonce->Photo)) ?>" class="card-img-top" alt="<?= htmlspecialchars($annonce->Description) ?>">
 
                 <div class="card-body">
                     <!-- Descritpion Abregee -->
@@ -51,6 +51,13 @@
                     <!-- Prix -->
                     <p class="card-text Prix"><strong>Prix :</strong> <?= htmlspecialchars($annonce->Prix) ?> $ CA</p>
 
+                    <?php
+                    // UtilisateurDAO
+                        $utilisateurById = $GLOBALS["utilisateurDAO"]->utilisateurDetail(($annonce->NoUtilisateur))
+                    ?>
+                    <p class="card-text Prix"><strong>Publié par l'auteur :</strong> <?= htmlspecialchars($utilisateurById->prenom) ?> </p>
+                    <p class="card-text Prix"><strong>Adresse :</strong> <?= htmlspecialchars($utilisateurById->courriel) ?> </p>
+
                     <!-- Date de publication -->
                     <p class="card-text"><small class="text-muted Parution"><?= htmlspecialchars($annonce->Parution) ?></small></p>
                     <!-- Etat -->
@@ -61,7 +68,7 @@
 
                 <div class="card-footer">
                     <!-- Bouton Détails -->
-                    <a href="/annonce/details/<?= htmlspecialchars($annonce->NoAnnonce) ?>" class="btn btn-outline-primary w-100">Détails</a>
+                    <a href="<?= lien("annonce/details/".htmlspecialchars($annonce->NoAnnonce))?>" class="btn btn-outline-primary w-100">Détails</a>
                 </div>
             </div>
         </div>

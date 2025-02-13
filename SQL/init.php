@@ -39,7 +39,7 @@ $BDProjet2->creeTableGenerique(
 $BDProjet2->creeTableGenerique(
     TABLE_ANNOUNCEMENTS,
     'A,NoAnnonce;E,NoUtilisateur;D,Parution;E,Categorie;V50,DescriptionAbregee;
-    V250,DescriptionComplete;M,Prix;V50,Photo;D,MiseAJour;E,Etat',
+    V250,DescriptionComplete;M,Prix;V100,Photo;D,MiseAJour;E,Etat',
     'NoAnnonce'
 );
 /* --- Création de la structure de la table categories --- */

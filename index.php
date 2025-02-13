@@ -82,21 +82,23 @@
                 }
             }
         }
-        afficheMessageConsole("Controller : ". $controller);
-        afficheMessageConsole("Action : ". $action);
-        afficheMessageConsole("ID param : ". $paramId);
-        afficheMessageConsole("nombre de segment uri : ". $intNbSegments);
-        afficheMessageConsole("METHODE : ". $_SERVER['REQUEST_METHOD']);
+
 
     }
 
-
+    afficheMessageConsole("Controller : ". $controller);
+    afficheMessageConsole("Action : ". $action);
+    afficheMessageConsole("ID param : ". $paramId);
+    afficheMessageConsole("nombre de segment uri : ". $intNbSegments);
+    afficheMessageConsole("METHODE : ". $_SERVER['REQUEST_METHOD']);
 
 
 
     //Si le controlleur est inexistant et lien trop long ridiger vers les routes de default
     if(is_null($controller) || $intNbSegments > 4){
-        header("Location: ".lien(DEFAULT_CONTROLLER));
+        echo '<script type="text/javascript">
+        window.location.href = "' . lien(DEFAULT_CONTROLLER) . '";
+      </script>';
         exit();
     }
 
