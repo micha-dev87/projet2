@@ -4,7 +4,7 @@
 
 $annonceDAO = new AnnonceDAO();
 $id = $GLOBALS['paramId'];
-$result = $annonceDAO->changerEtatAnnonce($id, 2);
+$result = $annonceDAO->changerEtatAnnonce($id, 3);
 if($result){
     echo '<script type="text/javascript">
  window.location.href = "' . lien("annonce/liste_annonces/".NO_UTILISATEUR) . '";
