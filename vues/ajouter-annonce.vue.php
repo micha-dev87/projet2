@@ -40,7 +40,7 @@
             <label for="etat" class="form-label">État</label>
             <select class="form-select" id="etat" name="Etat" required>
           
-                <?php foreach (range(1, 3) as $id): ?>
+                <?php foreach (range(1, 2) as $id): ?>
                     <option value="<?= $id; ?>" <?= isset($Etat) && $Etat == $id || $id==1 ? 'selected' : ''; ?>><?= strEtat($id); ?></option>
                 <?php endforeach; ?>
             </select>

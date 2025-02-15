@@ -2,8 +2,8 @@
     /*
     |----------------------------------------------------------------------------------|
     | Données sensibles,
-    | Pour le developpement dans votre serveur local
-    | Definissez les valeurs DB_HOST, DB_USERNAME, DB_PASSWORD
+    | Pour le développement dans votre serveur local
+    | Définissez les valeurs DB_HOST, DB_USERNAME, DB_PASSWORD
     |----------------------------------------------------------------------------------|
     */
     define('DB_NAME', 'if0_38253009_projet2');
