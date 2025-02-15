@@ -16,7 +16,7 @@ if (!isset($_SESSION['utilisateur'])) {
 $annonceDAO = new AnnonceDAO();
 $utilisateurDAO = new UtilisateurDAO();
 $categorieDAO = new CategorieDAO();
-$id_annonce = intval($GLOBALS["paramId"]);
+
 
 // Gérer les actions
 if ($GLOBALS["action"]) {

@@ -21,6 +21,14 @@
     define('CONTROLLERS_PATH', 'controllers/');
     define('ACTIONS_PATH', 'actions/');
 
+    // Récupérer les informations de l'utilisateur connecté
+    define('NO_CONNEXION', $_SESSION['no_connexion'] ?? null);
+    define('NO_UTILISATEUR', $_SESSION['utilisateur']['NoUtilisateur'] ?? null);
+    define('NOM_UTILISATEUR', $_SESSION['utilisateur']['Nom'] ?? null);
+    define('PRENOM_UTILISATEUR', $_SESSION['utilisateur']['Prenom'] ?? null);
+    define('COURRIEL_UTILISATEUR', $_SESSION['utilisateur']['Courriel'] ?? null);
+    define('STATUT_UTILISATEUR', $_SESSION['utilisateur']['Statut'] ?? null);
+
 // Charger les variables d'environnement si on est en local
     if (SERVER_NAME === "localhost") {
         require_once __DIR__ . '/vendor/autoload.php';
