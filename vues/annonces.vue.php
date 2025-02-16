@@ -2,17 +2,19 @@
 
 // annonces.vue.php : affichage de la liste des annonces
 
+//gestion pagination
 $titre = is_numeric( $GLOBALS["paramId"]) ? "Mes annonces" : "Liste des annonces";
-$totalAnnonces = $GLOBALS["annonceDAO"]->getAnnoncesTotal();
-$annonceParPage = 10;
-$totalPages = ceil($totalAnnonces / $annonceParPage);
 
-afficheMessageConsole("nombre total d'annonces : " . $totalAnnonces);
-afficheMessageConsole("nombre total de pages : " . $totalPages);
+$annonceParPage = 10;
+
+
+
 if (is_numeric($GLOBALS["paramId"])) {
 
     $annonces = $GLOBALS["annonceDAO"]->listerAnnoncesPourUtilisateur($GLOBALS["paramId"]);
+    $totalAnnonces = $GLOBALS["annonceDAO"]->getAnnoncesTotal(true);
 } else {
+    $totalAnnonces = $GLOBALS["annonceDAO"]->getAnnoncesTotal();
 
     $params = $GLOBALS["paramId"] != null ? explode("=", $GLOBALS["paramId"]) : null;
     if (!is_null($params)) {
@@ -24,6 +26,9 @@ if (is_numeric($GLOBALS["paramId"])) {
     // recuperer les paramatres de pagination dans le lien format p-offset ici offset serat le count
     $annonces = $GLOBALS["annonceDAO"]->listerAnnonces($offset, $annonceParPage);
 }
+$totalPages = ceil($totalAnnonces / $annonceParPage);
+afficheMessageConsole("nombre total d'annonces : " . $totalAnnonces);
+afficheMessageConsole("nombre total de pages : " . $totalPages);
 global $categories;
 ?>
 <a href="<?= lien("dashboard"); ?>" class="btn btn-outline-primary">Retour vers le dashboard</a>
@@ -59,11 +64,25 @@ global $categories;
 
 <!-- Liste des annonces en grille -->
 <div class="row row-cols-1 row-cols-md-3 g-4" id="listeAnnonces">
-    <?php foreach ($annonces ?? [] as $annonce): ?>
+    <?php foreach ($annonces ?? [] as $annonce): 
+       //Extrait le temps
+       $time = date('H\h i', strtotime($annonce->Parution));
+       //extraire la date
+        $date = date('d-m-Y', strtotime($annonce->Parution));
+        extraitJSJJMMAAAA($intSemaine, $jour, $mois, $annee, $date);
+        
+
+        
+        ?>
         <div class="col">
             <div class="card" style="width: 18rem;">
                 <!-- Image de l'annonce -->
-                <img  src="<?= lien(htmlspecialchars($annonce->Photo)) ?>" class="card-img-top" alt="<?= htmlspecialchars($annonce->Description) ?>">
+                <img style="height: 200px!important; object-fit: cover;" src= "<?php
+                
+                // si la "Photo" de contient http ou https
+                echo (str_contains($annonce->Photo, 'http') || str_contains($annonce->Photo, 'https')) ? htmlspecialchars($annonce->Photo) :  lien(htmlspecialchars($annonce->Photo)); 
+                ?>" class="card-img-top" alt="<?= htmlspecialchars($annonce->Description) ?>"
+                >
 
                 <div class="card-body">
                     <!-- Descritpion Abregee -->
@@ -83,11 +102,14 @@ global $categories;
                     <p class="card-text Prix"><strong>Adresse :</strong> <?= htmlspecialchars($utilisateurById->courriel) ?> </p>
 
                     <!-- Date de publication -->
-                    <p class="card-text"><small class="text-muted Parution"><?= htmlspecialchars($annonce->Parution) ?></small></p>
+                    <p class="card-text"><small class="text-muted Parution"><strong>Parution :</strong> <?=
+                        jourSemaineEnLitteral($intSemaine)." le ".$jour." ".moisEnLitteral($mois)." ".$annee." à ".$time
+                        
+                        ?></small></p>
                     <!-- Etat -->
-                    <p class="card-text"><small class="text-muted Etat"><?= strEtat($annonce->Etat) ?></small></p>
+                    <p class="card-text"><small class="text-muted Etat"><strong>Etat :</strong><?= strEtat($annonce->Etat) ?></small></p>
                     <!-- Categories -->
-                    <p class="card-text"><small class="text-muted Categroie"><?= htmlspecialchars($annonce->Categorie) ?></small></p>
+                    <p class="card-text"><small class="text-muted Categroie"><strong>Catégorie :</strong><?= htmlspecialchars($annonce->Categorie) ?></small></p>
                 </div>
 
                 <div class="card-body">
@@ -134,6 +156,11 @@ global $categories;
         const categorieFiltre = document.getElementById('categorieFiltre').value;
         const recherche = document.getElementById('recherche').value.toLowerCase();
 
+        //affiche console 
+        console.log("date à filtré: " + dateFiltre);
+        console.log("categorie à filtré: " + categorieFiltre);
+        console.log("recherche à filtré: " + recherche);
+
         const annonces = document.querySelectorAll('#listeAnnonces .col');
 
         annonces.forEach(annonce => {
@@ -145,7 +172,7 @@ global $categories;
             const categorie = annonce.querySelector('.Categroie').innerText.toLowerCase();
 
 
-            const correspondDate = !dateFiltre || parution.includes(dateFiltre);
+            const correspondDate = !dateFiltre || parution.(dateFiltre);
             const correspondCategorie = !categorieFiltre || categorie === categorieFiltre;
             const correspondRecherche = !recherche || descriptionA.includes(recherche) || descriptionC.includes(recherche);
 

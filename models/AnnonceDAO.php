@@ -53,9 +53,12 @@
     }
 
     //counter le nombre d'annonces
-    public function getAnnoncesTotal()
+    public function getAnnoncesTotal($all=false)
     {
-        $requete = "SELECT COUNT(*) AS total FROM annonces";
+        $requete = "SELECT COUNT(*) AS total FROM annonces ";
+        if (!$all) {
+            $requete .= "WHERE Etat = 1";
+        }
         $resultat = mysqli_query($this->db, $requete);
         $row = mysqli_fetch_assoc($resultat);
         return $row['total'];

@@ -6,6 +6,8 @@
 // Inclusion des librairies nécessaires
     require_once __DIR__ . "/librairies/librairie-exercice01.php";
     require_once __DIR__ . "/librairies/librairie-generale-2025-01-26.php";
+    require_once __DIR__ . "/librairies/librairie-date.php";
+    require_once __DIR__ . "/librairies/librairie-generale.php";
 
 
 // Déterminer le sous-dossier dynamiquement

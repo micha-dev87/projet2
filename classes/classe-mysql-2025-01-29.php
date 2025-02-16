@@ -220,6 +220,12 @@
 
         /*
         |----------------------------------------------------------------------------------|
+        |poupulateTableAnnonces et ()
+        |----------------------------------------------------------------------------------|
+        */
+
+        /*
+        |----------------------------------------------------------------------------------|
         | insereEnregistrement
         |----------------------------------------------------------------------------------|
         */
@@ -371,7 +377,7 @@
 
             /* --- Parcours de chacune des tables --- */
             echo "<span $sCommande>Informations sur " . (!empty($strNomTableRecherchee) ?
-                    "la table '$strNomTableRecherchee' de " : "") . "la base de données ' $this->nomBD' </span><br />";
+                    "la table '$strNomTableRecherchee' de " : "") . "la base de données '".DB_NAME."' </span><br />";
             $binTablePresente = false;
             for ($i = 0; $i < $intNbTables; $i++) {
                 /* Récupération du nom de la table courante */
