@@ -8,7 +8,7 @@
     */
     define('DB_NAME', 'if0_38253009_projet2');
     define('PORT', 3306);
-    if (getParametre("SERVER_NAME", "SERVER") == "localhost") {
+    if ($_SERVER['SERVER_NAME'] == "localhost") {
         
         define("HOSTNAME", $_ENV['DB_HOST'] );
         define("USERNAME", $_ENV['DB_USERNAME']);

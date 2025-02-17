@@ -36,151 +36,71 @@ global $categories;
 <h2 class="text-center mb-4"><?= $titre?></h2>
 
 <!-- Barre d'actions -->
-<div class="d-flex justify-content-between align-items-center mb-4">
+
     <div>
         <a href="<?= lien("annonce/ajouter") ?>" class="btn btn-primary">Ajouter une annonce</a>
     </div>
-    <div class="d-flex gap-2">
 
-        <!-- Filtre par date -->
-        <input type="date" class="form-control" id="dateFiltre" placeholder="Filtrer par date">
+<!-- Système de filtrage avancé -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form id="filterForm" class="row g-3">
+            <!-- Recherche -->
+            <div class="col-md-4">
+                <label for="recherche" class="form-label">Recherche globale</label>
+                <input type="text" class="form-control" id="recherche" placeholder="Rechercher..." onchange="appliquerFiltres()">
+            </div>
 
-        <!-- Filtre par catégorie -->
-        <select class="form-select" id="categorieFiltre">
-            <option value="">Toutes les catégories</option>
-            <?php foreach ($categories as $id => $categorie): ?>
-                <option value="<?= intval($id) + 1 ?>"><?= htmlspecialchars($categorie) ?></option>
-            <?php endforeach; ?>
-        </select>
+            <!-- Filtre par catégorie -->
+            <div class="col-md-4">
+                <label for="categorieFiltre" class="form-label">Catégorie</label>
+                <select class="form-select" id="categorieFiltre" onchange="appliquerFiltres()">
+                    <option value="">Toutes les catégories</option>
+                    <?php foreach ($categories as $id => $categorie): ?>
+                        <option value="<?= intval($id) + 1 ?>"><?= htmlspecialchars($categorie) ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-        <!-- Barre de recherche -->
-        <input type="text" class="form-control" id="recherche" placeholder="Rechercher...">
-        <form>
-            <!-- reset -->
-            <input type="submit" onsubmit="this.submit()" class="btn btn-primary" value="Reset">
+            <!-- Filtre par date -->
+            <div class="col-md-4">
+                <label for="dateDebut" class="form-label">Période</label>
+                <div class="input-group">
+                    <input type="date" class="form-control" id="dateDebut">
+                    <span class="input-group-text">au</span>
+                    <input type="date" class="form-control" id="dateFin">
+                </div>
+            </div>
+
+            <!-- Tri -->
+            <div class="col-md-4">
+                <label for="tri" class="form-label">Trier par</label>
+                <select class="form-select" id="tri" onselect="appliquerFiltres()">
+                    <option value="">Sélectionner un tri</option>
+                    <option value="date_asc">Date ↑</option>
+                    <option value="date_desc">Date ↓</option>
+                    <option value="auteur_asc">Auteur A-Z</option>
+                    <option value="auteur_desc">Auteur Z-A</option>
+                    <option value="categorie_asc">Catégorie A-Z</option>
+                    <option value="categorie_desc">Catégorie Z-A</option>
+                </select>
+            </div>
+
+            <!-- Boutons -->
+            <div class="col-12">
+                <button type="reset" class="btn btn-secondary" onclick="reinitialiserFiltres()">Réinitialiser</button>
+            </div>
         </form>
     </div>
 </div>
-
+<class="d-flex justify-content-between align-items-center mb-4">
 <!-- Liste des annonces en grille -->
 <div class="row row-cols-1 row-cols-md-3 g-4" id="listeAnnonces">
-    <?php foreach ($annonces ?? [] as $annonce): 
-       //Extrait le temps
-       $time = date('H\h i', strtotime($annonce->Parution));
-       //extraire la date
-        $date = date('d-m-Y', strtotime($annonce->Parution));
-        extraitJSJJMMAAAA($intSemaine, $jour, $mois, $annee, $date);
-        
 
-        
-        ?>
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                <!-- Image de l'annonce -->
-                <img style="height: 200px!important; object-fit: cover;" src= "<?php
-                
-                // si la "Photo" de contient http ou https
-                echo (str_contains($annonce->Photo, 'http') || str_contains($annonce->Photo, 'https')) ? htmlspecialchars($annonce->Photo) :  lien(htmlspecialchars($annonce->Photo)); 
-                ?>" class="card-img-top" alt="<?= htmlspecialchars($annonce->Description) ?>"
-                >
-
-                <div class="card-body">
-                    <!-- Descritpion Abregee -->
-                    <h5 class="card-title DescriptionA"><?= htmlspecialchars($annonce->DescriptionA) ?></h5>
-
-                    <!-- Description complete -->
-                    <p class="card-text Description"><?= substr(htmlspecialchars($annonce->Description), 0, 50) . '...' ?></p>
-
-                    <!-- Prix -->
-                    <p class="card-text Prix"><strong>Prix :</strong> <?= htmlspecialchars($annonce->Prix) ?> $ CA</p>
-
-                    <?php
-                    // UtilisateurDAO
-                    $utilisateurById = $GLOBALS["utilisateurDAO"]->utilisateurDetail(($annonce->NoUtilisateur))
-                    ?>
-                    <p class="card-text Prix"><strong>Publié par l'auteur :</strong> <?= htmlspecialchars($utilisateurById->prenom) ?> </p>
-                    <p class="card-text Prix"><strong>Adresse :</strong> <?= htmlspecialchars($utilisateurById->courriel) ?> </p>
-
-                    <!-- Date de publication -->
-                    <p class="card-text"><small class="text-muted Parution"><strong>Parution :</strong> <?=
-                        jourSemaineEnLitteral($intSemaine)." le ".$jour." ".moisEnLitteral($mois)." ".$annee." à ".$time
-                        
-                        ?></small></p>
-                    <!-- Etat -->
-                    <p class="card-text"><small class="text-muted Etat"><strong>Etat :</strong><?= strEtat($annonce->Etat) ?></small></p>
-                    <!-- Categories -->
-                    <p class="card-text"><small class="text-muted Categroie"><strong>Catégorie :</strong><?= htmlspecialchars($annonce->Categorie) ?></small></p>
-                </div>
-
-                <div class="card-body">
-                    <!-- Bouton Détails -->
-                    <a href="<?= lien("annonce/details/" . htmlspecialchars($annonce->NoAnnonce)) ?>" class="btn btn-outline-primary w-100">Détails</a>
-                    <!-- if is the owner of the annonce -->
-                    <?php if ($annonce->NoUtilisateur == $GLOBALS["paramId"]): ?>
-                        <!-- Bouton Modifier -->
-                        <a href="<?= lien("annonce/modifier-annonce/" . htmlspecialchars($annonce->NoAnnonce)) ?>" class="btn btn-outline-warning w-100">Modifier</a>
-                        <!-- Bouton Supprimer -->
-                        <a href="<?= lien("annonce/supprimer-annonce/" . htmlspecialchars($annonce->NoAnnonce)) ?>" class="btn btn-outline-danger w-100">Supprimer</a>
-                    <?php endif; ?> <!-- Closing the if statement here for owner check -->
-
-                </div>
-            </div>
-        </div>
-    <?php endforeach; ?>
 
 </div>
-
+                    </div>
 <!-- Pagination -->
-<?php if (!is_numeric($GLOBALS["paramId"])): ?>
+
     <div class="pagination justify-content-center mt-4">
-        <?php
-
-
-        // Afficher les liens de pagination
-        for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="<?= lien("annonce/liste_annonces/p=" . $i) ?>" class="btn btn-outline-primary mx-1 <?= $i === $pageActuelle ? 'active' : '' ?>">
-                <?= $i ?>
-            </a>
-        <?php endfor; ?>
     </div>
-<?php endif; ?>
-
-<script>
-    // Fonction pour filtrer les annonces
-    document.getElementById('dateFiltre').addEventListener('change', filtrerAnnonces);
-    document.getElementById('categorieFiltre').addEventListener('change', filtrerAnnonces);
-    document.getElementById('recherche').addEventListener('input', filtrerAnnonces);
-
-    function filtrerAnnonces() {
-        const dateFiltre = document.getElementById('dateFiltre').value;
-        const categorieFiltre = document.getElementById('categorieFiltre').value;
-        const recherche = document.getElementById('recherche').value.toLowerCase();
-
-        //affiche console 
-        console.log("date à filtré: " + dateFiltre);
-        console.log("categorie à filtré: " + categorieFiltre);
-        console.log("recherche à filtré: " + recherche);
-
-        const annonces = document.querySelectorAll('#listeAnnonces .col');
-
-        annonces.forEach(annonce => {
-            const descriptionA = annonce.querySelector('.DescriptionA').innerText.toLowerCase();
-            const descriptionC = annonce.querySelector('.Description').innerText.toLowerCase();
-            const prix = annonce.querySelector('.Prix').innerText;
-            const parution = annonce.querySelector('.Parution').innerText;
-            annonce.querySelector('.Etat').innerText.toLowerCase();
-            const categorie = annonce.querySelector('.Categroie').innerText.toLowerCase();
-
-
-            const correspondDate = !dateFiltre || parution.(dateFiltre);
-            const correspondCategorie = !categorieFiltre || categorie === categorieFiltre;
-            const correspondRecherche = !recherche || descriptionA.includes(recherche) || descriptionC.includes(recherche);
-
-            if (correspondDate && correspondCategorie && correspondRecherche) {
-                annonce.style.display = '';
-            } else {
-                annonce.style.display = 'none';
-            }
-        });
-    }
-</script>

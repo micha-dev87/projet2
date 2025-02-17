@@ -2,7 +2,26 @@
 
 // Début de la session
     session_start();
+// Charger les variables d'environnement si on est en local
+if ($_SERVER['SERVER_NAME'] === "localhost") {
+    require_once __DIR__ . '/vendor/autoload.php';
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+}
 
+//config data
+//Controller de config
+$config_controllers = ["data_liste_annonces"];
+
+foreach($config_controllers as $controller)
+{
+    // verifions si le lien contient le controller 
+    if (strpos($_SERVER['REQUEST_URI'], $controller) !== false) {
+
+
+        require_once "config/" . $controller . ".php";
+        exit();}
+}
 // Inclusion des librairies nécessaires
     require_once __DIR__ . "/librairies/librairie-exercice01.php";
     require_once __DIR__ . "/librairies/librairie-generale-2025-01-26.php";
@@ -31,12 +50,7 @@
     define('COURRIEL_UTILISATEUR', $_SESSION['utilisateur']['Courriel'] ?? null);
     define('STATUT_UTILISATEUR', $_SESSION['utilisateur']['Statut'] ?? null);
 
-// Charger les variables d'environnement si on est en local
-    if (SERVER_NAME === "localhost") {
-        require_once __DIR__ . '/vendor/autoload.php';
-        $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-        $dotenv->load();
-    }
+
 
 // Chargement automatique des classes, styles et modèles
     inclureFichiersDossier("classes", "require");
@@ -71,11 +85,14 @@
     $intNbSegments = sizeof($uriSegments);
     $controllers = glob(CONTROLLERS_PATH . "*.php");
     $actions = glob(ACTIONS_PATH . "*.php");
+
+
   // Vérification du serveur local et des segments d'URL
     if(SERVER_NAME==="localhost"){
         if($intNbSegments >1){
             //si controleur
-            if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers) ) {
+
+            if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers) || in_array( $uriSegments[1], $config_controllers)) {
                 afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
                 $controller =  $uriSegments[1];
 
@@ -98,7 +115,7 @@
     }else{
         if($intNbSegments >0){
             //si controleur
-            if (in_array(CONTROLLERS_PATH . $uriSegments[0] . ".php", $controllers) ) {
+            if (in_array(CONTROLLERS_PATH . $uriSegments[0] . ".php", $controllers) || in_array( $uriSegments[0], $config_controllers)) {
                 afficheMessageConsole("le controleur " .  $uriSegments[0] . " existe !");
                 $controller =  $uriSegments[0];
 
@@ -119,6 +136,7 @@
 
         }
     }
+
 
 
 
