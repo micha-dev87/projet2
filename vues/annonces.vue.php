@@ -24,13 +24,13 @@ global $categories;
             <!-- Recherche -->
             <div class="col-md-4">
                 <label for="recherche" class="form-label">Recherche globale</label>
-                <input type="text" class="form-control" id="recherche" placeholder="Rechercher..." onchange="appliquerFiltres()">
+                <input type="text" class="form-control" id="recherche" placeholder="Rechercher...">
             </div>
 
             <!-- Filtre par catégorie -->
             <div class="col-md-4">
                 <label for="categorieFiltre" class="form-label">Catégorie</label>
-                <select class="form-select" id="categorieFiltre" onchange="appliquerFiltres()">
+                <select class="form-select" id="categorieFiltre" >
                     <option value="">Toutes les catégories</option>
                     <?php foreach ($categories as $id => $categorie): ?>
                         <option value="<?= intval($id) + 1 ?>"><?= htmlspecialchars($categorie) ?></option>

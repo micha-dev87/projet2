@@ -316,7 +316,7 @@ require_once("vues/annonces.vue.php");
         }
 
         // Écouteurs d'événements pour les filtres
-        document.querySelectorAll('#filterForm select, #filterForm input')
+        document.querySelectorAll('#categorieFiltre, #dateDebut, #dateFin, #tri')
             .forEach(element => {
                 element.addEventListener('change', () => appliquerFiltres(1));
             });
