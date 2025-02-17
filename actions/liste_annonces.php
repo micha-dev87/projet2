@@ -138,7 +138,7 @@ require_once("vues/annonces.vue.php");
 
     function confirmerSuppression(id) {
         if (confirm('Voulez-vous vraiment supprimer cette annonce ?')) {
-            window.location.href = lien('annonce/supprimer/' + id);
+            window.location.href = lien('annonce/supprimer-annonce/' + id);
         }
     }
 
