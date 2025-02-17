@@ -11,6 +11,13 @@
         public $Etat;
         public $Photo;
         public $Categorie;
+        public $NomCategories;
+
+
+    public $NomAuteur;
+    public $PrenomAuteur;
+
+    public $CourrielAuteur;
 
         public function __construct($NoUtilisateur, $NoAnnonce, $DescriptionA, $Description, $Prix, $Parution, $Etat, $Photo, $Categorie) {
             $this->NoUtilisateur = $NoUtilisateur;

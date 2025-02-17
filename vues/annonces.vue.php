@@ -5,30 +5,6 @@
 //gestion pagination
 $titre = is_numeric( $GLOBALS["paramId"]) ? "Mes annonces" : "Liste des annonces";
 
-$annonceParPage = 10;
-
-
-
-if (is_numeric($GLOBALS["paramId"])) {
-
-    $annonces = $GLOBALS["annonceDAO"]->listerAnnoncesPourUtilisateur($GLOBALS["paramId"]);
-    $totalAnnonces = $GLOBALS["annonceDAO"]->getAnnoncesTotal(true);
-} else {
-    $totalAnnonces = $GLOBALS["annonceDAO"]->getAnnoncesTotal();
-
-    $params = $GLOBALS["paramId"] != null ? explode("=", $GLOBALS["paramId"]) : null;
-    if (!is_null($params)) {
-        $pageActuelle = intval($params[1]);
-    } else {
-        $pageActuelle = 1;
-    }
-    $offset = ($pageActuelle - 1) * $annonceParPage;
-    // recuperer les paramatres de pagination dans le lien format p-offset ici offset serat le count
-    $annonces = $GLOBALS["annonceDAO"]->listerAnnonces($offset, $annonceParPage);
-}
-$totalPages = ceil($totalAnnonces / $annonceParPage);
-afficheMessageConsole("nombre total d'annonces : " . $totalAnnonces);
-afficheMessageConsole("nombre total de pages : " . $totalPages);
 global $categories;
 ?>
 <a href="<?= lien("dashboard"); ?>" class="btn btn-outline-primary">Retour vers le dashboard</a>
@@ -76,8 +52,8 @@ global $categories;
             <div class="col-md-4">
                 <label for="tri" class="form-label">Trier par</label>
                 <select class="form-select" id="tri" onselect="appliquerFiltres()">
-                    <option value="">Sélectionner un tri</option>
-                    <option value="date_asc">Date ↑</option>
+             
+                    <option  selected value="date_asc">Date ↑</option>
                     <option value="date_desc">Date ↓</option>
                     <option value="auteur_asc">Auteur A-Z</option>
                     <option value="auteur_desc">Auteur Z-A</option>

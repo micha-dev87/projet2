@@ -3,7 +3,8 @@
 
 class AnnonceDAO
 {
-    public $db;
+    private $db;
+    public $sql;
 
     public function __construct()
     {
@@ -15,8 +16,8 @@ class AnnonceDAO
     // Changer l'état d'une annonce
     public function changerEtatAnnonce($id, $etat)
     {
-        $requete = "UPDATE annonces SET Etat = $etat WHERE NoAnnonce = $id";
-        return mysqli_query($this->db, $requete);
+        $this->sql = "UPDATE annonces SET Etat = $etat WHERE NoAnnonce = $id";
+        return mysqli_query($this->db, $this->sql);
     }
 
     /*
@@ -30,9 +31,16 @@ class AnnonceDAO
         $categorie=null,
         $dateDebut=null,
         $dateFin=null,
-        $tri=null
+        $tri=null,
+        $id_user=null
     ) {
-        $conditions = "WHERE a.Etat = 1";
+        $conditions = $id_user ? "WHERE 1=1" : "WHERE a.Etat = 1";
+        //Filtre utilisateur
+        if ($id_user) {
+            $conditions .= " AND a.NoUtilisateur = " . mysqli_real_escape_string($this->db, $id_user);
+        }
+
+        // Filtre recherche
         if ($recherche) {
             $conditions .= " AND a.DescriptionAbregee LIKE '%" . mysqli_real_escape_string($this->db, $recherche) . "%'";
             $conditions .= " OR a.DescriptionComplete LIKE '%" . mysqli_real_escape_string($this->db, $recherche) . "%'";
@@ -41,41 +49,42 @@ class AnnonceDAO
             
 
         }
+        // Filtre catégorie
         if ($categorie) {
             $conditions .= " AND a.Categorie = '" . mysqli_real_escape_string($this->db, $categorie) . "'";
         }
+        // Filtre date
         if ($dateDebut) {
             $conditions .= " AND a.Parution >= '" . mysqli_real_escape_string($this->db, $dateDebut) . "'";
         }
+        // Filtre date de fin
         if ($dateFin) {
             $conditions .= " AND a.Parution <= '" . mysqli_real_escape_string($this->db, $dateFin) . "'";
         }
         if ($tri) {
-           // trie par rapport au option
+           // trie par rapport aux options
            switch($tri){
-            case "1":
+            case "date_asc":
                 //trie date parution croissant
                 $conditions .= " ORDER BY a.Parution ASC";
                 break;
-            case "2":
+            case "date_desc":
                 //trie date parution decroissant
                 $conditions .= " ORDER BY a.Parution DESC";
                 break;
-            case "3":
+            case "auteur_asc":
                 //trie auteur croissant
-                $conditions .= " ORDER BY u.Nom ASC";
-                $conditions .= " ORDER BY u.Prenom ASC";
+                $conditions .= " ORDER BY u.Nom ASC, u.Prenom ASC";
                 break;
-            case "4":
+            case "auteur_desc":
                 //trie auteur decroissant
-                $conditions .= " ORDER BY u.Nom DESC";
-                $conditions .= " ORDER BY u.Prenom DESC";
+                $conditions .= " ORDER BY u.Nom DESC, u.Prenom DESC";
                 break;
-            case "5":
+            case "categorie_asc":
                 //trie categorie croissant
                 $conditions .= " ORDER BY c.Description ASC";
                 break;
-            case "6":
+            case "categorie_desc":
                 //trie categorie decroissant
                 $conditions .= " ORDER BY c.Description DESC";
                 break;
@@ -84,18 +93,19 @@ class AnnonceDAO
             $conditions .= " ORDER BY a.Parution DESC";
         }
 
-        $requete = "SELECT a.*, c.Description AS Categorie 
+        $this->sql = "SELECT a.*, c.*, u.*
                 FROM annonces a 
                 JOIN categories c ON a.Categorie = c.NoCategorie
                 JOIN utilisateurs u ON a.NoUtilisateur = u.NoUtilisateur
                 $conditions
                 LIMIT $offset, $limit";
-        $resultat = mysqli_query($this->db, $requete);
+        $resultat = mysqli_query($this->db, $this->sql);
         $annonces = [];
         if ($resultat && mysqli_num_rows($resultat) > 0) {
 
             while ($row = mysqli_fetch_assoc($resultat)) {
-                $annonces[] = new Annonce(
+                
+                $annonce = new Annonce(
                     $row['NoUtilisateur'],
                     $row['NoAnnonce'],
                     $row['DescriptionAbregee'],
@@ -106,30 +116,103 @@ class AnnonceDAO
                     $row['Photo'],
                     $row['Categorie']
                 );
-            }
+
+                //recuperer : nom categoire, prenom et nom auteur et son adresse mail
+                $annonce->NomCategories = $row['Description'];
+                $annonce->NomAuteur = $row['Nom'];
+                $annonce->PrenomAuteur = $row['Prenom'];
+                $annonce->CourrielAuteur = $row['Courriel'];
+                $annonces[] = $annonce;
+                }
         }
         return $annonces;
     }
 
-    //counter le nombre d'annonces
-    public function getAnnoncesTotal($all = false)
+    // Compter le nombre d'annonces
+    public function getAnnoncesTotal(
+        $recherche = null, $categorie = null, $dateDebut = null, $dateFin = null, $id_user = null)     
     {
-        $requete = "SELECT COUNT(*) AS total FROM annonces ";
-        if (!$all) {
-            $requete .= "WHERE Etat = 1";
+        // Construction de la requête de base
+        $sql = "SELECT COUNT(DISTINCT a.NoAnnonce) as total 
+                FROM annonces a 
+                JOIN categories c ON a.Categorie = c.NoCategorie
+                JOIN utilisateurs u ON a.NoUtilisateur = u.NoUtilisateur
+                WHERE a.Parution IS NOT NULL";
+    
+        $params = [];
+        $types = "";
+    
+        // Filtre utilisateur
+        if ($id_user) {
+            $sql .= " AND a.NoUtilisateur = ?";
+            $params[] = $id_user;
+            $types .= "i";
         }
-        $resultat = mysqli_query($this->db, $requete);
-        $row = mysqli_fetch_assoc($resultat);
-        return $row['total'];
-    }
 
+    
+    
+        // Filtre recherche avec conditions regroupées
+        if ($recherche) {
+            $sql .= " AND (a.DescriptionAbregee LIKE ? 
+                       OR a.DescriptionComplete LIKE ? 
+                       OR c.Description LIKE ?
+                       OR a.Prix LIKE ?)";
+            $searchTerm = "%$recherche%";
+            $params = array_merge($params, [$searchTerm, $searchTerm, $searchTerm, $searchTerm]);
+            $types .= "ssss";
+        }
+    
+        // Filtre catégorie
+        if ($categorie) {
+            $sql .= " AND a.Categorie = ?";
+            $params[] = $categorie;
+            $types .= "i";
+        }
+    
+        // Filtres date
+        if ($dateDebut) {
+            $sql .= " AND a.Parution >= ?";
+            $params[] = $dateDebut;
+            $types .= "s";
+        }
+        if ($dateFin) {
+            $sql .= " AND a.Parution <= ?";
+            $params[] = $dateFin;
+            $types .= "s";
+        }
+
+    
+    
+        // Préparation et exécution de la requête
+        $stmt = mysqli_prepare($this->db, $sql);
+        
+        if (!$stmt) {
+            return 0;
+        }
+    
+        if (!empty($params)) {
+            mysqli_stmt_bind_param($stmt, $types, ...$params);
+        }
+    
+        if (!mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
+            return 0;
+        }
+    
+        $resultat = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($resultat);
+        mysqli_stmt_close($stmt);
+    
+        return (int)($row['total'] ?? 0);
+    }
+  
 
     // Update annonce by id
 
 
     public function updateAnnonce($annonce)
     {
-        $requete = "UPDATE annonces SET 
+        $this->sql = "UPDATE annonces SET 
                         DescriptionAbregee = '$annonce->DescriptionA', 
                         DescriptionComplete = '$annonce->Description', 
                         Prix = $annonce->Prix, 
@@ -139,38 +222,10 @@ class AnnonceDAO
                         Categorie = $annonce->Categorie 
                     WHERE NoAnnonce = $annonce->NoAnnonce";
 
-        return mysqli_query($this->db, $requete);
+        return mysqli_query($this->db, $this->sql);
     }
 
-    /*
-         * Lister les annonces pour l'utilisateur connecté
-         */
-    public function listerAnnoncesPourUtilisateur($idUtilisateur)
-    {
-        $requete = "SELECT a.*, c.Description AS Categorie 
-                        FROM annonces a 
-                        JOIN categories c ON a.Categorie = c.NoCategorie
-                        WHERE a.NoUtilisateur = $idUtilisateur
-                        ORDER BY a.Parution DESC";
-        $resultat = mysqli_query($this->db, $requete);
-        $annonces = [];
-        if ($resultat && mysqli_num_rows($resultat) > 0) {
-            while ($row = mysqli_fetch_assoc($resultat)) {
-                $annonces[] = new Annonce(
-                    $row['NoUtilisateur'],
-                    $row['NoAnnonce'],
-                    $row['DescriptionAbregee'],
-                    $row['DescriptionComplete'],
-                    $row['Prix'],
-                    $row['Parution'],
-                    $row['Etat'],
-                    $row['Photo'],
-                    $row['Categorie']
-                );
-            }
-        }
-        return $annonces;
-    }
+
 
     /*
          * Récupérer une annonce par son ID
@@ -179,12 +234,12 @@ class AnnonceDAO
     public function getAnnonceById($id)
     {
         // Préparer la requête avec un paramètre préparé
-        $requete = "SELECT a.*, c.Description AS Categorie 
+        $this->sql = "SELECT a.*, c.Description AS Categorie 
                         FROM annonces a 
                         JOIN categories c ON a.Categorie = c.NoCategorie
                         WHERE a.NoAnnonce = ?";
 
-        $stmt = mysqli_prepare($this->db, $requete);
+        $stmt = mysqli_prepare($this->db, $this->sql);
 
         if (!$stmt) {
             return null;
@@ -230,7 +285,7 @@ class AnnonceDAO
     {
 
 
-        $requete = "INSERT INTO annonces (NoUtilisateur, DescriptionAbregee, DescriptionComplete, 
+        $this->sql = "INSERT INTO annonces (NoUtilisateur, DescriptionAbregee, DescriptionComplete, 
             Prix, Parution, Etat, Photo, Categorie) 
                 VALUES ('$annonce->NoUtilisateur', '$annonce->DescriptionA', '$annonce->Description',
                         $annonce->Prix, '$annonce->Parution', $annonce->Etat, '$annonce->Photo', $annonce->Categorie)";
@@ -239,7 +294,7 @@ class AnnonceDAO
        
 
 
-        $resultat = mysqli_query($this->db, $requete);
+        $resultat = mysqli_query($this->db, $this->sql);
 
       
 
@@ -254,7 +309,7 @@ class AnnonceDAO
          */
     public function supprimerAnnonce($id)
     {
-        $requete = "DELETE FROM annonces WHERE NoAnnonce = $id";
-        return mysqli_query($this->db, $requete);
+        $this->sql = "DELETE FROM annonces WHERE NoAnnonce = $id";
+        return mysqli_query($this->db, $this->sql);
     }
 }

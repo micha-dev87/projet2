@@ -11,16 +11,18 @@ if ($_SERVER['SERVER_NAME'] === "localhost") {
 
 //config data
 //Controller de config
-$config_controllers = ["data_liste_annonces"];
+$api_controllers = ["data_liste_annonces"];
 
-foreach($config_controllers as $controller)
+
+foreach($api_controllers as $controller)
 {
     // verifions si le lien contient le controller 
     if (strpos($_SERVER['REQUEST_URI'], $controller) !== false) {
-
-
-        require_once "config/" . $controller . ".php";
-        exit();}
+    
+       
+        require "API/$controller.php";
+        exit();
+    }
 }
 // Inclusion des librairies nécessaires
     require_once __DIR__ . "/librairies/librairie-exercice01.php";
