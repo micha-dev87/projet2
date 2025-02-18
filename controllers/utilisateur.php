@@ -4,6 +4,8 @@
 
 // Instancier le DAO
     $utilisateurDAO = new UtilisateurDAO();
+    $connexionDAO = new ConnexionDAO();
+
 
 
 // Gérer les actions

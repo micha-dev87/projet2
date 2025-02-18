@@ -153,20 +153,14 @@ foreach($api_controllers as $controller)
 
     //Si le controlleur est inexistant et lien trop long ridiger vers les routes de default
     if(is_null($controller) ){
-        echo '<script type="text/javascript">
-        window.location.href = "' . lien(DEFAULT_CONTROLLER) . '";
-      </script>';
-        exit();
+    redirectTo(DEFAULT_CONTROLLER);
     }
 
 
     //Rediriger tous utilisateur vers le dashboard
     if (estConnecte() && ($controller == "login" || $controller == "register")) {
 
-        echo '<script type="text/javascript">
-        window.location.href = "' . lien("dashboard") . '";
-      </script>';
-        exit();
+        redirectTo(DEFAULT_CONTROLLER);
 
     }
 

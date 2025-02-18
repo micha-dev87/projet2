@@ -122,6 +122,7 @@ class AnnonceDAO
                 $annonce->NomAuteur = $row['Nom'];
                 $annonce->PrenomAuteur = $row['Prenom'];
                 $annonce->CourrielAuteur = $row['Courriel'];
+                $annonce->autresInfos = $row['AutresInfos'];
                 $annonces[] = $annonce;
                 }
         }

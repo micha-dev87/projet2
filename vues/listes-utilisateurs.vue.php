@@ -7,7 +7,7 @@
 <h2 class="text-center mb-4">Tableau de bord Administrateur</h2>
 
 <!-- Tableau des utilisateurs -->
-<table class="table table-striped table-hover">
+<table class="table table-striped table-hover w-100">
     <thead>
     <tr>
         <th>#</th>
@@ -15,17 +15,30 @@
         <th>Prénom</th>
         <th>Courriel</th>
         <th>Statut</th>
+        <th>Nombre de connexions</th>
+        <th>Date de connexion</th>
+        <th>Date de déconnexoin</th>
         <th>Actions</th>
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($listeUtilisateurs as $utilisateur): ?>
+    <?php foreach ($listeUtilisateurs as $utilisateur): 
+       
+        $connexions = $GLOBALS["connexionDAO"]->getAllConnexionById($utilisateur->NoUtilisateur);
+        $nombreConnexions = count($connexions);
+        $dernierConnexion = end($connexions);
+        $dateConnexion = $dernierConnexion ? htmlspecialchars($dernierConnexion['Connexion']) : 'Aucune connexion';
+        $dateDeconnexion = $dernierConnexion && isset($dernierConnexion['Deconnexion']) ? htmlspecialchars($dernierConnexion['Deconnexion']) : 'Aucune déconnexion';
+        ?>
         <tr>
             <td><?= htmlspecialchars($utilisateur->NoUtilisateur) ?></td>
             <td><?= htmlspecialchars($utilisateur->nom) ?></td>
             <td><?= htmlspecialchars($utilisateur->prenom) ?></td>
             <td><?= htmlspecialchars($utilisateur->courriel) ?></td>
             <td><?= strStatut($utilisateur->statut) ?></td>
+            <td><?= $nombreConnexions ?></td>
+            <td><?= $dateConnexion ?></td>
+            <td><?= $dateDeconnexion ?></td>
             <td>
                 <!-- Bouton pour ouvrir le modal -->
                 <button type="button" data-bs-toggle="modal" data-bs-target="#status-change-<?= $utilisateur->NoUtilisateur ?>" class="btn btn-sm btn-success">

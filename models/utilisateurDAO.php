@@ -117,7 +117,12 @@
         function listerUtilisateurs(): array
         {
             //Select all users
-            $requete = "SELECT * FROM ". TABLE_USERS;
+            $requete = "SELECT  u.*, c.* FROM ". TABLE_USERS. " u JOIN ".TABLE_CONNECTIONS.
+            " c ON u.NoUtilisateur = c.NoUtilisateur
+                 GROUP BY u.NoUtilisateur
+                    ORDER BY u.Nom DESC;
+           
+                ";
 
             $resultat = mysqli_query($this->db, $requete);
             $listeUtilisateurs = array();
@@ -125,7 +130,6 @@
                 $utilisateur = new Utilisateur($row["Nom"], $row["Prenom"], $row["Courriel"],
                     $row["MotDePasse"], $row["NoTelCellulaire"], $row["NoTelTravail"],
                     $row["NoTelMaison"], $row["Statut"], $row["NoUtilisateur"]);
-
                 array_push($listeUtilisateurs, $utilisateur);
 
             }
@@ -168,9 +172,11 @@
                     Prenom = '$utilisateur->prenom', 
                     Courriel = '$utilisateur->courriel', 
                     NoTelMaison = '$utilisateur->no_tel_maison', 
-                    NoTelTravail =  '$utilisateur->no_tel_travail', , 
+                    NoTelTravail =  '$utilisateur->no_tel_travail', 
                     NoTelCellulaire = '$utilisateur->no_tel_cellulaire',
-                    Modification = '$dateModification'
+                    Modification = '$dateModification',
+                    Statut = '$utilisateur->statut',
+                    AutresInfos = '$utilisateur->autreinfos'
                      
                     WHERE NoUtilisateur = $utilisateur->NoUtilisateur;";
 
@@ -271,7 +277,13 @@
             $this->OK = mysqli_query($this->db, $requete);
             if ($this->OK && mysqli_num_rows($this->OK) > 0) {
                 $row = mysqli_fetch_assoc($this->OK);
-                return new Utilisateur($row['Nom'], $row['Prenom'], $row['Courriel'], $row['MotDePasse'], $row['NoTelCellulaire'], $row['NoTelTravail'], $row['NoTelMaison']);
+                
+                $utilisateur =  new Utilisateur($row['Nom'], $row['Prenom'], $row['Courriel'], $row['MotDePasse'], $row['NoTelCellulaire'], $row['NoTelTravail'], $row['NoTelMaison']);
+                
+                $utilisateur->statut = $row['Statut'];
+                $utilisateur->autreinfos = $row['AutresInfos'];
+                
+                return $utilisateur;
             }
 
             return "Aucun Utilisateur Trouvé!";

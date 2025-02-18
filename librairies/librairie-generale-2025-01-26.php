@@ -323,6 +323,14 @@
         }
     }
 
+    // @function : redirect
+    function redirectTo($url){
+        echo '<script type="text/javascript">
+        window.location.href = "' . lien($url) . '";
+      </script>';
+        exit();
+    }
+
 
 
 

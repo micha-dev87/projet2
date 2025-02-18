@@ -12,6 +12,7 @@
         public $Photo;
         public $Categorie;
         public $NomCategories;
+    public $autresInfos;
 
 
     public $NomAuteur;

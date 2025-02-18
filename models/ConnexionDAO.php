@@ -17,6 +17,30 @@
 
         }
 
+
+        /* 
+        |----------------------------------------------------------------------------------|
+        | @function : recupérer les connexions
+        | @param : l'id de l'utilisateur
+        | @return : les connexions
+
+        |----------------------------------------------------------------------------------|
+        */
+        public function getAllConnexionById($id)
+        {
+            $requete = "SELECT * FROM connexions WHERE NoUtilisateur = $id ORDER BY Connexion, Deconnexion ASC";
+            $resultat = mysqli_query($this->db, $requete);
+            $listeConnexions = array();
+
+            if ($resultat) {
+                while ($row = mysqli_fetch_assoc($resultat)) {
+                    $listeConnexions[] = $row;
+                }
+            }
+
+            return $listeConnexions;
+        }
+
         /*
         |----------------------------------------------------------------------------------|
         | @function : Ajouter une connexion dans la db - "Connexion"

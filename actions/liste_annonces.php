@@ -86,6 +86,14 @@ require_once("vues/annonces.vue.php");
         const date = new Date(annonce.Parution);
         const dateFormatee = formatDate(date);
 
+        const $donnesPeronnelles = annonce.autresInfos == 'hideinfospersonnel' ? '' : `                    
+                                        <p class=" card-text">
+                        <small class=" text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
+                    </p>
+                                        <p class=" card-text">
+                        <small class="text-muted"><strong>Adresse Courriel de l'auteur :</strong> ${annonce.CourrielAuteur}</small>
+                    </p>`;
+
         return `
         <div class="col">
             <div class="card h-100">
@@ -107,12 +115,7 @@ require_once("vues/annonces.vue.php");
                                         <p class="card-text">
                         <small class="text-muted"><strong>Etat :</strong> ${strEtat(annonce.Etat)}</small>
                     </p>
-                                        <p class="auteur-infos card-text">
-                        <small class=" text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
-                    </p>
-                                        <p class="auteur-infos card-text">
-                        <small class="text-muted"><strong>Adresse Courriel de l'auteur :</strong> ${annonce.CourrielAuteur}</small>
-                    </p>
+                    ${$donnesPeronnelles}
                 </div>
                 
                 <div class="card-footer">

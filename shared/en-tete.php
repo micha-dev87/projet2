@@ -24,9 +24,10 @@
             // Définir les routes disponibles
             if(estConnecte()){
                 $routes = [
-                    'dashboard'     => 'Dashboard',
-                    'logout'   => 'Se déconnecter',
-                    'annonce/ajouter' => 'Ajouter Annonce',
+                    'dashboard'     => '<i class="fas fa-home"></i> Dashboard',
+                    'logout'   => '<i class="fas fa-sign-out-alt"></i> Se déconnecter',
+                    'annonce/ajouter' => '<i class="fas fa-plus"></i> Ajouter Annonce',
+                    'utilisateur/mon-profil'=> '<i class="fas fa-user"></i> Mon Profil'
                 ];
             }else{
                 $routes = [
