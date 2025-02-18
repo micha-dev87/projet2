@@ -13,6 +13,10 @@
         <?php if (!empty($erreur)): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($erreur) ?></div>
         <?php endif; ?>
+        
+        <?php if (!empty($success)): ?>
+            <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+        <?php endif; ?>
 
         <form id="loginForm" method="POST" class="p-4" style="<?= $shadowBox." ".$borderRadius. " ".$form_width ?>" action="">
             <!-- Champ Courriel -->

@@ -331,6 +331,15 @@
         exit();
     }
 
+    //@function : sleep(time in seconds)
+    function sleep_js($seconds) {
+        echo '<script type="text/javascript">
+        setTimeout(function(){
+            window.location.reload(1);
+        }, ' . $seconds * 1000 . ');
+        </script>';
+    }
+
 
 
 

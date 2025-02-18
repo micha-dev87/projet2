@@ -85,14 +85,21 @@ require_once("vues/annonces.vue.php");
     function genererCarteAnnonce(annonce) {
         const date = new Date(annonce.Parution);
         const dateFormatee = formatDate(date);
+        const telephoneAuteur = annonce.telephoneAuteur ? `
+            <p class="card-text">
+                <small class="text-muted"><strong>Téléphone de l'auteur:</strong> ${annonce.telephoneAuteur}</small>
+            </p>` : '';
 
-        const $donnesPeronnelles = annonce.autresInfos == 'hideinfospersonnel' ? '' : `                    
+        const donnesPeronnelles = annonce.autresInfos == 'hideinfospersonnel' ? '' : `                    
                                         <p class=" card-text">
                         <small class=" text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
                     </p>
                                         <p class=" card-text">
                         <small class="text-muted"><strong>Adresse Courriel de l'auteur :</strong> ${annonce.CourrielAuteur}</small>
-                    </p>`;
+                    </p>
+                       ${telephoneAuteur}
+                    `;
+        
 
         return `
         <div class="col">
@@ -115,7 +122,8 @@ require_once("vues/annonces.vue.php");
                                         <p class="card-text">
                         <small class="text-muted"><strong>Etat :</strong> ${strEtat(annonce.Etat)}</small>
                     </p>
-                    ${$donnesPeronnelles}
+                    ${donnesPeronnelles}
+                 
                 </div>
                 
                 <div class="card-footer">

@@ -7,6 +7,8 @@ if (!estConnecte()) {
 // Récupérer les informations de l'utilisateur
 $utilisateur = $GLOBALS["utilisateurDAO"]->utilisateurDetail(NO_UTILISATEUR);
 
+afficheMessageConsole("Utilisateur: " . json_encode($utilisateur));
+
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Création d'un nouvel objet Utilisateur avec les données du formulaire

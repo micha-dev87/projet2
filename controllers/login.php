@@ -1,7 +1,8 @@
 <?php
 // controllers/login.php
     $erreur = ""; // Stocke les messages d'erreur
-
+    $success = ""; // Stocke les messages de succès
+    
 // Vérifier si le formulaire a été soumis
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Récupérer les données du formulaire
@@ -29,16 +30,19 @@
                 ];
 
                 // Rediriger vers la page d'accueil ou le tableau de bord
-                echo '<script type="text/javascript">
-                         window.location.href = "' . lien("dashboard") . '";
-                    </script>';
-                exit();
+              redirectTo("dashboard");
 
             } else {
                 $erreur = $utilisateur; // Message d'erreur retourné par authentifierUtilisateur
             }
         }
     }
+$action = $GLOBALS["action"]??null;
 
+if($action == "validated") {
+    $success = "Votre compte a été validé avec succès. Vous pouvez maintenant vous connecter.";
+} else if($action == "new") {
+    $success = "Votre compte a été créé avec succès. Veuillez le confirmer en cliquant sur le lien envoyé à votre adresse courriel.";
+}
 // Inclure la vue
     require_once 'vues/login.vue.php';

@@ -44,10 +44,11 @@
 
             // Exécuter la requête
             $this->OK = mysqli_query($this->db, $requete);
+            // Récupérer l'ID généré automatiquement (clé primaire)
+            $noEmpl = mysqli_insert_id($this->db);
 
             if ($this->OK) {
-                // Récupérer l'ID généré automatiquement (clé primaire)
-                $noEmpl = mysqli_insert_id($this->db);
+
 
                 // Mettre à jour le champ NoEmpl avec la valeur de la clé primaire
                 $requeteUpdate = "UPDATE ".TABLE_USERS." SET NoEmpl = $noEmpl WHERE Noutilisateur = $noEmpl;";
@@ -56,13 +57,15 @@
                 // Exécuter la mise à jour
                 $this->OK = mysqli_query($this->db, $requeteUpdate);
 
-                if (!$this->OK) {
+                if ($this->OK) {
+                    return $noEmpl;
+                } else {
                     afficheMessageConsole("Erreur lors de la mise à jour du NoEmpl", true);
                 }
             } else {
                 afficheMessageConsole("Erreur lors de l'insertion de l'utilisateur", true);
             }
-            return $this->OK;
+        return $this->OK ? $noEmpl : false;
 
 
         }
@@ -278,7 +281,10 @@
             if ($this->OK && mysqli_num_rows($this->OK) > 0) {
                 $row = mysqli_fetch_assoc($this->OK);
                 
-                $utilisateur =  new Utilisateur($row['Nom'], $row['Prenom'], $row['Courriel'], $row['MotDePasse'], $row['NoTelCellulaire'], $row['NoTelTravail'], $row['NoTelMaison']);
+                $utilisateur =  new Utilisateur($row['Nom'], $row['Prenom'], $row['Courriel'], $row['MotDePasse']);
+                $utilisateur->no_tel_maison = $row['NoTelMaison'];
+                $utilisateur->no_tel_cellulaire = $row['NoTelCellulaire'];
+                $utilisateur->no_tel_travail = $row['NoTelTravail'];
                 
                 $utilisateur->statut = $row['Statut'];
                 $utilisateur->autreinfos = $row['AutresInfos'];

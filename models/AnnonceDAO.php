@@ -123,6 +123,7 @@ class AnnonceDAO
                 $annonce->PrenomAuteur = $row['Prenom'];
                 $annonce->CourrielAuteur = $row['Courriel'];
                 $annonce->autresInfos = $row['AutresInfos'];
+                $annonce->telephoneAuteur = !empty($row['NoTelCellulaire']) ? $row['NoTelCellulaire'] : (!empty($row['NoTelMaison']) ? $row['NoTelMaison'] : $row['NoTelTravail']);
                 $annonces[] = $annonce;
                 }
         }

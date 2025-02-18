@@ -20,6 +20,8 @@
 
     public $CourrielAuteur;
 
+    public $telephoneAuteur;
+
         public function __construct($NoUtilisateur, $NoAnnonce, $DescriptionA, $Description, $Prix, $Parution, $Etat, $Photo, $Categorie) {
             $this->NoUtilisateur = $NoUtilisateur;
             $this->NoAnnonce = $NoAnnonce;
