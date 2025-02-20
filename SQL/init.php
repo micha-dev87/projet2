@@ -60,7 +60,15 @@ $BDProjet2->deconnexion();
 */
 
 $adminUserDAO = new UtilisateurDAO();
-$adminUser = new Utilisateur(ADMIN_NAME, ADMIN_SURNAME, ADMIN_EMAIL, ADMIN_MOTDEPASSE, ADMIN_PHONE,ADMIN_PHONE, ADMIN_PHONE, 1);
+$adminUser = new Utilisateur();
+$adminUser ->nom = ADMIN_NAME;
+$adminUser->prenom = ADMIN_SURNAME;
+$adminUser->courriel = ADMIN_EMAIL;
+$adminUser->mot_de_passe = ADMIN_MOTDEPASSE;
+$adminUser->no_tel_maison = ADMIN_PHONE;
+$adminUser->no_tel_travail = ADMIN_PHONE;
+$adminUser->no_tel_cellulaire = ADMIN_PHONE;
+$adminUser->statut = 1;
 if(!$adminUserDAO->emailExiste(ADMIN_EMAIL)){
     $adminUserDAO->ajouterUtilisateur($adminUser );
     afficheMessageConsole("Ajout de l'administrateur avec success !");

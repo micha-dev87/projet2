@@ -29,6 +29,7 @@
         public function getAllConnexionById($id)
         {
             $requete = "SELECT * FROM connexions WHERE NoUtilisateur = $id ORDER BY Connexion, Deconnexion ASC";
+
             $resultat = mysqli_query($this->db, $requete);
             $listeConnexions = array();
 

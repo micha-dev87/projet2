@@ -5,22 +5,13 @@
 ?>
 <nav class="admin-menu">
     <ul class="admin-menu__list">
-        <li class="admin-menu__item">
-            <a href="<?= lien('annonce/liste_annonces') ?>" class="admin-menu__link">
-                <i class="fas fa-bullhorn"></i> Afficher les annonces
-            </a>
-        </li>
+
         <li class="admin-menu__item">
             <a href="<?= lien('annonce/liste_annonces/' . NO_UTILISATEUR) ?>" class="admin-menu__link">
                 <i class="fas fa-cog"></i> Gérer mes annonces
             </a>
         </li>
 
-        <li class="admin-menu__item">
-            <a href="<?= lien('utilisateur/mon-profil') ?>" class="admin-menu__link">
-                <i class="fas fa-user-edit"></i> Modifier mon profil
-            </a>
-        </li>
     </ul>
 </nav>
 

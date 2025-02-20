@@ -2,51 +2,78 @@
 // vues/annonce.details.vue.php
 $id_annonce = intval($GLOBALS["paramId"]);
 $annonce = $GLOBALS["annonceDAO"]->getAnnonceById($id_annonce);
-afficheMessageConsole("Annonce : " . print_r($annonce, true));
+
 if ($annonce) :
 
     $utilisateur     = $GLOBALS["utilisateurDAO"]->utilisateurDetail($annonce->NoUtilisateur);
-    afficheMessageConsole("Utilisateur : " . print_r($utilisateur, true));
-    if ($annonce) {
-               //Extrait le temps
-       $time = date('H\h i', strtotime($annonce->Parution));
-       //extraire la date
-        $date = date('d-m-Y', strtotime($annonce->Parution));
-        extraitJSJJMMAAAA($intSemaine, $jour, $mois, $annee, $date);
-        
-        
+   
+
+            // Format the date
+            $date = new DateTime($annonce->Parution);
+            $dateFormatee = $date->format('Y-m-d');
+
+            // Check personal info visibility
+            $donneesPersonnelles = '';
+            $courrielInfo = '';
+            $telephoneInfo = '';
+
+            if (!isset($annonce->autresInfos) || !stripos($annonce->autresInfos, 'hidePrenom')) {
+                $donneesPersonnelles = "<p class='card-text'><small class='text-muted'><strong>Publié par l'auteur:</strong> " . htmlspecialchars($utilisateur->prenom) . "</small></p>";
+            }
+
+            if (!isset($annonce->autresInfos) || !stripos($annonce->autresInfos, 'hideCourriel')) {
+                $courrielInfo = "<p class='card-text'><small class='text-muted'><strong>Courriel de l'auteur:</strong> " . htmlspecialchars($utilisateur->courriel) . "</small></p>";
+            }
+
+            if (!isset($annonce->autresInfos) || !stripos($annonce->autresInfos, 'hidePhone')) {
+                $telephoneInfo = "<p class='card-text'><small class='text-muted'><strong>Téléphone de l'auteur:</strong> " . 
+                    htmlspecialchars(
+                        !empty($utilisateur->no_tel_cellulaire) ? $utilisateur->no_tel_cellulaire : 
+                        (!empty($utilisateur->no_tel_maison) ? $utilisateur->no_tel_maison : 
+                        ($utilisateur->no_tel_travail ?? ''))
+                    ) . "</small></p>";
+            }
         ?>
-        <a href="<?= lien("annonce/liste_annonces"); ?>" class="btn btn-outline-primary">Retour vers les annonces</a>
-        <div class="col-md-6" style="width: 60rem;">
-            <h2 class="text-center mb-4">Détails de l'annonce</h2>
-            <h2 class="pb-2"><?= htmlspecialchars($annonce->DescriptionA) ?></h2>
-            <!-- Image de l'annonce -->
-            <img style="height: 600px!important; object-fit: cover;" src="<?php
-
-                                                                            // si la "Photo" de contient http ou https
-                                                                            echo (str_contains($annonce->Photo, 'http') || str_contains($annonce->Photo, 'https')) ? htmlspecialchars($annonce->Photo) :  lien(htmlspecialchars($annonce->Photo));
-                                                                            ?>" class="card-img-top" alt="<?= htmlspecialchars($annonce->Description) ?>">
-            <p class="py-2"><strong>Description :</strong> <?= htmlspecialchars($annonce->Description) ?></p>
-            <p><strong>Prix :</strong> <?= htmlspecialchars($annonce->Prix) ?> $ CA</p>
-            <p class="card-text Prix"><strong>Publié par l'auteur
-                    :</strong> <?= htmlspecialchars($utilisateur->prenom) ?> </p>
-            <p class="card-text Prix"><strong>Adresse :</strong> <?= htmlspecialchars($utilisateur->courriel) ?> </p>
-            <!-- Etat -->
-
-                    <!-- Date de publication -->
-                    <p class="card-text"><small class="text-muted Parution"><strong>Parution :</strong> <?=
-                        jourSemaineEnLitteral($intSemaine)." le ".$jour." ".moisEnLitteral($mois)." ".$annee." à ".$time
-                        
-                        ?></small></p>
-                    <!-- Etat -->
-                    <p class="card-text"><small class="text-muted Etat"><strong>Etat :</strong><?= strEtat($annonce->Etat) ?></small></p>
-                    <!-- Categories -->
-                    <p class="card-text"><small class="text-muted Categroie"><strong>Catégorie :</strong><?= htmlspecialchars($annonce->Categorie) ?></small></p>
+        <div class="col">
+            <div class="card h-100">
+                <img class="card-img-top" 
+                     style="height: 200px; object-fit: cover;" 
+                     src="<?= (str_contains($annonce->Photo, 'http') || str_contains($annonce->Photo, 'https')) ? htmlspecialchars($annonce->Photo) : lien(htmlspecialchars($annonce->Photo)) ?>" 
+                     alt="<?= htmlspecialchars($annonce->DescriptionA) ?>">
+                
+                <div class="card-body">
+                    <p class="card-text"><strong>Id :</strong> <?= $annonce->NoAnnonce ?></p>
+                    <h5 class="card-title"><?= htmlspecialchars($annonce->DescriptionA) ?></h5>
+                    <p class="card-text"><?= htmlspecialchars(substr($annonce->Description, 0, 100)) ?>...</p>
+                    <p class="card-text"><strong>Prix:</strong> <?= htmlspecialchars($annonce->Prix) ?> $ CA</p>
+                    <p class="card-text"></p>
+                        <small class="text-muted"><strong>Publié le</strong> <?= date('d F Y', strtotime($dateFormatee)) ?></small>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted"><strong>Catégorie:</strong> <?= htmlspecialchars($annonce->Categorie) ?></small>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted"><strong>Etat :</strong> <?= strEtat($annonce->Etat) ?></small>
+                    </p>
+                    <?= $donneesPersonnelles ?>
+                    <?= $courrielInfo ?>
+                    <?= $telephoneInfo ?>
                 </div>
+                
+                <div class="card-footer">
+                    <div class="d-grid gap-2">
+                        <a href="<?= lien("annonce/liste_annonces") ?>" class="btn btn-outline-primary">Retour vers les annonces</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
 <?php
-    } else {
-        die("<p class=\"text-danger\">Aucune annonce crée!</p>");
-    }
+ 
 else:
     die("<p class=\"text-danger\">Aucune annonce trouvée!</p>");
 endif;

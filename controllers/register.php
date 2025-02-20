@@ -15,8 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         | Recupération des valeurs du formulaire
         |----------------------------------------------------------------------------------|
         */
-    $nom = trim($_POST['nom']);
-    $prenom = trim($_POST['prenom']);
+    $nom = trim($_POST['nom'] ?? '');
+    $prenom = trim($_POST['prenom'] ?? '');
     $courriel = trim($_POST['courriel']);
     $courriel_confirmation = trim($_POST['courriel_confirmation']);
     $mot_de_passe = trim($_POST['mot_de_passe']);
@@ -36,10 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreur = "L'adresse de courriel saisie n'est pas valide.";
     } elseif (strlen($mot_de_passe) < 5 || strlen($mot_de_passe) > 15 || !preg_match('/[a-zA-Z]/', $mot_de_passe) || !preg_match('/[0-9]/', $mot_de_passe)) {
         $erreur = "Le mot de passe doit contenir entre 5 et 15 caractères, avec des lettres et chiffres combinés.";
-    } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-' . '’]*[a-zA-ZÀ-ÿ]$/', $nom)) {
-        $erreur = "Le nom est invalide.";
-    } elseif (!preg_match('/^[a-zA-ZÀ-ÿ][a-zA-ZÀ-ÿ \-' . '’]*[a-zA-ZÀ-ÿ]$/', $prenom)) {
-        $erreur = "Le prénom est invalide.";
+    
     } else {
         /*
             |----------------------------------------------------------------------------------|
@@ -47,9 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             |----------------------------------------------------------------------------------|
             */
 
-        // nouveau utilisateur
-        $utilisateur = new Utilisateur($nom, $prenom, $courriel, $mot_de_passe);
-
+            $utilisateur = new Utilisateur();
+            
+            // nouveau utilisateur
+            $utilisateur->nom = $nom;
+            $utilisateur->prenom = $prenom;
+            $utilisateur->courriel = $courriel;
+            $utilisateur->mot_de_passe = $mot_de_passe;
+            
+            afficheMessageConsole("nom et prenom : " . $nom . " " . $prenom);
 
         $utilisateurModel = new UtilisateurDAO();
         if ($utilisateurModel->emailExiste($courriel)) {

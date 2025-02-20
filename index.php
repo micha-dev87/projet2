@@ -94,7 +94,7 @@ foreach($api_controllers as $controller)
         if($intNbSegments >1){
             //si controleur
 
-            if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers) || in_array( $uriSegments[1], $config_controllers)) {
+            if (in_array(CONTROLLERS_PATH . $uriSegments[1] . ".php", $controllers)) {
                 afficheMessageConsole("le controleur " .  $uriSegments[1] . " existe !");
                 $controller =  $uriSegments[1];
 
@@ -117,7 +117,7 @@ foreach($api_controllers as $controller)
     }else{
         if($intNbSegments >0){
             //si controleur
-            if (in_array(CONTROLLERS_PATH . $uriSegments[0] . ".php", $controllers) || in_array( $uriSegments[0], $config_controllers)) {
+            if (in_array(CONTROLLERS_PATH . $uriSegments[0] . ".php", $controllers) ) {
                 afficheMessageConsole("le controleur " .  $uriSegments[0] . " existe !");
                 $controller =  $uriSegments[0];
 

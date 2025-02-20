@@ -7,7 +7,6 @@ $titre = is_numeric( $GLOBALS["paramId"]) ? "Mes annonces" : "Liste des annonces
 
 global $categories;
 ?>
-<a href="<?= lien("dashboard"); ?>" class="btn btn-outline-primary">Retour vers le dashboard</a>
 
 <h2 class="text-center mb-4"><?= $titre?></h2>
 

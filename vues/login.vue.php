@@ -38,7 +38,14 @@
         <div class="text-center mt-3">
             <p class="mt-4 mb-3 ">
                 Pas encore inscrit <i class="fas fa-face-smile"></i>  ?
-                <a href="<?=SERVER_NAME == 'localhost' ? "/{$uriSegments[0]}/register": "/register"?>" class="link">Inscrivez-vous ici</a>
+                <a href="<?= lien('/register') ?>" class="link">Inscrivez-vous ici</a>
+              </p>
+              <p>
+
+                  Mot de passe oublié ? <i class="fas fa-face-sad-tear"></i> <a href="<?= lien("utilisateur/send_password") ?>" class="link">Récupérer le mot de passe</a>
+              </p>
+          
+        </div>
             </p>
         </div>
     </div>

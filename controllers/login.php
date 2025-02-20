@@ -29,8 +29,14 @@
                     'Statut' => $utilisateur['Statut']
                 ];
 
-                // Rediriger vers la page d'accueil ou le tableau de bord
-              redirectTo("dashboard");
+                if(empty($utilisateur['Nom']) || empty($utilisateur['Prenom'])) {
+                    // Rediriger vers la page de mise à jour du profil
+                    redirectTo("utilisateur/mon-profil");
+                } else {
+                    // Rediriger vers la page d'accueil ou le tableau de bord
+                    redirectTo("annonce/liste_annonces");
+                }
+                
 
             } else {
                 $erreur = $utilisateur; // Message d'erreur retourné par authentifierUtilisateur

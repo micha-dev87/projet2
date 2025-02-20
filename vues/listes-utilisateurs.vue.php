@@ -3,7 +3,6 @@
             //liste des utilisateur :::: administrateur
             $listeUtilisateurs = $GLOBALS["utilisateurDAO"]->listerUtilisateurs();
 ?>
-<a href="<?= lien("dashboard"); ?>" class="btn btn-outline-primary">Retour vers le dashboard</a>
 <h2 class="text-center mb-4">Tableau de bord Administrateur</h2>
 
 <!-- Tableau des utilisateurs -->
@@ -22,7 +21,9 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($listeUtilisateurs as $utilisateur): 
+        <?php 
+      
+   foreach ($listeUtilisateurs as $utilisateur): 
        
         $connexions = $GLOBALS["connexionDAO"]->getAllConnexionById($utilisateur->NoUtilisateur);
         $nombreConnexions = count($connexions);
@@ -35,7 +36,7 @@
             <td><?= htmlspecialchars($utilisateur->nom) ?></td>
             <td><?= htmlspecialchars($utilisateur->prenom) ?></td>
             <td><?= htmlspecialchars($utilisateur->courriel) ?></td>
-            <td><?= strStatut($utilisateur->statut) ?></td>
+            <td><?= strStatut(intval($utilisateur->statut)) ?></td>
             <td><?= $nombreConnexions ?></td>
             <td><?= $dateConnexion ?></td>
             <td><?= $dateDeconnexion ?></td>

@@ -80,14 +80,14 @@
         function emailExiste($strEmail)
         {
             // Vérifier si l'adresse courriel existe déjà dans la table
-            $requeteVerification = "SELECT COUNT(*) AS count FROM ".TABLE_USERS." WHERE Courriel = '$strEmail'";
+            $requeteVerification = "SELECT  NoUtilisateur  FROM ".TABLE_USERS." WHERE Courriel = '$strEmail'";
             $resultatVerification = mysqli_query($this->db, $requeteVerification);
 
             if ($resultatVerification) {
                 $row = mysqli_fetch_assoc($resultatVerification);
-
-                if ($row['count'] > 0) {
-                    return true;
+              
+                if ($row['NoUtilisateur'] ) {
+                    return $row['NoUtilisateur'];
                 }
             } else {
                 die("Erreur lors de la vérification de l'adresse courriel : " . mysqli_error($this->db));
@@ -97,7 +97,7 @@
 
         /*
         |----------------------------------------------------------------------------------|
-        | Confirmer un utilistaeur
+        | Confirmer un utilisateur
         |----------------------------------------------------------------------------------|
         */
 
@@ -130,9 +130,18 @@
             $resultat = mysqli_query($this->db, $requete);
             $listeUtilisateurs = array();
             while ($row = mysqli_fetch_assoc($resultat)) {
-                $utilisateur = new Utilisateur($row["Nom"], $row["Prenom"], $row["Courriel"],
-                    $row["MotDePasse"], $row["NoTelCellulaire"], $row["NoTelTravail"],
-                    $row["NoTelMaison"], $row["Statut"], $row["NoUtilisateur"]);
+                $utilisateur = new Utilisateur();
+                $utilisateur->nom = $row["Nom"];
+                $utilisateur->prenom = $row["Prenom"];
+                $utilisateur->courriel = $row["Courriel"];
+                $utilisateur->mot_de_passe = $row["MotDePasse"];
+                $utilisateur->NoUtilisateur = $row["NoUtilisateur"];
+                $utilisateur->no_tel_maison = $row["NoTelMaison"];
+                $utilisateur->no_tel_cellulaire = $row["NoTelCellulaire"];
+                $utilisateur->no_tel_travail = $row["NoTelTravail"];
+                $utilisateur->statut = $row["Statut"];  
+                $utilisateur->NoEmpl = $row["NoEmpl"];
+                $utilisateur->date_creation = $row["Creation"];
                 array_push($listeUtilisateurs, $utilisateur);
 
             }
@@ -179,16 +188,36 @@
                     NoTelCellulaire = '$utilisateur->no_tel_cellulaire',
                     Modification = '$dateModification',
                     Statut = '$utilisateur->statut',
+                    NoEmpl = '$utilisateur->NoEmpl',
                     AutresInfos = '$utilisateur->autreinfos'
                      
                     WHERE NoUtilisateur = $utilisateur->NoUtilisateur;";
-
+            
             // Exécuter la requête
             return mysqli_query($this->db, $requete);
 
 
         }
 
+
+        /*
+        |----------------------------------------------------------------------------------|
+        | Changer le mot de passe d'un utilisateur
+        |----------------------------------------------------------------------------------|
+        */
+        public function changerMotDePasse($noUtilisateur, $nouveauMotDePasse) 
+        {
+            $mot_de_passe_hash = password_hash($nouveauMotDePasse, PASSWORD_BCRYPT);
+            $dateModification = date('Y-m-d H:i:s');
+            
+            $requete = "UPDATE ".TABLE_USERS." SET 
+                MotDePasse = '$mot_de_passe_hash',
+                Modification = '$dateModification'
+                WHERE NoUtilisateur = $noUtilisateur";
+          
+            return mysqli_query($this->db, $requete);
+        }
+        
 
         /*
         |----------------------------------------------------------------------------------|
@@ -281,11 +310,15 @@
             if ($this->OK && mysqli_num_rows($this->OK) > 0) {
                 $row = mysqli_fetch_assoc($this->OK);
                 
-                $utilisateur =  new Utilisateur($row['Nom'], $row['Prenom'], $row['Courriel'], $row['MotDePasse']);
+                $utilisateur = new Utilisateur();
+                $utilisateur->nom = $row["Nom"];
+                $utilisateur->prenom = $row["Prenom"];
+                $utilisateur->courriel = $row["Courriel"];
+                $utilisateur->mot_de_passe = $row["MotDePasse"];
                 $utilisateur->no_tel_maison = $row['NoTelMaison'];
                 $utilisateur->no_tel_cellulaire = $row['NoTelCellulaire'];
                 $utilisateur->no_tel_travail = $row['NoTelTravail'];
-                
+                $utilisateur->NoEmpl = $row['NoEmpl'];
                 $utilisateur->statut = $row['Statut'];
                 $utilisateur->autreinfos = $row['AutresInfos'];
                 

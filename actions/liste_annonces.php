@@ -85,21 +85,25 @@ require_once("vues/annonces.vue.php");
     function genererCarteAnnonce(annonce) {
         const date = new Date(annonce.Parution);
         const dateFormatee = formatDate(date);
-        const telephoneAuteur = annonce.telephoneAuteur ? `
-            <p class="card-text">
-                <small class="text-muted"><strong>Téléphone de l'auteur:</strong> ${annonce.telephoneAuteur}</small>
-            </p>` : '';
 
-        const donnesPeronnelles = annonce.autresInfos == 'hideinfospersonnel' ? '' : `                    
-                                        <p class=" card-text">
-                        <small class=" text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
+
+        const donnesPeronnelles = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidePrenom') ? '' : `                    
+                                        <p class="card-text">
+                        <small class="text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
                     </p>
-                                        <p class=" card-text">
-                        <small class="text-muted"><strong>Adresse Courriel de l'auteur :</strong> ${annonce.CourrielAuteur}</small>
-                    </p>
-                       ${telephoneAuteur}
                     `;
-        
+                    const courrielInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hideCourriel') ? '' : `                    
+                                        <p class="card-text">
+                        <small class="text-muted"><strong>Courriel de l'auteur:</strong> ${annonce.CourrielAuteur}</small>
+                    </p>
+                    `;
+                    const telephoneInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidePhone') ? '' : `                    
+                                        <p class="card-text">
+                        <small class="text-muted"><strong>Téléphone de l'auteur:</strong> ${annonce.telephoneAuteur}</small>
+                    </p>
+                    `;
+                    
+
 
         return `
         <div class="col">
@@ -110,6 +114,7 @@ require_once("vues/annonces.vue.php");
                      alt="${htmlspecialchars(annonce.DescriptionA)}">
                 
                 <div class="card-body">
+                    <p class="card-text"><strong>Id :</strong> ${annonce.NoAnnonce}</p>
                     <h5 class="card-title">${htmlspecialchars(annonce.DescriptionA)}</h5>
                     <p class="card-text">${htmlspecialchars(annonce.Description).substring(0, 100)}...</p>
                     <p class="card-text"><strong>Prix:</strong> ${annonce.Prix} $ CA</p>

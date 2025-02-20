@@ -3,7 +3,7 @@
 ?>
 
 <div class="container">
-    <h2 class="text-center mb-4">Inscription</h2>
+    <h2 class="text-center mb-4">Modification du mot de passe</h2>
     <?php if (!empty($erreur)): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($erreur) ?></div>
     <?php endif; ?>
@@ -11,26 +11,6 @@
         <div class="alert alert-success"><?= htmlspecialchars($succes) ?></div>
     <?php endif; ?>
     <form id="registerForm" class="p-4 " style="<?= $shadowBox . " " . $borderRadius ?>" method="POST">
-        <!-- Champ Nom -->
-        <div class="mb-3">
-            <label for="nom" class="form-label"><i class="fas fa-user me-2"></i>Nom</label>
-            <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrez votre nom" value="<?= htmlspecialchars($nom ?? '') ?>" >
-        </div>
-        <!-- Champ Prénom -->
-        <div class="mb-3">
-            <label for="prenom" class="form-label"><i class="fas fa-user me-2"></i>Prénom</label>
-            <input type="text" class="form-control" id="prenom" name="prenom" placeholder="Entrez votre prénom" value="<?= htmlspecialchars($prenom ?? '') ?>">
-        </div>
-        <!-- Champ Courriel -->
-        <div class="mb-3">
-            <label for="courriel" class="form-label"><i class="fas fa-envelope me-2"></i>Adresse de courriel</label>
-            <input type="email" class="form-control" id="courriel" name="courriel" placeholder="exemple@domaine.com" value="<?= htmlspecialchars($courriel ?? '') ?>" required>
-        </div>
-        <!-- Champ Confirmation Courriel -->
-        <div class="mb-3">
-            <label for="courriel_confirmation" class="form-label"><i class="fas fa-envelope me-2"></i>Confirmez votre adresse de courriel</label>
-            <input type="email" class="form-control" id="courriel_confirmation" name="courriel_confirmation" placeholder="exemple@domaine.com" value="<?= htmlspecialchars($courriel_confirmation ?? '') ?>" required>
-        </div>
         
         <!-- Champ Mot de passe -->
         <div class="mb-3">
@@ -56,15 +36,9 @@
 </div>
 
 <!-- Bouton Soumettre -->
-<button type="submit" class="btn btn-primary w-100 mt-4">S'inscrire</button>
-<p class="mt-4 mb-3 ">
-    Déjà membre <i class="fas fa-face-smile"></i> ? <a href="<?= lien('login') ?>" class="link">Connectez-vous</a>
+<button type="submit" class="btn btn-primary w-100 mt-4">Modifier le mot de passe</button>
 
-</p>
 
-<div>
-    Mot de passe oublié ? <i class="fas fa-face-sad-tear"></i> <a href="<?= lien("utilisateur/send_password") ?>" class="link">Récupérer le mot de passe</a>
-</div>
 </form>
 </div>
 
@@ -85,25 +59,9 @@
         }
     }
     document.getElementById('registerForm').addEventListener('submit', function(event) {
-        const courriel = document.getElementById('courriel').value;
-        const courrielConfirmation = document.getElementById('courriel_confirmation').value;
+
         const motDePasse = document.getElementById('mot_de_passe').value;
         const motDePasseConfirmation = document.getElementById('mot_de_passe_confirmation').value;
-
-
-        // Validation du courriel
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(courriel)) {
-            alert("L'adresse de courriel saisie n'est pas valide.");
-            event.preventDefault();
-            return;
-        }
-
-        // Validation de la correspondance des courriels
-        if (courriel !== courrielConfirmation) {
-            alert("Les deux adresses de courriel ne correspondent pas.");
-            event.preventDefault();
-            return;
-        }
 
         // Validation du mot de passe
         if (motDePasse.length < 5 || motDePasse.length > 15 || !/[a-zA-Z]/.test(motDePasse) || !/[0-9]/.test(motDePasse)) {

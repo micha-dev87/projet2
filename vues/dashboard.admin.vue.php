@@ -4,11 +4,7 @@
 ?>
 <nav class="admin-menu">
     <ul class="admin-menu__list">
-        <li class="admin-menu__item">
-            <a href="<?= lien('annonce/liste_annonces') ?>" class="admin-menu__link">
-                <i class="fas fa-bullhorn"></i> Afficher les annonces
-            </a>
-        </li>
+
         <li class="admin-menu__item">
             <a href="<?= lien('utilisateur/liste_utilisateurs') ?>" class="admin-menu__link">
                 <i class="fas fa-users"></i> Gérer les utilisateurs
