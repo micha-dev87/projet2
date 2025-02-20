@@ -3,7 +3,7 @@ require_once("vues/annonces.vue.php");
 ?>
 <script>
     // Variables globales
-    let base = '<?php echo empty(BASE_PATH) ? '/' : '/' . BASE_PATH; ?>';
+    let base = '<?php echo empty(BASE_PATH) ? '' : '/' . BASE_PATH; ?>';
     const GLOBALS_PARAM_ID = '<?php echo $GLOBALS["paramId"] ?? ""; ?>';
     const GLOBALS_USER_ID = '<?php echo NO_UTILISATEUR ?? ""; ?>';
 
@@ -92,17 +92,17 @@ require_once("vues/annonces.vue.php");
                         <small class="text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
                     </p>
                     `;
-                    const courrielInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hideCourriel') ? '' : `                    
+        const courrielInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hideCourriel') ? '' : `                    
                                         <p class="card-text">
                         <small class="text-muted"><strong>Courriel de l'auteur:</strong> ${annonce.CourrielAuteur}</small>
                     </p>
                     `;
-                    const telephoneInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidePhone') ? '' : `                    
+        const telephoneInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidePhone') ? '' : `                    
                                         <p class="card-text">
                         <small class="text-muted"><strong>Téléphone de l'auteur:</strong> ${annonce.telephoneAuteur}</small>
                     </p>
                     `;
-                    
+
 
 
         return `
