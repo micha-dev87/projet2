@@ -3,7 +3,7 @@
 
 class AnnonceDAO
 {
-    private $db;
+    public $db;
     public $sql;
 
     public function __construct()
@@ -105,6 +105,7 @@ class AnnonceDAO
         if ($resultat && mysqli_num_rows($resultat) > 0) {
 
             while ($row = mysqli_fetch_assoc($resultat)) {
+                afficheMessageConsole("annonce : " . json_encode($row));
                 
                 $annonce = new Annonce(
                     $row['NoUtilisateur'],
