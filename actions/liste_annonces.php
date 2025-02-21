@@ -3,7 +3,7 @@ require_once("vues/annonces.vue.php");
 ?>
 <script>
     // Variables globales
-    let base = '<?php echo empty(BASE_PATH) ? "http://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['SERVER_NAME'] . '/' . BASE_PATH; ?>';
+    let base = '<?php echo empty(BASE_PATH) ? "https://" . $_SERVER['SERVER_NAME'] : "http://" . $_SERVER['SERVER_NAME'] . '/' . BASE_PATH; ?>';
     const GLOBALS_PARAM_ID = '<?php echo $GLOBALS["paramId"] ?? ""; ?>';
     const GLOBALS_USER_ID = '<?php echo NO_UTILISATEUR ?? ""; ?>';
 
