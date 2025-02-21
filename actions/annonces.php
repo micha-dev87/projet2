@@ -17,5 +17,7 @@ $annonces = $annonceDAO->listerAnnonces(
 );
 
 // Return as JSON
-header('Content-Type: application/json');
-echo json_encode($annonces);
+
+echo "<pre>";
+print_r($annonces);
+echo "</pre>";
