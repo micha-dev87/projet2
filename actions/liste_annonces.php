@@ -74,36 +74,43 @@ require_once("vues/annonces.vue.php");
             </div>`;
             return;
         }
+        var id = 1;
 
         // Générer le HTML pour toutes les annonces
         container.innerHTML = annonces
-            .map(annonce => genererCarteAnnonce(annonce))
+            .map(annonce => genererCarteAnnonce(annonce, id++))
             .join('');
     }
 
 
-    function genererCarteAnnonce(annonce) {
+    function genererCarteAnnonce(annonce, id) {
         const date = new Date(annonce.Parution);
         const dateFormatee = formatDate(date);
 
 
-        const donnesPeronnelles = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidePrenom') ? '' : `                    
+        let donnesPersonnelles = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hideprenom') ? '' : `                    
                                         <p class="card-text">
                         <small class="text-muted"><strong>Publié par l'auteur:</strong> ${annonce.PrenomAuteur}</small>
                     </p>
                     `;
-        const courrielInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hideCourriel') ? '' : `                    
+        donnesPersonnelles += JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidecourriel') ? '' : `                    
                                         <p class="card-text">
-                        <small class="text-muted"><strong>Courriel de l'auteur:</strong> ${annonce.CourrielAuteur}</small>
+                        <small class="text-muted"><strong>Courriel de l'auteur:</strong> <a href="mailto:${annonce.CourrielAuteur}">${annonce.CourrielAuteur}</a></small>
                     </p>
                     `;
-        const telephoneInfo = JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidePhone') ? '' : `                    
+
+        donnesPersonnelles += JSON.stringify(annonce.autresInfos).toLowerCase().includes('hidephone') ? '' : `                    
                                         <p class="card-text">
                         <small class="text-muted"><strong>Téléphone de l'auteur:</strong> ${annonce.telephoneAuteur}</small>
                     </p>
                     `;
 
+                    // Masquer les données personnelles si l'annonce appartient à l'utilisateur connecté
+                    if (annonce.NoUtilisateur == GLOBALS_USER_ID) {
+                        donnesPersonnelles = '';
+                    }
 
+        console.log(JSON.stringify(annonce.autresInfos).toLowerCase());
 
         return `
         <div class="col">
@@ -114,10 +121,11 @@ require_once("vues/annonces.vue.php");
                      alt="${htmlspecialchars(annonce.DescriptionA)}">
                 
                 <div class="card-body">
-                    <p class="card-text"><strong>Id :</strong> ${annonce.NoAnnonce}</p>
-                    <h5 class="card-title">${htmlspecialchars(annonce.DescriptionA)}</h5>
-                    <p class="card-text">${htmlspecialchars(annonce.Description).substring(0, 100)}...</p>
-                    <p class="card-text"><strong>Prix:</strong> ${annonce.Prix} $ CA</p>
+                <p class="card-text"><strong>No :</strong> ${id}</p>
+                <p class="card-text"><strong>Id :</strong> ${annonce.NoAnnonce}</p>
+                <h5 class="card-title">${htmlspecialchars(annonce.DescriptionA)}</h5>
+                <p class="card-text">${htmlspecialchars(annonce.Description).substring(0, 100)}...</p>
+                    <p class="card-text"><strong>Prix:</strong> ${(annonce.Prix && annonce.Prix > 0) ? annonce.Prix + ' $ CA' : 'N/A'}</p>
                     <p class="card-text">
                         <small class="text-muted"><strong>Publié le</strong> ${formatDateLitterale(dateFormatee)}</small>
                     </p>
@@ -127,7 +135,7 @@ require_once("vues/annonces.vue.php");
                                         <p class="card-text">
                         <small class="text-muted"><strong>Etat :</strong> ${strEtat(annonce.Etat)}</small>
                     </p>
-                    ${donnesPeronnelles}
+                    ${donnesPersonnelles}
                  
                 </div>
                 

@@ -38,7 +38,7 @@
         <div class="text-center mt-3">
             <p class="mt-4 mb-3 ">
                 Pas encore inscrit <i class="fas fa-face-smile"></i>  ?
-                <a href="<?= lien('/register') ?>" class="link">Inscrivez-vous ici</a>
+                <a href="<?= lien('register') ?>" class="link">Inscrivez-vous ici</a>
               </p>
               <p>
 

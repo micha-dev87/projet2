@@ -28,7 +28,7 @@
         <div class="col-md-4">
             <label for="prix" class="form-label">Prix</label>
             <input type="number" step="0.01" class="form-control" id="prix" value="<?= $Prix ?? ""; ?>" name="Prix"
-                required>
+                >
         </div>
         <!-- Champ Date de Parution -->
         <div class="col-md-4">
@@ -99,12 +99,7 @@
             return;
         }
 
-        // Validation du Prix
-        if (isNaN(prix) || prix <= 0) {
-            alert("Le prix doit être un nombre positif.");
-            event.preventDefault();
-            return;
-        }
+
 
         // Validation de la Date de Parution
         const today = new Date().toISOString().split('T')[0];

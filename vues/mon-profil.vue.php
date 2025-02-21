@@ -97,14 +97,14 @@
             <div class="col-12 mb-3">
             <h5><i class="fas fa-user-shield"></i> Options de confidentialité</h5>
                 <!-- Option pour masquer les numéros de téléphone -->
-                <div class="form-check"></div>
+                <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="hidePhone" 
                            name="hidePhone" 
                            <?= isset($utilisateur->autreinfos) && str_contains($utilisateur->autreinfos, 'hidePhone') ? 'checked' : '' ?>>
                     <label class="form-check-label" for="hidePhone">
                         Masquer mes numéros de téléphone dans les annonces
                     </label>
-                </div>
+                </di>
                 <!-- Option pour masquer le courriel -->
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="hideCourriel" 
@@ -125,15 +125,17 @@
                 </div>
             </div>
         </div>
+        <div class="my-3">
+            <a href="<?= lien("utilisateur/send_password") ?>" class="btn btn-outline-primary">
+            <i class="fas fa-key me-2"></i>Changer mon mot de passe
+            </a>
+        </div>
 
         <!-- Boutons de soumission et de retour -->
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
         
         <a href="<?= lien('dashboard') ?>" class="btn btn-secondary">Retour</a>
-        <div>
-            
-            Mot de passe oublié ? <i class="fas fa-face-sad-tear"></i> <a href="<?= lien("utilisateur/send_password") ?>" class="link">Récupérer le mot de passe</a>
-        </div>
+
     </form>
 </div>
 

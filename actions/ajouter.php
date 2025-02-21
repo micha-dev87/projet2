@@ -35,9 +35,7 @@
             if (empty($Description) || strlen($Description) < 20 || strlen($Description) > 1000) {
                 throw new Exception("La description complète doit contenir entre 20 et 1000 caractères.");
             }
-            if ($Prix <= 0) {
-                throw new Exception("Le prix doit être un nombre positif.");
-            }
+    
             if (!validateDate($Parution)) {
                 throw new Exception("La date de parution n'est pas valide.");
             }

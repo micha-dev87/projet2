@@ -20,7 +20,7 @@ $recherche = $_POST['recherche'] ?? null;
 $categorie = $_POST['categorie'] ?? null;
 $dateDebut = $_POST['dateDebut'] ?? null;
 $dateFin = $_POST['dateFin'] ?? null;
-$tri = $_POST['tri'] ?? null;
+$tri = $_POST['tri'] ?? '';
 $id_user = $_POST['id_user'] ?? null;
 $limit = 10;
 

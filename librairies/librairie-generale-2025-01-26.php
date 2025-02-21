@@ -340,6 +340,11 @@
         </script>';
     }
 
+//function estAdmin
+function estAdmin() {
+    return STATUT_UTILISATEUR == 1;
+}
+
 
 
 

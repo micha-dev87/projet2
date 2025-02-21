@@ -1,6 +1,6 @@
 INSERT INTO annonces (NoUtilisateur, Parution, Categorie, DescriptionAbregee, DescriptionComplete, Prix, Photo, MiseAJour, Etat) VALUES
 (4, NOW(), 1, 'Smartphone haut de gamme', 'Smartphone récent avec écran AMOLED et triple caméra', 799.99, 'https://picsum.photos/200/300?random=1', NOW(), 1),
-(5, NOW(), 2, 'Canapé cuir noir', 'Canapé 3 places en cuir véritable - état neuf', 499.50, 'https://picsum.photos/200/300?random=2', NOW(), 1),
+(5, NOW(), 2, 'Canapé cuir noir', 'Canapé 3 places en cuir véritable - état neuf', 0, 'https://picsum.photos/200/300?random=2', NOW(), 1),
 (6, '2023-10-15 14:30:00', 3, 'Voiture familiale', 'Voiture essence 5 portes, 120 000 km', 8500.00, 'https://picsum.photos/200/300?random=3', NOW(), 1),
 (4, '2023-10-20 09:15:00', 4, 'Studio centre-ville', 'Studio meublé proche transports', 120000.00, 'https://picsum.photos/200/300?random=4', NOW(), 0),
 (5, NOW(), 5, 'Manteau d''hiver', 'Manteau en laine taille M - couleur grise', 89.99, 'https://picsum.photos/200/300?random=5', NOW(), 1),

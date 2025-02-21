@@ -286,6 +286,10 @@ class AnnonceDAO
     public function ajouterAnnonce($annonce)
     {
 
+        afficheMessageConsole("annonce : " . json_encode($annonce));
+
+        $annonce->DescriptionA = mysqli_real_escape_string($this->db, $annonce->DescriptionA);
+        $annonce->Description = mysqli_real_escape_string($this->db, $annonce->Description);
 
         $this->sql = "INSERT INTO annonces (NoUtilisateur, DescriptionAbregee, DescriptionComplete, 
             Prix, Parution, Etat, Photo, Categorie) 

@@ -52,8 +52,8 @@ global $categories;
                 <label for="tri" class="form-label">Trier par</label>
                 <select class="form-select" id="tri" onselect="appliquerFiltres()">
              
-                    <option  selected value="date_asc">Date ↑</option>
-                    <option value="date_desc">Date ↓</option>
+                    <option   value="date_asc">Date ↑</option>
+                    <option selected value="date_desc">Date ↓</option>
                     <option value="auteur_asc">Auteur A-Z</option>
                     <option value="auteur_desc">Auteur Z-A</option>
                     <option value="categorie_asc">Catégorie A-Z</option>

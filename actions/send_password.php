@@ -37,9 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $noUtilisateur = $GLOBALS["utilisateurDAO"]->emailExiste($courriel);
 
 
-            $succes = "Un lien pour changer votre mot de passe vous a été envoyé par courriel.";
-
-            if ($noUtilisateur) {
+        
+        if ($noUtilisateur) {
+             
 
                 // Envoyer un courriel de confirmation
                 $sujet = "Changer votre mot de passe";
@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // TODO : Envoyer un courriel de confirmation avec un jeton unique
                 afficheMessageConsole($succes);
+                $succes = "Un lien pour changer votre mot de passe vous a été envoyé par courriel.";
          
             } else {
                            /*

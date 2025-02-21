@@ -11,7 +11,7 @@
             </a>
         </li>
         <li class="admin-menu__item">
-            <a href="<?= lien('utilisateur/liste_utilisateurs') ?>" class="admin-menu__link">
+            <a href="<?= lien('utilisateur/vider-data') ?>" class="admin-menu__link">
                 <i class="fas fa-database"></i> Vider la base de données
             </a>
         </li>
