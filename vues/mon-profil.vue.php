@@ -1,18 +1,20 @@
-<!-- Container principal avec marge supérieure -->
+
 <div class="container mt-4">
     <h2>Mon Profil</h2>
 
     <!-- Affichage des messages de succès -->
     <?php if (isset($_SESSION['message'])): ?>
         <div class="alert alert-success">
-            <?= $_SESSION['message']; unset($_SESSION['message']); ?>
+            <?= $_SESSION['message'];
+            unset($_SESSION['message']); ?>
         </div>
     <?php endif; ?>
 
     <!-- Affichage des messages d'erreur -->
     <?php if (isset($_SESSION['erreur'])): ?>
         <div class="alert alert-danger">
-            <?= $_SESSION['erreur']; unset($_SESSION['erreur']); ?>
+            <?= $_SESSION['erreur'];
+            unset($_SESSION['erreur']); ?>
         </div>
     <?php endif; ?>
 
@@ -104,7 +106,7 @@
                     <label class="form-check-label" for="hidePhone">
                         Masquer mes numéros de téléphone dans les annonces
                     </label>
-                </di>
+                </div>
                 <!-- Option pour masquer le courriel -->
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="hideCourriel" 
@@ -131,27 +133,28 @@
             </a>
         </div>
 
+        <div></div>
         <!-- Boutons de soumission et de retour -->
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
         
-        <a href="<?= lien('dashboard') ?>" class="btn btn-secondary">Retour</a>
+        <a href="<?= lien('dashboard') ?>" class="btn btn-outline-primary">Retour</a>
 
     </form>
 </div>
 
 <script>
-// Script JavaScript pour formater automatiquement les numéros de téléphone
-document.querySelectorAll('input[type="tel"]').forEach(input => {
-    input.addEventListener('input', function(e) {
-        // Supprime tous les caractères non numériques et limite à 10 chiffres
-        let value = e.target.value.replace(/\D/g, '').substring(0,10);
-        // Formate le numéro selon le pattern XXX-XXX-XXXX
-        if (value.length >= 6) {
-            value = value.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-        } else if (value.length >= 3) {
-            value = value.replace(/(\d{3})(\d{0,3})/, "$1-$2");
-        }
-        e.target.value = value;
+    // Script JavaScript pour formater automatiquement les numéros de téléphone
+    document.querySelectorAll('input[type="tel"]').forEach(input => {
+        input.addEventListener('input', function(e) {
+            // Supprime tous les caractères non numériques et limite à 10 chiffres
+            let value = e.target.value.replace(/\D/g, '').substring(0, 10);
+            // Formate le numéro selon le pattern XXX-XXX-XXXX
+            if (value.length >= 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+            } else if (value.length >= 3) {
+                value = value.replace(/(\d{3})(\d{0,3})/, "$1-$2");
+            }
+            e.target.value = value;
+        });
     });
-});
 </script>
