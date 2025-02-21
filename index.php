@@ -126,13 +126,13 @@ define('DEFAULT_CONTROLLER', estConnecte() ? "annonce/liste_annonces" : "login")
                 $controller =  $uriSegments[0];
 
                 //action ?
-                if($intNbSegments >2){
+                if($intNbSegments >1){
                     //si action
                     if (in_array(ACTIONS_PATH . $uriSegments[1] . ".php", $actions)) {
                         afficheMessageConsole("l'action " .  $uriSegments[1] . " existe !");
                         $action =  $uriSegments[1];
 
-                        if($intNbSegments ==3){
+                        if($intNbSegments > 2){
                             $paramId = $uriSegments[2];
                         }
 
