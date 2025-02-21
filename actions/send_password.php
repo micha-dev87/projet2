@@ -48,12 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    
                 $message .= "<p>Pour finaliser votre demande, veuillez cliquer sur le bouton ci-dessous :</p>";
                 $message .= "<p style='text-align:center;margin:30px 0;'>";
-                $message .= "<a href='localhost" . lien("utilisateur/update-password/" . $noUtilisateur) . "' 
+                $message .= "<a href='http://" . $_SERVER['SERVER_NAME'] . lien("utilisateur/update-password/" . $noUtilisateur) . "' 
                                 style='background-color:#4CAF50;color:white;padding:14px 25px;
                                 text-decoration:none;border-radius:4px;'>
                                 Changer mon mot de passe</a></p>";
                 $message .= "<p>Si le bouton ne fonctionne pas, vous pouvez copier et coller ce lien dans votre navigateur :</p>";
-                $message .= "<p>localhost" . lien("utilisateur/update-password/" . $noUtilisateur) . "</p>";
+                $message .= "<p>http://" . $_SERVER['SERVER_NAME']. lien("utilisateur/update-password/" . $noUtilisateur) . "</p>";
                 $message .= "<hr>";
                 $message .= "<p>Cordialement,<br>L'équipe du site</p>";
                 $message .= "</body></html>";
@@ -63,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     sendMail($to, $sujet, $message);
                 
-
 
 
                 // TODO : Envoyer un courriel de confirmation avec un jeton unique

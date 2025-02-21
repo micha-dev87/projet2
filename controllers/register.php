@@ -77,12 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message .= "<p>Votre compte a été créé avec succès.</p>";
                 $message .= "<p>Pour finaliser votre inscription, veuillez cliquer sur le bouton ci-dessous :</p>";
                 $message .= "<p style='text-align:center;margin:30px 0;'>";
-                $message .= "<a href='localhost" . lien("utilisateur/validateUser/" . $resultat_insertion) . "' 
+                $message .= "<a href='http://" . $_SERVER['SERVER_NAME'] . lien("utilisateur/validateUser/" . $resultat_insertion) . "' 
                                 style='background-color:#4CAF50;color:white;padding:14px 25px;
                                 text-decoration:none;border-radius:4px;'>
                                 Confirmer mon inscription</a></p>";
                 $message .= "<p>Si le bouton ne fonctionne pas, vous pouvez copier et coller ce lien dans votre navigateur :</p>";
-                $message .= "<p>localhost" . lien("utilisateur/validateUser/" . $resultat_insertion) . "</p>";
+                $message .= "<p>http://" . $_SERVER['SERVER_NAME'] . lien("utilisateur/validateUser/" . $resultat_insertion) . "</p>";
                 $message .= "<hr>";
                 $message .= "<p>Cordialement,<br>L'équipe du site</p>";
                 $message .= "</body></html>";
