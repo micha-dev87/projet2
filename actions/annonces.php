@@ -1,4 +1,4 @@
-<?
+<?php
 // Connect to database
 
 
@@ -16,7 +16,6 @@ $annonces = $annonceDAO->listerAnnonces(
     ''
 );
 
-// Return as JSON
 
 echo "<pre>";
 print_r($annonces);
