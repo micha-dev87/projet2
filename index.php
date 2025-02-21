@@ -3,11 +3,11 @@
 // Début de la session
     session_start();
 // Charger les variables d'environnement si on est en local
-if ($_SERVER['SERVER_NAME'] === "localhost") {
+
     require_once __DIR__ . '/vendor/autoload.php';
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
-}
+
 
 //config data
 //Controller de config

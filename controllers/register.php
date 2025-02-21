@@ -87,11 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message .= "<p>Cordialement,<br>L'équipe du site</p>";
                 $message .= "</body></html>";
                 $to = $courriel;
-                if (SERVER_NAME == "localhost") {
+            
                     require_once("shared/sendMail.php");
 
                     sendMail($to, $sujet, $message);
-                }
+                
 
 
 
