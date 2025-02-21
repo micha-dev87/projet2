@@ -1,3 +1,8 @@
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
 # Activer le module RewriteEngine
 RewriteEngine On
 
