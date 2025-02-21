@@ -24,6 +24,8 @@ foreach($api_controllers as $controller)
         exit();
     }
 }
+
+
 // Inclusion des librairies nécessaires
     require_once __DIR__ . "/librairies/librairie-exercice01.php";
     require_once __DIR__ . "/librairies/librairie-generale-2025-01-26.php";
@@ -150,6 +152,7 @@ define('DEFAULT_CONTROLLER', estConnecte() ? "annonce/liste_annonces" : "login")
     afficheMessageConsole("nombre de segment uri : ". $intNbSegments);
     afficheMessageConsole("BASE_PATH : ". BASE_PATH);
     afficheMessageConsole("METHODE : ". $_SERVER['REQUEST_METHOD']);
+afficheMessageConsole("uri : " . $requestUri);
 
 
 
@@ -159,12 +162,7 @@ define('DEFAULT_CONTROLLER', estConnecte() ? "annonce/liste_annonces" : "login")
     }
 
 
-    //Rediriger tous utilisateur vers le dashboard
-    if (estConnecte() && ($controller == "login" || $controller == "register")) {
 
-        redirectTo(DEFAULT_CONTROLLER);
-
-    }
 
 
 
