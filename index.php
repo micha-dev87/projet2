@@ -39,7 +39,7 @@ foreach($api_controllers as $controller)
 
 // Définir des constantes globales
     define('SERVER_NAME', getParametre("SERVER_NAME", "SERVER"));
-    define('DEFAULT_CONTROLLER', estConnecte() ? "dashboard" : "login");
+define('DEFAULT_CONTROLLER', estConnecte() ? "annonce/liste_annonces" : "login");
     define('BASE_PATH', $subFolder);
     define('CONTROLLERS_PATH', 'controllers/');
     define('ACTIONS_PATH', 'actions/');

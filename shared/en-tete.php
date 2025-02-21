@@ -26,8 +26,8 @@
             // Définir les routes disponibles
             if (estConnecte()) {
                 $routes = [
-                     'annonce/liste_annonces' => '<i class="fas fa-bullhorn"></i> Les annonces',
-                    'dashboard'     => '<i class="fas fa-home"></i> Dashboard',
+                    'annonce/liste_annonces' => '<i class="fas fa-bullhorn"></i> Les annonces',
+                    'annonce/liste_annonces/' . NO_UTILISATEUR => '<i class="fas fa-cog"></i> Gérer mes annonces',
                     'logout'   => '<i class="fas fa-sign-out-alt"></i> Se déconnecter',
                     'annonce/ajouter' => '<i class="fas fa-plus"></i> Ajouter Annonce',
                     'utilisateur/mon-profil' => '<i class="fas fa-user"></i> Mon Profil'
@@ -44,7 +44,7 @@
             echo '<ul class="nav nav-pills">';
             foreach ($routes as $route => $label) {
                 // Déterminer si le lien est actif
-                $isActive = $GLOBALS["controller"] == $route || $isActive = $GLOBALS["controller"] . "/" . $GLOBALS["action"] === $route;
+                $isActive = $GLOBALS["controller"] == $route || $isActive = $GLOBALS["controller"] . "/" . $GLOBALS["action"] === $route && is_null($GLOBALS["paramId"]) || $GLOBALS["controller"] . "/" . $GLOBALS["action"] . "/" . $GLOBALS["paramId"] === $route;
 
 
 
