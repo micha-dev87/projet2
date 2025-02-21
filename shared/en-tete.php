@@ -23,11 +23,12 @@
             </a>
 
             <?php
+        
             // Définir les routes disponibles
             if (estConnecte()) {
                 $routes = [
                     'annonce/liste_annonces' => '<i class="fas fa-bullhorn"></i> Les annonces',
-                    'annonce/liste_annonces/' . NO_UTILISATEUR => '<i class="fas fa-cog"></i> Gérer mes annonces',
+                    estAdmin() ? 'dashboard/' : 'annonce/liste_annonces/'.NO_UTILISATEUR => '<i class="fas fa-cog"></i> ' . (estAdmin() ? "Dashboard" : "Mes annonces"),
                     'logout'   => '<i class="fas fa-sign-out-alt"></i> Se déconnecter',
                     'annonce/ajouter' => '<i class="fas fa-plus"></i> Ajouter Annonce',
                     'utilisateur/mon-profil' => '<i class="fas fa-user"></i> Mon Profil'

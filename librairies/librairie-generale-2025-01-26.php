@@ -342,7 +342,7 @@
 
 //function estAdmin
 function estAdmin() {
-    return STATUT_UTILISATEUR == 1;
+    return intval(STATUT_UTILISATEUR) == 1;
 }
 
 
