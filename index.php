@@ -68,6 +68,8 @@ define('DEFAULT_CONTROLLER', estConnecte() ? "annonce/liste_annonces" : "login")
     $requestUri = $_SERVER['REQUEST_URI'];
     $requestUri = strtok($requestUri, '?'); // Supprimer la query string
     $requestUri = trim($requestUri, '/');  // Nettoyer les slashes
+    // Retirer https:// du chemin
+    $requestUri = str_replace('https://', '', $requestUri);
 
 // Supprimer le sous-dossier du chemin
     if (!empty($subFolder)) {
