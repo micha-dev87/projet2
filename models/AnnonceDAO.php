@@ -9,6 +9,7 @@ class AnnonceDAO
     public function __construct()
     {
         $DB = new mysql();
+        $DB->deconnexion();
         $this->db = $DB->connexion();
     }
 
