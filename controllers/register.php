@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 text-decoration:none;border-radius:4px;'>
                                 Confirmer mon inscription</a></p>";
                 $message .= "<p>Si le bouton ne fonctionne pas, vous pouvez copier et coller ce lien dans votre navigateur :</p>";
-                $message .= "<p>http://" . $_SERVER['SERVER_NAME'] . lien("utilisateur/validateUser/" . $resultat_insertion) . "</p>";
+                $message .= "<p>https://" . $_SERVER['SERVER_NAME'] . lien("utilisateur/validateUser/" . $resultat_insertion) . "</p>";
                 $message .= "<hr>";
                 $message .= "<p>Cordialement,<br>L'équipe du site</p>";
                 $message .= "</body></html>";
